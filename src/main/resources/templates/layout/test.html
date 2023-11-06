@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-mode="detached" data-topbar-color="dark" data-menu-color="light" data-sidenav-user="true" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    <th:block th:replace="fragments/header :: headerFragment"></th:block>
+    <body>
+    <div class="wrapper">
+        <th:block th:replace="fragments/topbar :: topbarFragment"></th:block>
+        <th:block th:replace="fragments/leftsidebar :: leftsidebarFragment"></th:block>
+        <div class="content">
+
+        </div>
+        <th:block th:replace="fragments/footer :: footerFragment"></th:block>
+        <th:block th:replace="fragments/script :: scriptFragment"></th:block>
+    </div>
+    </body>
+</html>
