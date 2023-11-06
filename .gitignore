@@ -319,4 +319,7 @@ gradle-app.setting
 # Java heap dump
 *.hprof
 
+### queryDSL
+/src/main/generated
+
 # End of https://www.toptal.com/developers/gitignore/api/macos,windows,intellij+all,eclipse,java,visualstudiocode,sonarqube,gradle,maven
