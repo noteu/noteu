@@ -5,10 +5,11 @@
     <div class="wrapper">
         <th:block th:replace="fragments/topbar :: topbarFragment"></th:block>
         <th:block th:replace="fragments/leftsidebar :: leftsidebarFragment"></th:block>
-        <div class="content">
-
+        <div class="content-page">
+            <div class="content"></div>
+            <th:block th:replace="fragments/footer :: footerFragment"></th:block>
         </div>
-        <th:block th:replace="fragments/footer :: footerFragment"></th:block>
+
         <th:block th:replace="fragments/script :: scriptFragment"></th:block>
     </div>
     </body>
