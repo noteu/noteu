@@ -1,7 +1,7 @@
 ---
 name: refactor
 about: refactor issue template
-title: "[REFACTOR]"
+title: "[REFACTOR] "
 labels: "♻️ refactor"
 assignees: ''
 
