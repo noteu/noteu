@@ -1,7 +1,7 @@
 ---
 name: feat
 about: feat issue template
-title: "[FEAT]"
+title: "[FEAT] "
 labels: ''
 assignees: ''
 

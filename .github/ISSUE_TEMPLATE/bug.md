@@ -1,8 +1,8 @@
 ---
 name: bug
 about: bug issue template
-title: "[BUG]"
-labels: "\U0001F41B bug"
+title: "[BUG] "
+labels: "\U0001F41B bug, ♻️ refactor"
 assignees: ''
 
 ---
