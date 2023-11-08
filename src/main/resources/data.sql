@@ -1,0 +1,6 @@
+insert into member (id, username, password, profile, member_name, email, tel, created_at,  modified_at) values ('1', 'aaaa', '$2a$10$WDxK/ffIG2I5.B3sfj68ruYfnUZPGj3oxSJkxzmEO29VWMsA7D3sC', null, 'nameA', 'a@a', '111', '2023-11-08 15:21:25.345762', '2023-11-08 15:21:25.345762');
+insert into member (id, username, password, profile, member_name, email, tel, created_at,  modified_at) values ('2', 'bbbb', '$2a$10$ibkVqtQNSIEwW0VH1znV7ON5gAZAxUrTJzrSgk.mnnnqkWM5lqRFa', null, 'nameB', 'b@b', '222', '2023-11-08 15:21:25.345762', '2023-11-08 15:21:25.345762');
+insert into member (id, username, password, profile, member_name, email, tel, created_at,  modified_at) values ('3', 'cccc', '$2a$10$mAXvbJcbLahLt6VB1UL5VetT4hlHVDXOWfq1ZVNYhSwZtekLMizg2', null, 'nameC', 'c@c', '333', '2023-11-08 15:21:25.345762', '2023-11-08 15:21:25.345762');
+insert into member_role (member_id, role) values (1, 0);
+insert into member_role (member_id, role) values (2, 1);
+insert into member_role (member_id, role) values (3, 2);
