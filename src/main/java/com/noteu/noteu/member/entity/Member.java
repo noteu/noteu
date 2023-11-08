@@ -5,16 +5,14 @@ import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Entity
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends AuditingFields {
@@ -22,7 +20,7 @@ public class Member extends AuditingFields {
     @Column(nullable = false, length = 20, unique = true)
     private String username;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 70)
     private String password;
 
     @Column(length = 300)
@@ -35,7 +33,7 @@ public class Member extends AuditingFields {
     private String email;
 
     @Column(nullable = false, length = 30)
-    private String phone;
+    private String tel;
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<Role> role = new ArrayList<>();
