@@ -6,7 +6,7 @@
         <th:block th:replace="fragments/common/topbar :: topbarFragment"></th:block>
         <th:block th:replace="fragments/common/sidebar1 :: sidebar1Fragment"></th:block>
         <div class="content-page">
-            <div class="content"></div>
+            <th:block th:replace="fragments/content/subject/list_content :: listContentFragment"></th:block>
             <th:block th:replace="fragments/common/footer :: footerFragment"></th:block>
         </div>
 
