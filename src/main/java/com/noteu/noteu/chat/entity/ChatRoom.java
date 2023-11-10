@@ -1,21 +1,27 @@
 package com.noteu.noteu.chat.entity;
 
 import com.noteu.noteu.audit.AuditingFields;
-import com.noteu.noteu.subject.entity.Subject;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToOne;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
+import lombok.*;
 
-@AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.UUID;
+
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class ChatRoom extends AuditingFields {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Subject subject;
+    private String roomName;
+
+    @ToString.Exclude
+    @OrderBy("createdAt DESC")
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
+    private final Set<ChatParticipant> participants = new LinkedHashSet<>();
+
 }
