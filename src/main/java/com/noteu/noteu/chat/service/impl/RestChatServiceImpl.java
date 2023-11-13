@@ -1,12 +1,13 @@
 package com.noteu.noteu.chat.service.impl;
 
 import com.noteu.noteu.chat.converter.ChatConverter;
+import com.noteu.noteu.chat.dto.response.ChatMessageResponseDto;
 import com.noteu.noteu.chat.dto.response.ChatRoomResponseDto;
 import com.noteu.noteu.chat.entity.ChatRoom;
+import com.noteu.noteu.chat.repository.ChatMessageRepository;
 import com.noteu.noteu.chat.repository.ChatParticipantRepository;
 import com.noteu.noteu.chat.repository.ChatRoomRepository;
 import com.noteu.noteu.chat.service.RestChatService;
-import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ import java.util.*;
 public class RestChatServiceImpl implements RestChatService {
 
     private final ChatRoomRepository chatRoomRepository;
+    private final ChatMessageRepository chatMessageRepository;
     private final ChatParticipantRepository chatParticipantRepository;
     private final ChatConverter converter;
 
@@ -37,6 +39,13 @@ public class RestChatServiceImpl implements RestChatService {
         return chatRoomRepository.findById(roomId)
                 .map(converter::chatRoomEntityToChatRoomDto)
                 .orElseThrow(EntityNotFoundException::new);
+    }
+
+    @Override
+    public List<ChatMessageResponseDto> pastChat(Long roomId) {
+        return chatMessageRepository.getAllByRoomId(roomId).stream()
+                .map(converter::chatMessageEntityToChatMessageResponsedto)
+                .toList();
     }
 
     //채팅방 생성
