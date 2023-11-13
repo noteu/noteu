@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-mode="detached" data-topbar-color="dark" data-menu-color="light" data-sidenav-user="true" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<th:block th:replace="fragments/common/header :: headerFragment"></th:block>
+<body>
+<div class="wrapper">
+    <th:block th:replace="fragments/common/topbar :: topbarFragment"></th:block>
+    <th:block th:replace="fragments/common/sidebar1 :: sidebar1Fragment"></th:block>
+    <div class="content-page">
+        <div class="content">
+            <h3 class="my-3">회원가입</h3>
+            <form th:action="@{/members/sign-up}" th:object="${signUpDto}" method="post">
+                <div th:if="${#fields.hasAnyErrors()}">
+                    <div class="alert alert-danger" role="alert" th:each="err : ${#fields.allErrors()}" th:text="${err}" />
+                </div>
+                <div class="mb-2">
+                    <label for="username">아이디</label>
+                    <input id="username" name="username" th:field="*{username}" type="text" class="form-control">
+                </div>
+                <div class="mb-2">
+                    <label for="password1">비밀번호</label>
+                    <input id="password1" name="password1" th:field="*{password1}" type="password" class="form-control">
+                </div>
+                <div class="mb-2">
+                    <label for="password2">비밀번호 확인</label>
+                    <input id="password2" name="password2" th:field="*{password2}" type="password" class="form-control">
+                </div>
+                <div class="mb-2">
+                    <label for="name">이름</label>
+                    <input id="name" name="memberName" th:field="*{memberName}" type="text" class="form-control">
+                </div>
+                <div class="mb-2">
+                    <label for="email">이메일</label>
+                    <input id="email" name="email" th:field="*{email}" type="email" class="form-control">
+                </div>
+                <div class="mb-2">
+                    <label for="tel">전화번호</label>
+                    <input id="tel" name="phone" th:field="*{tel}" type="tel" class="form-control">
+                </div>
+                <div class="mb-2">
+                    <label for="role">타입</label>
+                    <div id="role">
+                        <input id="admin" type='radio' name='role' value='ROLE_ADMIN' th:field="*{role}" class="form-check-input">
+                        <label for="admin" class="form-check-label">관리자</label>
+                        <input id="teacher" type='radio' name='role' value='ROLE_TEACHER' th:field="*{role}" class="form-check-input">
+                        <label for="teacher" class="form-check-label">선생님</label>
+                        <input id="student" type='radio' name='role' value='ROLE_STUDENT' th:field="*{role}" class="form-check-input">
+                        <label for="student" class="form-check-label">학생</label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary float-end">가입</button>
+            </form>
+        </div>
+        <th:block th:replace="fragments/common/footer :: footerFragment"></th:block>
+    </div>
+
+    <th:block th:replace="fragments/common/script :: scriptFragment"></th:block>
+</div>
+</body>
+</html>
