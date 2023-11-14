@@ -4,14 +4,14 @@
         <meta charset="UTF-8">
         <title>Title</title>
         <th:block th:replace="fragments/common/header :: headerFragment"></th:block>
-        <!-- <script src="js/subject/add.js"></script> -->
+        <!-- .js file -->
     </head>
     <body>
     <div class="wrapper">
         <th:block th:replace="fragments/common/topbar :: topbarFragment"></th:block>
         <th:block th:replace="fragments/common/sidebar1 :: sidebar1Fragment"></th:block>
         <div class="content-page">
-            <th:block th:replace="fragments/content/subject/add_content :: addContentFragment"></th:block>
+            <th:block th:replace="fragments/content/subject/input_subject_code_content :: inputCodeContentFragment"></th:block>
             <th:block th:replace="fragments/common/footer :: footerFragment"></th:block>
         </div>
 
@@ -20,21 +20,22 @@
     </body>
     <script type="text/javascript">
         const btn_submit = document.getElementById("btn_submit");
-
+        
         btn_submit.addEventListener("click", () => {
-            var subjectName = document.getElementById("subjectName").value;
+            var subjectCode = document.getElementById("subjectCode").value;
+            console.log(subjectCode);
             $.ajax({
                 type: "POST",
-                url: "/subjects",
+                url: "/subjects/input-code",
                 data: {
-                    "subjectName": subjectName,
+                    "subjectCode": subjectCode,
                 },
                 success: function(data) {
-                    alert("등록이 완료되었습니다");
+                    alert("과목 가입이 완료되었습니다");
                     location.href = "/subjects";
                 },
                 error: function(error) {
-                    console.log(subjectName);
+                    console.log(subjectCode);
                     alert("등록 실패: " + JSON.stringify(error.responseJSON));
                 },
             });
