@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends AuditingFields {
-
+    
     @Column(nullable = false, length = 20, unique = true)
     private String username;
 

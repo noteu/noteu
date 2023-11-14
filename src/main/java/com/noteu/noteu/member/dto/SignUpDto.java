@@ -15,8 +15,8 @@ import org.hibernate.validator.constraints.Length;
 public class SignUpDto {
 
     // TODO: 정규식 검사
-    @Length(min = 4, max = 10, message = "ID를 4자 이상, 10자 이하로 입력해주세요.")
-    @NotBlank(message = "")
+    @Length(min = 4, max = 10, message = "아이디를 4자 이상, 10자 이하로 입력해주세요.")
+    @NotBlank(message = "아이디를 입력해주세요.")
     private String username;
 
     @NotBlank(message = "비밀번호를 입력해주세요.")
