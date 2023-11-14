@@ -4,7 +4,10 @@
         <meta charset="UTF-8">
         <title>Title</title>
         <th:block th:replace="fragments/common/header :: headerFragment"></th:block>
-        <!-- .js file -->
+
+        <!-- 사용할 .js file / .css file
+             **주의**
+             템플릿에서 제공하는 파일을 불러올 때 assets -> /assets 로 경로 지정해줄 것 -->
     </head>
     <body>
     <div class="wrapper">
@@ -12,12 +15,29 @@
         <th:block th:replace="fragments/common/sidebar2 :: sidebar2Fragment"></th:block>
         <div class="content-page">
             <div class="content">
-                <!-- <th:block th:replace="html 파일 경로 :: 'th:fragment'"></th:block> -->
+                <!-- <th:block th:replace="fragments/content/기능별 dir/불러올 .html 파일 :: 'th:fragment=?'"></th:block> -->
             </div>
             <th:block th:replace="fragments/common/footer :: footerFragment"></th:block>
         </div>
-
-        <th:block th:replace="fragments/common/script :: scriptFragment"></th:block>
     </div>
+    <th:block th:replace="fragments/common/script :: scriptFragment"></th:block>
+
+    <!-- Daterangepicker js -->
+    <script src="/assets/vendor/daterangepicker/moment.min.js"></script>
+    <script src="/assets/vendor/daterangepicker/daterangepicker.js"></script>
+
+    <!-- Apex Charts js -->
+    <script src="/assets/vendor/apexcharts/apexcharts.min.js"></script>
+
+    <!-- Vector Map js -->
+    <script src="/assets/vendor/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js"></script>
+    <script src="/assets/vendor/admin-resources/jquery.vectormap/maps/jquery-jvectormap-world-mill-en.js"></script>
+
+    <!-- Dashboard App js -->
+    <script src="/assets/js/pages/demo.dashboard.js"></script>
+
+    <!-- 사용할 .js file
+         **주의**
+         템플릿에서 제공하는 파일을 불러올 때 assets -> /assets 로 경로 지정해줄 것 -->
     </body>
 </html>
