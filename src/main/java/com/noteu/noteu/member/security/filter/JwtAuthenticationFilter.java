@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -62,7 +63,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.setHeader("Refresh", refreshToken);
 
         // 쿠키 생성
-        response.addCookie(new Cookie("Auth", accessToken));
+        Cookie cookie = new Cookie("Auth", accessToken);
+        cookie.setDomain("localhost");
+        cookie.setPath("/");
+        response.addCookie(cookie);
+        cookie.setMaxAge(24 * 60 * 60); // 1일(초)
 
         log.info("header 값: {}", response.getHeader("Authorization"));
         log.info("token 값: {}", accessToken);
