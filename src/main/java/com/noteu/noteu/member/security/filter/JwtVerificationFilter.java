@@ -4,36 +4,41 @@ import com.noteu.noteu.member.dto.MemberInfo;
 import com.noteu.noteu.member.security.utils.JwtUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
-public class JwtVerificationFilter extends OncePerRequestFilter { // 요청에 토큰이 있는 지 없는 지 검사
+public class JwtVerificationFilter extends OncePerRequestFilter {
 
     private final JwtUtils jwtUtils;
 
+    /**
+     * JWT 토큰 검증 및 SecurityContext에 Authentication 저장하는 메서드
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        log.info("JWT 토큰 검증 및 SecurityContext에 저장을 시도합니다.");
+        log.info("JWT 토큰 검증 및 SecurityContent에 저장을 시도합니다.");
         try {
-            Map<String, Object> claims = verifyJws(request);
-            setAuthenticationToContext(claims);
+            Map<String, Object> claims = verifyJws(request); // JWT 검증
+            setAuthenticationToContext(claims); // SecurityContext에 Authentication 저장
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
@@ -42,16 +47,24 @@ public class JwtVerificationFilter extends OncePerRequestFilter { // 요청에 �
         filterChain.doFilter(request, response);
     }
 
+    /**
+     * 특정 조건에 부합하면 동작을 수행하지 않고 건너뛰게 해주는 필터
+     */
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
 
+        String requestURI = request.getRequestURI();
+        log.info("requestURI 값 : {}", requestURI);
+
         String authorization = request.getHeader("Authorization");
-        return authorization == null || !authorization.startsWith("Bearer");
+
+        // 요청 헤더가 Bearer로 시작하지 않는다면 Filter 동작을 수행하지 않음.(비회원도 요청할 수 있다면)
+        return authorization == null || !authorization.startsWith("Bearer") || requestURI.contains("/assets");
     }
 
     private Map<String, Object> verifyJws(HttpServletRequest request) {
-
-        String jws = request.getHeader("Authorization").replace("Bearer ", "");
+        // request의 header에서 JWT를 얻음
+        String jws = request.getHeader("Authorization").replace("Bearer_", "");
 
         // Secret Key 획득
         String base64EncodedSecretKey = jwtUtils.encodeBase64SecretKey(jwtUtils.getSecretKey());
@@ -60,6 +73,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter { // 요청에 �
         log.info("JWT에서 claims가 정상적으로 파싱 검증 성공했습니다. {}", jwtUtils.getClaims(jws, base64EncodedSecretKey).getBody());
         return jwtUtils.getClaims(jws, base64EncodedSecretKey).getBody();
     }
+
 
     /**
      * SecurityContext에 저장하기 위한 메서드
@@ -73,18 +87,20 @@ public class JwtVerificationFilter extends OncePerRequestFilter { // 요청에 �
         String username = (String) claims.get("username");
         // Users id를 얻음
         Long userId = Long.valueOf((Integer) claims.get("userId"));
-
         // 권한 정보를 얻음
-        Collection<? extends GrantedAuthority> authorities = (Collection<? extends GrantedAuthority>) claims.get("roles");
+        Collection<? extends GrantedAuthority> authorities = (Collection<? extends GrantedAuthority>) ((List) claims.get("roles")).stream()
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+                .collect(Collectors.toUnmodifiableSet());
 
         log.info("authorities : {} ", authorities);
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(
                 MemberInfo.builder()
-                        .Id(userId)
+                        .id(userId)
                         .username(username)
                         .authorities(authorities)
-                        .build(), null, authorities);
+                        .build()
+                , null, authorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 }

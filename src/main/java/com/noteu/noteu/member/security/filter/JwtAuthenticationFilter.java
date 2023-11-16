@@ -6,13 +6,12 @@ import com.noteu.noteu.member.dto.SignInDto;
 import com.noteu.noteu.member.security.utils.JwtUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,6 +23,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/*
+1. 서버에서(필터에서) 쿠키를 만들어서 response에 담아준다.
+2. 브라우저에 쿠키가 저장되어 있는지 확인한다.
+3. 매 요청마다 쿠키에서 토큰을 꺼내 헤더에 담는다. (모든 요청)
+ */
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -52,12 +56,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         MemberDetails memberDetails = (MemberDetails) authResult.getPrincipal();
 
         // 로그인 성공하여 jwt 발급
-        String accessToken = delegateAccessToken(memberDetails);
+        String accessToken = "Bearer_" + delegateAccessToken(memberDetails);
         String refreshToken = delegateRefreshToken(memberDetails);
-        response.setHeader("Authorization", "Bearer " + accessToken);
+        response.setHeader( "Authorization", accessToken);
         response.setHeader("Refresh", refreshToken);
 
-        log.info("토큰 값: {}", accessToken);
+        // 쿠키 생성
+        response.addCookie(new Cookie("Auth", accessToken));
+
+        log.info("header 값: {}", response.getHeader("Authorization"));
+        log.info("token 값: {}", accessToken);
 
         this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
     }

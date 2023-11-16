@@ -1,10 +1,12 @@
 package com.noteu.noteu.member.controller;
 
+import com.noteu.noteu.member.dto.MemberInfo;
 import com.noteu.noteu.member.dto.SignUpDto;
 import com.noteu.noteu.member.service.MemberDetailsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,11 +42,12 @@ public class MemberController {
         }
 
         memberDetailsService.createUser(signUpDto);
-        return "redirect:/";
+        return "redirect:/members/login";
     }
 
     @GetMapping("/login")
     public String login() {
         return "fragments/member/sign_in";
     }
+
 }

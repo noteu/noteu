@@ -14,7 +14,7 @@ import java.io.IOException;
 
 @Slf4j
 @Component
-public class MemberAuthenticationEntryPoint implements AuthenticationEntryPoint {
+public class MemberAuthenticationEntryPoint implements AuthenticationEntryPoint { // 인증되지 않은 사용자 처리
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         Exception exception = (Exception) request.getAttribute("exception");

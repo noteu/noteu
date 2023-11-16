@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.noteu.noteu.member.dto.MemberDetails;
 import com.noteu.noteu.member.dto.MemberInfo;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,7 @@ public class MemberAuthenticationSuccessHandler implements AuthenticationSuccess
         log.info("MemberAuthenticationSuccessHandler auth.getPrincipal : {}", authentication.getPrincipal().toString());
 
         MemberInfo memberInfo = MemberInfo.builder()
-                .Id(memberDetails.getId())
+                .id(memberDetails.getId())
                 .username(memberDetails.getUsername())
                 .authorities(memberDetails.getAuthorities())
                 .build();
@@ -31,5 +32,7 @@ public class MemberAuthenticationSuccessHandler implements AuthenticationSuccess
         response.getWriter().write(memberInfoToJson);
         log.info("login authentication success!!!");
 
+        String authorization = response.getHeader("Authorization");
+        log.info("successHandler 토큰 값: {}", authorization);
     }
 }
