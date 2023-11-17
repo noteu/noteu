@@ -1,6 +1,5 @@
 package com.noteu.noteu.config;
 
-import com.noteu.noteu.member.oauth2.Oauth2UserService;
 import com.noteu.noteu.member.security.handler.CustomAuthenticationSuccessHandler;
 import com.noteu.noteu.member.service.MemberDetailsService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +26,6 @@ import java.util.Arrays;
 public class SecurityConfig {
 
     private final MemberDetailsService memberDetailsService;
-    private final Oauth2UserService oauth2UserService;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
@@ -50,8 +48,7 @@ public class SecurityConfig {
                         .loginPage("/auth/login")
                         .usernameParameter("username")
                         .passwordParameter("password")
-                        .successHandler(new CustomAuthenticationSuccessHandler()));
-        http
+                        .successHandler(new CustomAuthenticationSuccessHandler()))
                 .userDetailsService(memberDetailsService);
 
         return http.build();
