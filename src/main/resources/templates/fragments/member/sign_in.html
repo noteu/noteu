@@ -34,9 +34,9 @@
                             axios.get("/subjects", {
                                 headers: {
                                     Authorization: `${token}`
-                                }
+                                },
+                                url: "/subjects"
                             })
-                            location.href = "/subjects";
                         }
                     })
                     .catch(response => {
