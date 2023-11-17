@@ -1,36 +1,31 @@
 package com.noteu.noteu.config;
 
-import com.noteu.noteu.member.security.config.CustomFilterConfig;
-import com.noteu.noteu.member.security.handler.MemberAccessDeniedHandler;
-import com.noteu.noteu.member.security.handler.MemberAuthenticationEntryPoint;
-import com.noteu.noteu.member.security.utils.JwtUtils;
+import com.noteu.noteu.member.security.handler.CustomAuthenticationSuccessHandler;
+import com.noteu.noteu.member.service.MemberDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtUtils jwtUtils;
-
-    // Password 암호화 방식 설정
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    private final MemberDetailsService memberDetailsService;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
@@ -43,22 +38,40 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                         .requestMatchers(new AntPathRequestMatcher("/**")).permitAll())
-                .csrf(AbstractHttpConfigurer::disable)
                 .headers((headers) -> headers
                         .addHeaderWriter(new XFrameOptionsHeaderWriter(
                                 XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)))
-                .formLogin(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .cors(AbstractHttpConfigurer::disable)
-                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .exceptionHandling(e -> {
-                    e.authenticationEntryPoint(new MemberAuthenticationEntryPoint());
-                    e.accessDeniedHandler(new MemberAccessDeniedHandler());
-                });
-
-        http
-                .apply(new CustomFilterConfig(jwtUtils));
+                .cors(Customizer.withDefaults())
+                .formLogin((formLogin) -> formLogin
+                        .loginPage("/auth/login")
+                        .usernameParameter("username")
+                        .passwordParameter("password")
+                        .successHandler(new CustomAuthenticationSuccessHandler()))
+                .userDetailsService(memberDetailsService);
 
         return http.build();
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowCredentials(true); // 쿠키 가능
+        configuration.setAllowedOrigins(Arrays.asList(
+                        "http://localhost:8081"
+                )
+        ); // * 은 문제 발생
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE", "UPDATE"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.addExposedHeader("Authorization");
+        configuration.addExposedHeader("Refresh");
+        configuration.setMaxAge(3000L);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource(); // UrlBasedCorsConfigurationSource 생성
+        source.registerCorsConfiguration("/**", configuration); // 모든 URL에 앞에서 구성한 CORS 정책 적용
+
+        return source;
     }
 }

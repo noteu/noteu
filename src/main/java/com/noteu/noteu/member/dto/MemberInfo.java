@@ -16,5 +16,6 @@ public class MemberInfo {
     // 서버 내에서 인증된 사용자의 정보를 가져올 수 있는 객체
     private Long id;
     private String username;
+    private String memberName;
     private Collection<? extends GrantedAuthority> authorities;
 }

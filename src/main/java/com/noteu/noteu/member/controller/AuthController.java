@@ -1,12 +1,10 @@
 package com.noteu.noteu.member.controller;
 
-import com.noteu.noteu.member.dto.MemberInfo;
 import com.noteu.noteu.member.dto.SignUpDto;
 import com.noteu.noteu.member.service.MemberDetailsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/members")
-public class MemberController {
+@RequestMapping("/auth")
+public class AuthController {
 
     private final MemberDetailsService memberDetailsService;
 
@@ -47,7 +45,7 @@ public class MemberController {
 
     @GetMapping("/login")
     public String login() {
-        return "fragments/member/sign_in";
+        return "fragments/member/login";
     }
 
 }
