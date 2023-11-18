@@ -12,7 +12,7 @@ public interface MemberConverter {
                 .password(member.getPassword())
                 .profile(member.getProfile())
                 .memberName(member.getMemberName())
-                .email(member.getTel())
+                .email(member.getEmail())
                 .tel(member.getTel())
                 .role(member.getRole())
                 .createdAt(member.getCreatedAt())

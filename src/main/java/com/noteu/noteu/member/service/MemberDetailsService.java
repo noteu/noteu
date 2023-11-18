@@ -80,6 +80,7 @@ public class MemberDetailsService implements UserDetailsManager{
                 .id(member.getId())
                 .username(member.getUsername())
                 .password(member.getPassword())
+                .memberName(member.getMemberName())
                 .authorities(list)
                 .build();
     }
