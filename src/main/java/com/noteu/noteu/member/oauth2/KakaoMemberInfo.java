@@ -23,14 +23,19 @@ public class KakaoMemberInfo implements OAuth2MemberInfo {
     }
 
     @Override
+    public String getName() {
+        Map<String, Object> kakaoProfile = (Map<String, Object>) kakaoAccount.get("profile");
+        return String.valueOf(kakaoProfile.get("nickname"));
+    }
+
+    @Override
     public String getEmail() {
         return String.valueOf(kakaoAccount.get("email"));
     }
 
     @Override
-    public String getName() {
-        Map<String, Object> kakaoProfile = (Map<String, Object>) kakaoAccount.get("profile");
-        return String.valueOf(kakaoProfile.get("nickname"));
+    public String getTel() {
+        return "";
     }
 
     @Override

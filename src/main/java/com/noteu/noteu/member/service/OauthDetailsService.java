@@ -4,6 +4,7 @@ import com.noteu.noteu.member.dto.MemberDetails;
 import com.noteu.noteu.member.entity.Member;
 import com.noteu.noteu.member.entity.Role;
 import com.noteu.noteu.member.oauth2.KakaoMemberInfo;
+import com.noteu.noteu.member.oauth2.NaverMemberInfo;
 import com.noteu.noteu.member.oauth2.OAuth2MemberInfo;
 import com.noteu.noteu.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +45,8 @@ public class OauthDetailsService extends DefaultOAuth2UserService {
         if (userRequest.getClientRegistration().getRegistrationId().equals("kakao")) {
             oAuth2UserInfo = new KakaoMemberInfo(String.valueOf(oAuth2User.getAttributes().get("id")),
                     (Map) oAuth2User.getAttributes().get("kakao_account"));
+        } else if (userRequest.getClientRegistration().getRegistrationId().equals("naver")) {
+            oAuth2UserInfo = new NaverMemberInfo((Map) oAuth2User.getAttributes().get("response"));
         } else {
             System.out.println("지원하지 않는 로그인 서비스 입니다.");
         }
@@ -51,6 +54,9 @@ public class OauthDetailsService extends DefaultOAuth2UserService {
         String providerType = oAuth2UserInfo.getProviderType();
         String providerId = oAuth2UserInfo.getProviderId();
         String username = providerType.toLowerCase() + "_" + providerId;
+        if (username.length() > 20) {
+            username = username.substring(0, 20);
+        }
 
         Member member = memberRepository.findByUsername(username).orElse(null);
 
@@ -61,10 +67,9 @@ public class OauthDetailsService extends DefaultOAuth2UserService {
                     .profile(oAuth2UserInfo.getProfile())
                     .memberName(oAuth2UserInfo.getName())
                     .email(oAuth2UserInfo.getEmail())
-                    .tel("")
+                    .tel(oAuth2UserInfo.getTel())
                     .role(Role.equals("ROLE_STUDENT"))
                     .build();
-            log.info("소셜 로그인 회원가입: {}", member.toString());
             memberRepository.save(member);
         }
 

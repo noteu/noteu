@@ -6,9 +6,11 @@ public interface OAuth2MemberInfo {
 
     String getProviderType();
 
+    String getName();
+
     String getEmail();
 
-    String getName();
+    String getTel();
 
     String getProfile();
 }
