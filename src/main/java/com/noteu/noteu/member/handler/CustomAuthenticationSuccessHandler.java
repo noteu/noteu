@@ -1,4 +1,4 @@
-package com.noteu.noteu.member.security.handler;
+package com.noteu.noteu.member.handler;
 
 import com.noteu.noteu.member.dto.MemberDetails;
 import com.noteu.noteu.member.dto.MemberInfo;
