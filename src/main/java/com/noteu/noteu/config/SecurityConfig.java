@@ -1,7 +1,8 @@
 package com.noteu.noteu.config;
 
-import com.noteu.noteu.member.security.handler.CustomAuthenticationSuccessHandler;
+import com.noteu.noteu.member.handler.CustomAuthenticationSuccessHandler;
 import com.noteu.noteu.member.service.MemberDetailsService;
+import com.noteu.noteu.member.service.OauthDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +27,7 @@ import java.util.Arrays;
 public class SecurityConfig {
 
     private final MemberDetailsService memberDetailsService;
+    private final OauthDetailsService oauthDetailsService;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
@@ -44,13 +46,21 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
+
+                // 로컬 로그인 설정
                 .formLogin((formLogin) -> formLogin
                         .loginPage("/auth/login")
                         .usernameParameter("username")
                         .passwordParameter("password")
                         .successHandler(new CustomAuthenticationSuccessHandler()))
-                .userDetailsService(memberDetailsService);
-
+                .userDetailsService(memberDetailsService)
+                // 소셜 로그인 설정
+                .oauth2Login(oauth2Login -> oauth2Login
+                        .loginPage("/auth/login")
+                        .successHandler(new CustomAuthenticationSuccessHandler())
+                        .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
+                                .userService(oauthDetailsService)) // 소셜 로그인이 완료된 뒤 소셜 회원의 엑세스 토큰, 정보를 받아옴
+                );
         return http.build();
     }
 
