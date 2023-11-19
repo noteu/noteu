@@ -3,6 +3,7 @@ package com.noteu.noteu.member.service;
 import com.noteu.noteu.member.dto.MemberDetails;
 import com.noteu.noteu.member.entity.Member;
 import com.noteu.noteu.member.entity.Role;
+import com.noteu.noteu.member.oauth2.GoogleMemberInfo;
 import com.noteu.noteu.member.oauth2.KakaoMemberInfo;
 import com.noteu.noteu.member.oauth2.NaverMemberInfo;
 import com.noteu.noteu.member.oauth2.OAuth2MemberInfo;
@@ -45,6 +46,8 @@ public class OauthDetailsService extends DefaultOAuth2UserService {
         if (userRequest.getClientRegistration().getRegistrationId().equals("kakao")) {
             oAuth2UserInfo = new KakaoMemberInfo(String.valueOf(oAuth2User.getAttributes().get("id")),
                     (Map) oAuth2User.getAttributes().get("kakao_account"));
+        } else if (userRequest.getClientRegistration().getRegistrationId().equals("google")) {
+            oAuth2UserInfo = new GoogleMemberInfo(oAuth2User.getAttributes());
         } else if (userRequest.getClientRegistration().getRegistrationId().equals("naver")) {
             oAuth2UserInfo = new NaverMemberInfo((Map) oAuth2User.getAttributes().get("response"));
         } else {
