@@ -4,14 +4,34 @@ import com.noteu.noteu.chat.dto.request.ChatMessageRequestDto;
 import com.noteu.noteu.chat.dto.response.ChatMessageResponseDto;
 import com.noteu.noteu.chat.dto.response.ChatRoomResponseDto;
 import com.noteu.noteu.chat.entity.ChatMessage;
+import com.noteu.noteu.chat.entity.ChatParticipant;
 import com.noteu.noteu.chat.entity.ChatRoom;
+import com.noteu.noteu.member.dto.response.MemberResponseDto;
+import com.noteu.noteu.member.entity.Member;
+
+import java.util.Objects;
 
 public interface ChatConverter {
 
-    default ChatRoomResponseDto chatRoomEntityToChatRoomDto(ChatRoom chatRoom) {
+    default ChatRoomResponseDto chatRoomEntityToChatRoomDto(ChatRoom chatRoom, Long loginId) {
         return ChatRoomResponseDto.builder()
                 .id(chatRoom.getId())
-                .roomName(chatRoom.getRoomName())
+                .subjectId(chatRoom.getSubject().getId())
+                .participants(chatRoom.getParticipants().stream()
+                        .map(ChatParticipant::getMember)
+                        .filter(m -> !Objects.equals(m.getId(), loginId))
+                        .map(this::memberEntityToMemberResponseDto)
+                        .toList())
+                .build();
+    }
+
+    default MemberResponseDto memberEntityToMemberResponseDto(Member member) {
+        return MemberResponseDto.builder()
+                .id(member.getId())
+                .username(member.getUsername())
+                .profile(member.getProfile())
+                .email(member.getEmail())
+                .tel(member.getTel())
                 .build();
     }
 
@@ -19,7 +39,6 @@ public interface ChatConverter {
         return ChatMessage.builder()
                 .roomId(chatMessageRequestDto.getRoomId())
                 .senderId(chatMessageRequestDto.getSenderId())
-                .senderName(chatMessageRequestDto.getSenderName())
                 .message(chatMessageRequestDto.getMessage())
                 .build();
     }
@@ -33,5 +52,4 @@ public interface ChatConverter {
                 .createdAt(String.valueOf(chatMessage.getCreatedAt()))
                 .build();
     }
-
 }

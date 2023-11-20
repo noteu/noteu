@@ -26,12 +26,11 @@ public class SocketChatServiceImpl implements SocketChatService {
         log.info("채팅으로 넘어온 값 : {}", chatMessageRequestDto);
 
         if (MessageType.TALK.equals(chatMessageRequestDto.getMessageType())) {
-            log.info("이코드가 실행되면 안되는데 실행되어서 문제입니다.");
             ChatMessage save = chatMessageRepository.save(converter.chatMessageRequestDtoToChatMessageEntity(chatMessageRequestDto));
             return converter.chatMessageEntityToChatMessageResponsedto(save);
         }
 
-        chatMessageRequestDto.setMessage(chatMessageRequestDto.getSenderName() + "님이 입장하였습니다.");
+        chatMessageRequestDto.setMessage(chatMessageRequestDto.getSenderName() + "채팅 입장.");
         return chatMessageRequestDto;
     }
 }

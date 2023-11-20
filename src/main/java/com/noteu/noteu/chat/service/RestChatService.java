@@ -7,14 +7,12 @@ import java.util.List;
 
 public interface RestChatService {
 
-    List<ChatRoomResponseDto> findAllRoom();
-
     //채팅방 하나 불러오기
-    ChatRoomResponseDto findById(Long roomId);
+    List<ChatRoomResponseDto> findAllById(Long friendId, Long loginId);
 
     //채팅방 생성
-    List<ChatMessageResponseDto> pastChat(Long roomId);
+    List<ChatMessageResponseDto> findPastChat(Long roomId);
 
-    ChatRoomResponseDto createRoom(String name);
+    ChatRoomResponseDto createRoom(Long subjectId, Long friendId, Long loginMemberId);
     //이전 채팅 보임
 }
