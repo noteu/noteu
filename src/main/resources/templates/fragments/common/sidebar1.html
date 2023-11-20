@@ -3,7 +3,7 @@
  -->
 <!DOCTYPE html>
 <html lang="en" data-layout-mode="detached" data-topbar-color="dark" data-menu-color="light" data-sidenav-user="true"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
     <th:block th:fragment="sidebar1Fragment">
         <div class="leftside-menu">
 
@@ -40,10 +40,10 @@
             <!-- Sidebar -left -->
             <div class="h-100" id="leftside-menu-container" data-simplebar>
                 <!-- Leftbar User -->
-                <div class="leftbar-user">
+                <div class="leftbar-user" sec:authorize="isAuthenticated()">
                     <a href="pages-profile.html">
-                        <img src="/assets/images/users/avatar-1.jpg" alt="user-image" height="42" class="rounded-circle shadow-sm">
-                        <span class="leftbar-user-name mt-2">Dominic Keller</span>
+                        <img th:src="${#authentication.getPrincipal().getProfile()}" alt="user-image" height="42" class="rounded-circle shadow-sm">
+                        <span class="leftbar-user-name mt-2" th:text="${#authentication.getPrincipal().getMemberName()}"></span>
                     </a>
                 </div>
 

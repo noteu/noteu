@@ -19,16 +19,18 @@ public class MemberDetails implements UserDetails, OAuth2User {
     private String username;
     private String password;
     private String memberName;
+    private String profile;
     Collection<? extends GrantedAuthority> authorities;
     private Map<String, Object> attributes;
 
     // 일반 로그인 생성자
     // TODO: 오류가 나지 않으면 지울 코드
-    public MemberDetails(Long id, String username, String password, String memberName, Collection<? extends GrantedAuthority> authorities) {
+    public MemberDetails(Long id, String username, String password, String memberName, String profile, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.memberName = memberName;
+        this.profile = profile;
         this.authorities = authorities;
     }
 

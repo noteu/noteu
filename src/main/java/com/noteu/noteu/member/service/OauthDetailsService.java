@@ -81,10 +81,16 @@ public class OauthDetailsService extends DefaultOAuth2UserService {
                 .map(SimpleGrantedAuthority::new)
                 .toList();
 
+        String profile = member.getProfile();
+        if (profile.equals("null")) {
+            profile = "/file/profile/default.png"; // 기본 이미지
+        }
+
         return MemberDetails.builder()
                 .id(member.getId())
                 .username(member.getUsername())
                 .password(member.getPassword())
+                .profile(profile)
                 .memberName(member.getMemberName())
                 .authorities(list)
                 .build();

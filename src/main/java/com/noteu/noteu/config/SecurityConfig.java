@@ -60,6 +60,12 @@ public class SecurityConfig {
                         .successHandler(new CustomAuthenticationSuccessHandler())
                         .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
                                 .userService(oauthDetailsService)) // 소셜 로그인이 완료된 뒤 소셜 회원의 엑세스 토큰, 정보를 받아옴
+                )
+                // 로그아웃 설정
+                .logout(logout -> logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout"))
+                        .logoutSuccessUrl("/auth/login")
+                        .invalidateHttpSession(true) // 세션 삭제
                 );
         return http.build();
     }

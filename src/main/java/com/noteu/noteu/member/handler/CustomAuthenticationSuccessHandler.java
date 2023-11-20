@@ -38,6 +38,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                         .id(memberDetails.getId())
                         .username(memberDetails.getUsername())
                         .memberName(memberDetails.getName())
+                        .profile(memberDetails.getProfile())
                         .authorities(authorities)
                         .build()
                 , null, authorities);

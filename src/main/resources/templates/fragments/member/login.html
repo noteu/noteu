@@ -26,8 +26,9 @@
                 <label for="password">비밀번호</label>
                 <input type="password" name="password" id="password" class="form-control"><br/>
             </div>
-            <input type="submit" id="login_btn" value="login" class="btn btn-primary float-end">
+            <input type="submit" id="login_btn" value="로그인" class="btn btn-primary float-end">
             </form>
+            <a th:href="@{/auth/sign-up}" class="btn btn-secondary">회원가입</a>
             <a href="/oauth2/authorization/kakao" class="btn btn-warning bg-yellow-300">
                 <i class="fa-solid fa-comment text-black me-1"></i>
                 <span>카카오 로그인</span>
