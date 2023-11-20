@@ -2,6 +2,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,windows,intellij+all,eclipse,java,visualstudiocode,sonarqube,gradle,maven
 
 src/main/resources/application.yml
+src/main/resources/application-secret.yml
 
 ### Eclipse ###
 .metadata

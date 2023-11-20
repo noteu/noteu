@@ -1,4 +1,4 @@
-package com.noteu.noteu.member.security.utils;
+package com.noteu.noteu.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
