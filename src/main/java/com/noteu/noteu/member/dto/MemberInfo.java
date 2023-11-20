@@ -17,5 +17,6 @@ public class MemberInfo {
     private Long id;
     private String username;
     private String memberName;
+    private String profile;
     private Collection<? extends GrantedAuthority> authorities;
 }

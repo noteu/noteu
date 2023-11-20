@@ -76,10 +76,16 @@ public class MemberDetailsService implements UserDetailsManager{
                 .map(SimpleGrantedAuthority::new)
                 .toList();
 
+        String profile = member.getProfile();
+        if (profile == null) {
+            profile = "/file/profile/default.png"; // 기본 이미지
+        }
+
         return MemberDetails.builder()
                 .id(member.getId())
                 .username(member.getUsername())
                 .password(member.getPassword())
+                .profile(profile)
                 .memberName(member.getMemberName())
                 .authorities(list)
                 .build();
