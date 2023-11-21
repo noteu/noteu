@@ -35,14 +35,14 @@ public class SubjectController {
     }
 
     // 과목 추가
-    // TODO: @AuthenticationPrincipal 로 Member 객체 받아오기
     @PostMapping
-    public String addSubject(SubjectRequestDto subjectRequestDto){
+    public String addSubject(@AuthenticationPrincipal MemberInfo memberInfo, SubjectRequestDto subjectRequestDto){
         SubjectResponseDto subjectResponseDto = subjectService.save(subjectRequestDto);
 
         // Test Code
         log.info("과목 코드: {}", subjectResponseDto.getSubjectCode());
-        subjectMemberService.save(subjectResponseDto.getSubjectCode(), 2L);
+        log.info("memberInfo: {}", memberInfo.getId());
+        subjectMemberService.save(subjectResponseDto.getSubjectCode(), memberInfo.getId());
         return "redirect:/subjects";
     }
 
@@ -54,17 +54,18 @@ public class SubjectController {
 
     // 과목 코드 입력
     @PostMapping("/input-code")
-    public String inputCode(SubjectMemberRequestDto subjectMemberRequestDto, @AuthenticationPrincipal MemberInfo memberInfo){
+    public String inputCode(@AuthenticationPrincipal MemberInfo memberInfo, SubjectMemberRequestDto subjectMemberRequestDto){
         // Test Code
-        // TODO: @AuthenticationPrincipal 로 Member 객체 받아오기
+        log.info("memberInfo: {}", memberInfo);
         subjectMemberService.save(subjectMemberRequestDto.getSubjectCode(), memberInfo.getId());
         return "redirect:/subjects";
     }
 
     // 과목 리스트
     @GetMapping
-    public String list(Model m){
-        List<Subject> list = subjectService.getAll(3L);
+    public String list(@AuthenticationPrincipal MemberInfo memberInfo, Model m){
+        log.info("memberInfo: {}", memberInfo);
+        List<Subject> list = subjectService.getAll(memberInfo.getId());
 
         if (list != null)
             if (!list.isEmpty())
