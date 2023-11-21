@@ -40,7 +40,7 @@ public class AuthController {
         }
 
         memberDetailsService.createUser(signUpDto);
-        return "redirect:/members/login";
+        return "redirect:/auth/login";
     }
 
     @GetMapping("/login")

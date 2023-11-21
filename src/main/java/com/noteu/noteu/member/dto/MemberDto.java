@@ -20,15 +20,15 @@ public class MemberDto {
 
     private String username;
 
-    private String password;
-
-    private String profile;
-
     private String memberName;
 
     private String email;
 
     private String tel;
+
+    private String introduction;
+
+    private String profile;
 
     private List<Role> role = new ArrayList<>();
 

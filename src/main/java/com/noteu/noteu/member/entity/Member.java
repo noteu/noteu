@@ -23,9 +23,6 @@ public class Member extends AuditingFields {
     @Column(nullable = false, length = 70)
     private String password;
 
-    @Column(length = 300)
-    private String profile;
-
     @Column(nullable = false, length = 20)
     private String memberName;
 
@@ -34,6 +31,12 @@ public class Member extends AuditingFields {
 
     @Column(nullable = false, length = 30)
     private String tel;
+
+    @Column(length = 500)
+    private String introduction;
+
+    @Column(length = 300)
+    private String profile;
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<Role> role = new ArrayList<>();
