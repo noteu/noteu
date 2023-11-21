@@ -7,10 +7,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -19,6 +16,7 @@ import java.time.LocalDateTime;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 public class Task extends AuditingFields {
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -36,4 +34,10 @@ public class Task extends AuditingFields {
     @Column(nullable = false)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime deadLine;
+
+    public void updateTask(String title, String content, LocalDateTime deadLine){
+        this.taskTitle = title;
+        this.taskContent = content;
+        this.deadLine = deadLine;
+    }
 }
