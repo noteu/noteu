@@ -40,4 +40,11 @@ public class Member extends AuditingFields {
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<Role> role = new ArrayList<>();
+
+    public void modifyInfomation(String memberName, String email, String tel, String introduction) {
+        this.memberName = memberName;
+        this.email = email;
+        this.tel = tel;
+        this.introduction = introduction;
+    }
 }

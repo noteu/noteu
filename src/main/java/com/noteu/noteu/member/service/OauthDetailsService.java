@@ -64,10 +64,14 @@ public class OauthDetailsService extends DefaultOAuth2UserService {
         Member member = memberRepository.findByUsername(username).orElse(null);
 
         if (member == null) {
+            String profile = oAuth2UserInfo.getProfile();
+            if (profile.equals("null")) {
+                profile = "/file/profile/default.png"; // 기본 이미지
+            }
             member = Member.builder()
                     .username(username)
                     .password(passwordEncoder.encode(""))
-                    .profile(oAuth2UserInfo.getProfile())
+                    .profile(profile)
                     .memberName(oAuth2UserInfo.getName())
                     .email(oAuth2UserInfo.getEmail())
                     .tel(oAuth2UserInfo.getTel())
@@ -81,16 +85,12 @@ public class OauthDetailsService extends DefaultOAuth2UserService {
                 .map(SimpleGrantedAuthority::new)
                 .toList();
 
-        String profile = member.getProfile();
-        if (profile.equals("null")) {
-            profile = "/file/profile/default.png"; // 기본 이미지
-        }
 
         return MemberDetails.builder()
                 .id(member.getId())
                 .username(member.getUsername())
                 .password(member.getPassword())
-                .profile(profile)
+                .profile(member.getProfile())
                 .memberName(member.getMemberName())
                 .authorities(list)
                 .build();
