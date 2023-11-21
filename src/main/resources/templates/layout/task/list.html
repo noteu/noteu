@@ -9,14 +9,15 @@
     <body>
     <div class="wrapper">
         <th:block th:replace="fragments/common/topbar :: topbarFragment"></th:block>
-        <th:block th:replace="fragments/common/sidebar1 :: sidebar1Fragment"></th:block>
+        <th:block th:replace="fragments/common/sidebar2 :: sidebar2Fragment"></th:block>
         <div class="content-page">
-            <th:block th:replace="fragments/content/subject/list_content :: listContentFragment"></th:block>
+            <th:block th:replace="fragments/content/task/list_content :: listContentFragment"></th:block>
             <th:block th:replace="fragments/common/footer :: footerFragment"></th:block>
         </div>
 
         <th:block th:replace="fragments/common/script :: scriptFragment"></th:block>
-        <script type="text/javascript" src="/js/task/list.js"></script>
+
+        <script type="text/javascript" src="/js/notice/list.js"></script>
     </div>
     </body>
 </html>

@@ -7,15 +7,13 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 public class Notice extends AuditingFields {
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -29,4 +27,9 @@ public class Notice extends AuditingFields {
 
     @Column(nullable = false, length = 512)
     private String noticeContent;
+
+    public void updateNotice(String title, String content){
+        this.noticeTitle = title;
+        this.noticeContent = content;
+    }
 }
