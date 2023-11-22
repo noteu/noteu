@@ -14,13 +14,7 @@ btn_submit.addEventListener("click", () => {
     var taskContent = document.getElementById("taskContent").value;
     
     var deadLineValue = document.getElementById("deadLineInput").value;
-    // var formattedDate = new Date(deadLineValue).toISOString();
-
-    // JavaScript Date 객체를 생성
-    var date = new Date(deadLineValue);
-
-    // 브라우저의 로컬 타임존을 고려하여 서버로 전송할 문자열로 변환
-    var formattedDate = date.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
+    var formattedDate = new Date(deadLineValue).toISOString();
 
     $.ajax({
         type: "POST",

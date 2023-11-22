@@ -36,7 +36,6 @@ public class NoticeController {
 
         m.addAttribute("notice_list", notice_list);
         m.addAttribute("subjectId", subjectId);
-        m.addAttribute("member_role", memberInfo.getAuthorities());
 
         return "layout/notice/list";
     }

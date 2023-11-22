@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -37,5 +38,25 @@ public class SubjectMemberServiceImpl implements SubjectMemberService {
         Member member = memberRepository.findById(memberId).orElse(null);
 
         subjectMemberRepository.save(SubjectMember.builder().subject(subject).member(member).build());
+    }
+
+    @Override
+    public ArrayList<Member> getSubjectMember(Long subjectId) {
+        Subject subject = subjectRepository.findById(subjectId).orElse(null);
+
+        ArrayList<Member> subjectMember = (ArrayList<Member>) subjectMemberRepository.findBySubject(subject);
+        return subjectMember;
+    }
+
+    @Override
+    public Member getMemberBySubjectCode(Long memberId, Long subjectId) {
+        Member member = memberRepository.findById(memberId).orElse(null);
+        Subject subject = subjectRepository.findById(subjectId).orElse(null);
+
+        Member result = subjectMemberRepository.findBySubjectAndMember(member, subject);
+        if(result == null)
+            return null;
+
+        return result;
     }
 }

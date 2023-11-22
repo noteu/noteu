@@ -53,6 +53,11 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
+    public Subject getSubjectByCode(String subjectCode) {
+        return subjectRepository.findBySubjectCode(subjectCode).orElse(null);
+    }
+
+    @Override
     public void delSubject(Long id) {
         subjectRepository.deleteById(id);
     }

@@ -12,5 +12,6 @@ import java.util.List;
 @Value
 public class SubjectMemberRequestDto implements Serializable {
     Long memberId;
+    Long subjectId;
     String subjectCode;
 }
