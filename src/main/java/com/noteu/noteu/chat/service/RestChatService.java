@@ -1,14 +1,14 @@
 package com.noteu.noteu.chat.service;
 
 import com.noteu.noteu.chat.dto.response.ChatMessageResponseDto;
+import com.noteu.noteu.chat.dto.response.ChatRoomInfoResponseDto;
 import com.noteu.noteu.chat.dto.response.ChatRoomResponseDto;
 
 import java.util.List;
 
 public interface RestChatService {
 
-    //채팅방 하나 불러오기
-    List<ChatRoomResponseDto> findAllById(Long friendId, Long loginId);
+    ChatRoomInfoResponseDto findAllById(Long friendId, Long loginId);
 
     //채팅방 생성
     List<ChatMessageResponseDto> findPastChat(Long roomId);

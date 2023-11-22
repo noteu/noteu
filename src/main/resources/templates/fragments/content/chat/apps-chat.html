@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" data-layout-mode="detached" data-topbar-color="dark" data-menu-color="light" data-sidenav-user="true"
       xmlns:th="http://www.thymeleaf.org">
+
 <th:block th:fragment="chatContentFragment">
     <!--/*@thymesVar id="subjectId" type="Long"*/-->
     <!--/*@thymesVar id="memberId" type="Long"*/-->
     <input type="hidden" id="subjectId" th:value="${subjectId}">
     <input type="hidden" id="memberId" th:value="${memberId}">
-    <div class="content">
+    <input type="hidden" id="memberName" th:value="${memberName}">
 
+    <div class="content">
         <!-- Start Content-->
         <div class="container-fluid">
 
@@ -35,12 +37,14 @@
                         <div class="card-body p-0">
                             <ul class="nav nav-tabs nav-bordered">
                                 <li class="nav-item" role="presentation">
-                                    <a href="#alwaysopen-accordions-preview" class="nav-link active" data-bs-toggle="tab" role="tab" aria-controls="nav-preview" aria-selected="true">
+                                    <a id="chats" href="#alwaysopen-accordions-preview" class="nav-link active"
+                                       data-bs-toggle="tab" role="tab" aria-controls="nav-preview" aria-selected="true">
                                         Chats
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a href="#alwaysopen-accordions-code" class="nav-link" data-bs-toggle="tab" role="tab" aria-controls="nav-code" aria-selected="false">
+                                <li id="friends" class="nav-item">
+                                    <a href="#alwaysopen-accordions-code" class="nav-link" data-bs-toggle="tab"
+                                       role="tab" aria-controls="nav-code" aria-selected="false">
                                         Friends
                                     </a>
                                 </li>
@@ -140,54 +144,118 @@
                 <div class="col-xxl-6 col-xl-12 order-xl-2">
                     <div class="card">
                         <div class="card-body px-0 pb-0">
-                            <ul class="conversation-list px-3" data-simplebar style="max-height: 554px">
-                                <li class="clearfix">
-                                    <div class="chat-avatar">
-                                        <i>10:00</i>
+                            <ul class="conversation-list px-3" data-simplebar="init" style="max-height: 554px">
+                                <div class="simplebar-wrapper" style="margin: 0px -24px;">
+                                    <div class="simplebar-height-auto-observer-wrapper">
+                                        <div class="simplebar-height-auto-observer"></div>
                                     </div>
-                                    <div class="conversation-text">
-                                        <div class="ctext-wrap">
-                                            <i>Shreyu N</i>
-                                            <p>
-                                                Hello!
-                                            </p>
+                                    <div class="simplebar-mask">
+                                        <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
+                                            <div class="simplebar-content-wrapper" tabindex="0" role="region"
+                                                 aria-label="scrollable content"
+                                                 style="height: auto; overflow: hidden scroll;">
+                                                <div id="chat-message" class="simplebar-content"
+                                                     style="padding: 0px 24px;">
+                                                    <li class="clearfix">
+                                                        <div class="chat-avatar">
+                                                            <i>10:00</i>
+                                                        </div>
+                                                        <div class="conversation-text">
+                                                            <div class="ctext-wrap">
+                                                                <i>Shreyu N</i>
+                                                                <p>
+                                                                    Hello!
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li class="clearfix odd">
+                                                        <div class="chat-avatar">
+                                                            <i>10:01</i>
+                                                        </div>
+                                                        <div class="conversation-text">
+                                                            <div class="ctext-wrap">
+                                                                <i>Dominic</i>
+                                                                <p>
+                                                                    Hi, How are you? What about our next meeting?
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li class="clearfix">
+                                                        <div class="chat-avatar">
+                                                            <i>10:00</i>
+                                                        </div>
+                                                        <div class="conversation-text">
+                                                            <div class="ctext-wrap">
+                                                                <i>Shreyu N</i>
+                                                                <p>
+                                                                    Hello!
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li class="clearfix odd">
+                                                        <div class="chat-avatar">
+                                                            <i>10:01</i>
+                                                        </div>
+                                                        <div class="conversation-text">
+                                                            <div class="ctext-wrap">
+                                                                <i>Dominic</i>
+                                                                <p>
+                                                                    Hi, How are you? What about our next meeting?
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li class="clearfix">
+                                                        <div class="chat-avatar">
+                                                            <i>10:00</i>
+                                                        </div>
+                                                        <div class="conversation-text">
+                                                            <div class="ctext-wrap">
+                                                                <i>Shreyu N</i>
+                                                                <p>
+                                                                    Hello!
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li class="clearfix odd">
+                                                        <div class="chat-avatar">
+                                                            <i>10:01</i>
+                                                        </div>
+                                                        <div class="conversation-text">
+                                                            <div class="ctext-wrap">
+                                                                <i>Dominic</i>
+                                                                <p>
+                                                                    Hi, How are you? What about our next meeting?
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </li>
-                                <li class="clearfix odd">
-                                    <div class="chat-avatar">
-                                        <i>10:01</i>
-                                    </div>
-                                    <div class="conversation-text">
-                                        <div class="ctext-wrap">
-                                            <i>Dominic</i>
-                                            <p>
-                                                Hi, How are you? What about our next meeting?
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="conversation-actions dropdown">
-                                        <button class="btn btn-sm btn-link" data-bs-toggle="dropdown"
-                                                aria-expanded="false"><i class='uil uil-ellipsis-v'></i>
-                                        </button>
-
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="#">Copy Message</a>
-                                            <a class="dropdown-item" href="#">Delete</a>
-                                        </div>
-                                    </div>
-                                </li>
+                                    <div class="simplebar-placeholder" style="width: auto; height: 885px;"></div>
+                                </div>
+                                <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
+                                    <div class="simplebar-scrollbar" style="width: 0px; display: none;transform: translate3d(0px, 0px, 0px);"></div>
+                                </div>
+                                <div class="simplebar-track simplebar-vertical" style="visibility: hidden;">
+                                    <div id="sisisi" class="simplebar-scrollbar" style="height: 335px; transform: translate3d(0px, 218px, 0px); display: block;"></div>
+                                </div>
                             </ul>
                         </div> <!-- end card-body -->
                         <div class="card-body p-0">
                             <div class="row">
                                 <div class="col">
                                     <div class="mt-2 bg-light p-3">
-                                        <form class="needs-validation" novalidate="" name="chat-form"
-                                              id="chat-form">
+<!--                                        <form class="needs-validation" novalidate="" name="chat-form" id="chat-form">-->
                                             <div class="row">
                                                 <div class="col mb-2 mb-sm-0">
-                                                    <input type="text" class="form-control border-0"
+                                                    <input id="message-input" type="text" class="form-control border-0"
                                                            placeholder="Enter your text" required="">
                                                     <div class="invalid-feedback">
                                                         Please enter your messsage
@@ -195,19 +263,18 @@
                                                 </div>
                                                 <div class="col-sm-auto">
                                                     <div class="btn-group">
-                                                        <a href="#" class="btn btn-light"><i
-                                                                class="uil uil-paperclip"></i></a>
-                                                        <a href="#" class="btn btn-light"> <i
-                                                                class='uil uil-smile'></i> </a>
+                                                        <!--                                                        <a href="#" class="btn btn-light"><i-->
+                                                        <!--                                                                class="uil uil-paperclip"></i></a>-->
+                                                        <!--                                                        <a href="#" class="btn btn-light"> <i-->
+                                                        <!--                                                                class='uil uil-smile'></i> </a>-->
                                                         <div class="d-grid">
-                                                            <button type="submit"
-                                                                    class="btn btn-success chat-send"><i
-                                                                    class='uil uil-message'></i></button>
+                                                            <button id="send-btn" class="btn btn-success chat-send"><i
+                                                                    class="uil uil-message"></i></button>
                                                         </div>
                                                     </div>
                                                 </div> <!-- end col -->
                                             </div> <!-- end row-->
-                                        </form>
+<!--                                        </form>-->
                                     </div>
                                 </div> <!-- end col-->
                             </div>
