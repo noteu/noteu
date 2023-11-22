@@ -6,9 +6,12 @@ import com.noteu.noteu.notice.dto.NoticeResponseDto;
 import com.noteu.noteu.subject.dto.SubjectResponseDto;
 import com.noteu.noteu.subject.entity.Subject;
 import com.noteu.noteu.subject.service.SubjectService;
+import com.noteu.noteu.task.dto.TaskCommentResponseDto;
 import com.noteu.noteu.task.dto.TaskRequestDto;
 import com.noteu.noteu.task.dto.TaskResponseDto;
 import com.noteu.noteu.task.entity.Task;
+import com.noteu.noteu.task.entity.TaskComment;
+import com.noteu.noteu.task.service.TaskCommentService;
 import com.noteu.noteu.task.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @Slf4j
@@ -28,7 +32,7 @@ import java.util.ArrayList;
 public class TaskController {
 
     private final TaskService taskService;
-    private final SubjectService subjectService;
+    private final TaskCommentService taskCommentService;
 
     @GetMapping("/add-form")
     public String addForm(@PathVariable("subject-id") Long subjectId, Model m){
@@ -63,12 +67,19 @@ public class TaskController {
     }
 
     @GetMapping("/{task-id}")
-    public String detailForm(@PathVariable("subject-id") Long subjectId, @PathVariable("task-id") Long taskId, Model m){
+    public String detailForm(@AuthenticationPrincipal MemberInfo memberInfo, @PathVariable("subject-id") Long subjectId, @PathVariable("task-id") Long taskId, Model m){
         TaskResponseDto taskResponseDto = taskService.getTask(taskId);
+        List<TaskComment> taskCommentList;
+        if (memberInfo.getAuthorities().stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_TEACHER"))) {
+            taskCommentList = taskCommentService.getAll(taskId);
+        } else {
+            taskCommentList = taskCommentService.getAllTaskComment(taskId, memberInfo.getId());
+        }
 
         m.addAttribute("task", taskResponseDto);
         m.addAttribute("taskId", taskId);
         m.addAttribute("subjectId", subjectId);
+        m.addAttribute("taskCommentList", taskCommentList);
 
         return "layout/task/detail";
     }
