@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-mode="detached" data-topbar-color="dark" data-menu-color="light" data-sidenav-user="true"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+    <th:block th:fragment="references">
+        <!-- start page title -->
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Subject(getById)</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">ReferenceRoom</a></li>
+                            <li class="breadcrumb-item active">Reference Article List</li>
+                        </ol>
+                    </div>
+                    <h4 class="page-title">Reference Article List</h4>
+                </div>
+            </div>
+        </div>
+        <!-- end page title -->
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+
+                        <h4 class="header-title">자료실</h4>
+                        <p class="text-muted font-14">
+                            수업에 필요한 자료 파일들을 다운로드 받을 수 있는 공간입니다.
+                        </p>
+
+                        <!-- { Role : TEACHER } Only -->
+                        <input type="button" id="addForm" class="btn btn-outline-primary" value="자료 추가" th:onclick="|location.href='/subjects/1/references/add-form'|"
+                               sec:authorize="hasRole('ROLE_TEACHER')">
+
+                        <div class="tab-content">
+                            <div class="tab-pane show active" id="buttons-table-preview">
+                                <table id="datatable-buttons" class="table table-striped dt-responsive nowrap w-100">
+                                    <thead>
+                                    <tr>
+                                        <th>작성자</th>
+                                        <th>제목</th>
+                                        <th>작성일</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr th:each="r:${list}" class="detail">
+                                        <input type="hidden" class="rid" th:value="${r.referenceRoomId}">
+                                        <input type="hidden" class="sid" th:value="${r.subject.id}">
+                                        <td th:text="${r.memberName}"></td>
+                                        <td th:text="${r.referenceRoomTitle}"></td>
+                                        <td th:text="${r.createdAt}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div> <!-- end preview-->
+                        </div> <!-- end tab-content-->
+
+                    </div> <!-- end card body-->
+                </div> <!-- end card -->
+            </div><!-- end col-->
+        </div> <!-- end row-->
+    </th:block>
+</html>
