@@ -23,6 +23,6 @@ public class ChatController {
 
         ChatMessageResponse chatMessageResponseDto = chatService.reqMessage(chatMessageRequestDto);
         log.info("chat response values : {}", chatMessageResponseDto);
-        sendingOperations.convertAndSend("/topic/chat/room/"+chatMessageRequestDto.getRoomId(),chatMessageResponseDto);
+        sendingOperations.convertAndSend("/topic/chats/room/"+chatMessageRequestDto.getRoomId(),chatMessageResponseDto);
     }
 }

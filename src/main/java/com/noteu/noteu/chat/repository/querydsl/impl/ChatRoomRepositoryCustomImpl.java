@@ -8,6 +8,7 @@ import com.noteu.noteu.member.entity.QMember;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -30,5 +31,17 @@ public class ChatRoomRepositoryCustomImpl extends QuerydslRepositorySupport impl
                         .and(member.id.eq(loginId)))
                 .select(chatRoom)
                 .fetch();
+    }
+
+    @Override
+    public boolean existsChatRoom(Long subjectId, Long friendId, Long loginId) {
+        QChatRoom chatRoom = QChatRoom.chatRoom;
+        QChatParticipant chatParticipant = QChatParticipant.chatParticipant;
+
+        return from(chatRoom)
+                .join(chatRoom.participants, chatParticipant)
+                .where(chatRoom.subject.id.eq(subjectId)
+                        .and(chatParticipant.member.id.in(Arrays.asList(friendId, loginId))))
+                .fetchCount() > 0;
     }
 }
