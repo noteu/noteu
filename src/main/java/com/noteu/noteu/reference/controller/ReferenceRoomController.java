@@ -30,11 +30,12 @@ import java.nio.file.Path;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/subjects/{subjectId}/references")
+@RequestMapping("/subjects/{subject-id}/references")
 public class ReferenceRoomController {
 
     private final ReferenceRoomServiceImpl referenceRoomService;
@@ -43,12 +44,15 @@ public class ReferenceRoomController {
     private String path;
 
     @GetMapping("/add-form")
-    public String addForm(@AuthenticationPrincipal MemberInfo memberInfo){
+    public String addForm(@AuthenticationPrincipal MemberInfo memberInfo, @PathVariable("subject-id") Long subjectId, Map map){
+
+        map.put("subjectId", subjectId);
         return "layout/reference/add";
     }
 
     @PostMapping
-    public String addReferenceRoom(@AuthenticationPrincipal MemberInfo memberInfo, @PathVariable Long subjectId, @ModelAttribute AddRequestReferenceRoomDTO addRequestReferenceRoomDTO){
+    public String addReferenceRoom(@AuthenticationPrincipal MemberInfo memberInfo, @PathVariable("subject-id") Long subjectId,
+                                   @ModelAttribute AddRequestReferenceRoomDTO addRequestReferenceRoomDTO){
         log.info("회원id : {}", memberInfo.getId());
         log.info("과목id : {}", subjectId);
         log.info("제목 : {}", addRequestReferenceRoomDTO.getReferenceRoomTitle());
@@ -87,42 +91,45 @@ public class ReferenceRoomController {
                 throw new RuntimeException(e);
             }
         }
-
         addRequestReferenceRoomDTO.setReferenceName(fileNames);
         addRequestReferenceRoomDTO.setReferenceSize(fileSizes);
         addRequestReferenceRoomDTO.setReferenceType(fileTypes);
         referenceRoomService.saveFile(addRequestReferenceRoomDTO, referenceRoomDTOId);
-        return "redirect:/subjects/{subjectId}/references";
+
+        return "redirect:/subjects/{subject-id}/references";
     }
 
     @GetMapping
-    public String referenceRoomList(@AuthenticationPrincipal MemberInfo memberInfo, ModelMap map){
+    public String referenceRoomList(@AuthenticationPrincipal MemberInfo memberInfo, @PathVariable("subject-id") Long subjectId, ModelMap map){
         List<GetAllResponseReferenceRoomDTO> dtoList = referenceRoomService.getAll();
         map.put("list", dtoList);
+        map.put("subjectId", subjectId);
 
         return "layout/reference/list";
     }
 
     @GetMapping("/{referenceId}")
-    public String getById(@AuthenticationPrincipal MemberInfo memberInfo, @PathVariable Long referenceId, ModelMap map){
+    public String getById(@AuthenticationPrincipal MemberInfo memberInfo, @PathVariable("subject-id") Long subjectId, @PathVariable Long referenceId, ModelMap map){
         try {
             DetailResponseReferenceRoomDTO detailResponseReferenceRoomDTO = referenceRoomService.getById(referenceId);
             map.put("referenceRoom", detailResponseReferenceRoomDTO);
         } catch (Exception e) {
             System.out.println(e);
         }
+        map.put("subjectId", subjectId);
 
         return "layout/reference/detail";
     }
 
     @GetMapping("/edit-form/{referenceRoomId}")
-    public String updateForm(@PathVariable Long referenceRoomId, ModelMap map){
+    public String updateForm(@PathVariable("subject-id") Long subjectId, @PathVariable Long referenceRoomId, ModelMap map){
         try {
             DetailResponseReferenceRoomDTO detailResponseReferenceRoomDTO = referenceRoomService.getById(referenceRoomId);
             map.put("referenceRoom", detailResponseReferenceRoomDTO);
         } catch (Exception e) {
             System.out.println(e);
         }
+        map.put("subjectId", subjectId);
 
         return "layout/reference/edit";
     }
@@ -236,7 +243,7 @@ public class ReferenceRoomController {
         editRequestReferenceRoomDTO.setReferenceType(fileTypes);
         referenceRoomService.updateById(editRequestReferenceRoomDTO, referenceRoomId);
 
-        return "redirect:/subjects/{subjectId}/references";
+        return "redirect:/subjects/{subject-id}/references";
     }
 
     @GetMapping("/delete/{referenceRoomId}")
@@ -256,12 +263,12 @@ public class ReferenceRoomController {
             }
         }
         referenceRoomService.deleteById(referenceRoomId);
-        return "redirect:/subjects/{subjectId}/references";
+        return "redirect:/subjects/{subject-id}/references";
     }
 
     @RequestMapping("/down")
     public ResponseEntity<byte[]> downReference(Long id, String referenceName) {
-        File f = new File(path + "/reference/" + id + "/" + referenceName);
+        File f = new File(path + "reference/" + id + "/" + referenceName);
 
         HttpHeaders headers = new HttpHeaders();
 

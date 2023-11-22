@@ -70,7 +70,7 @@
                     <li class="side-nav-title">Apps</li>
 
                     <li class="side-nav-item">
-                        <a href="#" class="side-nav-link">
+                        <a th:href="@{/subjects/{subjectId}/notices(subjectId=${subjectId})}" class="side-nav-link">
                             <i class="ri-notification-2-line"></i>
                             <span> Notice </span>
                         </a>
@@ -84,28 +84,28 @@
                     </li>
 
                     <li class="side-nav-item">
-                        <a href="#" class="side-nav-link">
+                        <a th:href="@{/subjects/{subjectId}/chats(subjectId=${subjectId})}" class="side-nav-link">
                             <i class="uil-comments-alt"></i>
                             <span> Chat </span>
                         </a>
                     </li>
 
                     <li class="side-nav-item">
-                        <a href="#" class="side-nav-link">
+                        <a th:href="@{/subjects/{subjectId}/questions(subjectId=${subjectId})}" class="side-nav-link">
                             <i class="ri-question-line"></i>
                             <span> Question Post </span>
                         </a>
                     </li>
 
                     <li class="side-nav-item">
-                        <a href="#" class="side-nav-link">
+                        <a th:href="@{/subjects/{subjectId}/references(subjectId=${subjectId})}" class="side-nav-link">
                             <i class="ri-folders-line"></i>
                             <span> ReferenceRoom </span>
                         </a>
                     </li>
 
                     <li class="side-nav-item">
-                        <a href="#" class="side-nav-link">
+                        <a th:href="@{/subjects/{subjectId}/tasks(subjectId=${subjectId})}" class="side-nav-link">
                             <i class="ri-book-open-line"></i>
                             <span> Task </span>
                         </a>
