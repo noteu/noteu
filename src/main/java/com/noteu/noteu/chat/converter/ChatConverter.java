@@ -13,10 +13,12 @@ import java.util.Objects;
 
 public interface ChatConverter {
 
-    default ChatRoomResponseDto chatRoomEntityToChatRoomDto(ChatRoom chatRoom, Long loginId) {
+    default ChatRoomResponseDto chatRoomEntityToChatRoomDto(ChatRoom chatRoom, Long loginId, ChatMessage lastMessage) {
         return ChatRoomResponseDto.builder()
                 .id(chatRoom.getId())
                 .subjectId(chatRoom.getSubject().getId())
+                .lastMessage(lastMessage.getMessage())
+                .lastMessageDateTime(lastMessage.getCreatedAt())
                 .participants(chatRoom.getParticipants().stream()
                         .map(ChatParticipant::getMember)
                         .filter(m -> !Objects.equals(m.getId(), loginId))
@@ -39,6 +41,7 @@ public interface ChatConverter {
         return ChatMessage.builder()
                 .roomId(chatMessageRequestDto.getRoomId())
                 .senderId(chatMessageRequestDto.getSenderId())
+                .senderName(chatMessageRequestDto.getSenderName())
                 .message(chatMessageRequestDto.getMessage())
                 .build();
     }
