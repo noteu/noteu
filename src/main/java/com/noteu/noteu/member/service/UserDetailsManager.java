@@ -20,7 +20,7 @@ public interface UserDetailsManager extends UserDetailsService {
     /**
      * Remove the user with the given login name from the system.
      */
-    void deleteUser(String username);
+    void deleteUser(Long memberId, String username);
 
     /**
      * Modify the current user's password. This should change the user's password in the

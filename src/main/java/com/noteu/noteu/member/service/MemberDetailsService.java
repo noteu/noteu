@@ -7,6 +7,7 @@ import com.noteu.noteu.member.exception.UserAlreadyExistAuthenticationException;
 import com.noteu.noteu.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,6 +18,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -86,12 +88,15 @@ public class MemberDetailsService implements UserDetailsManager{
         // SecurityContextHolder에 MemberInfo 저장
         SecurityContextHolder.getContext().setAuthentication(memberInfo);
         log.info("SecurityContextHolder 저장 객체: {}", SecurityContextHolder.getContext().getAuthentication());
-
     }
 
     @Override
-    public void deleteUser(String username) {
-
+    public void deleteUser(Long memberId, String username) {
+        Member member = memberRepository.findById(memberId).orElseThrow();
+        if (!member.getUsername().equals(username)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제 권한이 없습니다.");
+        }
+        memberRepository.delete(member);
     }
 
     @Override

@@ -30,7 +30,6 @@ public class MemberController {
     @GetMapping("/account/{id}")
     public String account(@PathVariable("id") Long memberId, @AuthenticationPrincipal MemberInfo memberInfo, Model model) {
         Member member = memberDetailsService.findById(memberId);
-
         List<Role> list = new ArrayList<>(member.getRole());
         MemberDto memberDto = MemberDto.builder()
                 .id(member.getId())
@@ -48,12 +47,18 @@ public class MemberController {
         }
         model.addAttribute("member", memberDto);
 
-        return "fragments/member/account";
+        return "layout/member/account";
     }
 
     @PostMapping("/account/{id}")
     public String editInformation(MemberEditDto memberEditDto) {
         memberDetailsService.updateUser(memberEditDto);
         return "redirect:/members/account/{id}";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable("id") Long memberId, @AuthenticationPrincipal MemberInfo memberInfo) {
+        memberDetailsService.deleteUser(memberId, memberInfo.getUsername());
+        return "redirect:/auth/login";
     }
 }
