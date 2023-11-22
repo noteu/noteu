@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-mode="detached" data-topbar-color="dark" data-menu-color="light" data-sidenav-user="true"
+      xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<th:block th:fragment="loginFragment">
+    <div class="content">
+        <h3 class="my-3">로그인</h3>
+        <form th:action="@{/auth/login}" method="post">
+            <div th:if="${param.error}">
+                <div class="alert alert-danger">
+                    ID 또는 비밀번호를 확인해 주세요.
+                </div>
+            </div>
+            <div class="mb-2">
+                <label for="username" class="form-label">아이디</label>
+                <input type="text" name="username" id="username" class="form-control"><br/>
+            </div>
+            <div class="mb-2">
+                <label for="password" class="form-label">비밀번호</label>
+                <input type="password" name="password" id="password" class="form-control"><br/>
+            </div>
+            <input type="submit" id="login_btn" value="로그인" class="btn btn-primary float-end">
+        </form>
+        <!--            <ul class="social-list list-inline mt-3 mb-0 text-center">-->
+        <!--                <li class="list-inline-item">-->
+        <!--                    <a href="javascript: void(0);" class="social-list-item border-warning text-black">-->
+        <!--                        <i class="ri-kakao-talk-fill"></i>-->
+        <!--                    </a>-->
+        <!--                </li>-->
+        <!--                <li class="list-inline-item">-->
+        <!--                    <a href="javascript: void(0);" class="social-list-item border-success text-success"><i-->
+        <!--                            class="fa-solid fa-n"></i></a>-->
+        <!--                </li>-->
+        <!--                <li class="list-inline-item">-->
+        <!--                    <a href="javascript: void(0);" class="social-list-item border-info text-info"><i-->
+        <!--                            class="uil uil-google"></i></a>-->
+        <!--                </li>-->
+        <!--            </ul>-->
+        <a th:href="@{/auth/sign-up}" class="btn btn-secondary">회원가입</a>
+        <a href="/oauth2/authorization/kakao" class="btn btn-warning bg-yellow-300">
+            <i class="ri-kakao-talk-fill me-1 text-black"></i>
+            <span>카카오 로그인</span>
+        </a>
+        <a href="/oauth2/authorization/naver" class="btn btn-success bg-green-400">
+            <i class="fa-solid fa-n text-white me-1"></i>
+            <span class="normal-case text-white">네이버 로그인</span>
+        </a>
+        <a href="/oauth2/authorization/google" class="btn btn-soft-secondary">
+            <i class="fa-brands fa-google me-1"></i>
+            <span>구글 로그인</span>
+        </a>
+    </div>
+</th:block>
+</html>
