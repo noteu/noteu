@@ -8,8 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface SubjectService {
-    public SubjectResponseDto save(SubjectRequestDto subjectRequestDto);
-    public SubjectResponseDto getSubject(Long id);
-    public List<Subject> getAll(Long memberId);
-    public void delSubject(Long id);
+    SubjectResponseDto save(SubjectRequestDto subjectRequestDto);
+    SubjectResponseDto getSubject(Long id);
+    List<Subject> getAll(Long memberId);
+    Subject getSubjectByCode(String subjectCode);
+    void delSubject(Long id);
 }

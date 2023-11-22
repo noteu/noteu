@@ -1,14 +1,18 @@
 package com.noteu.noteu.subject.controller;
 
 import com.noteu.noteu.member.dto.MemberInfo;
+import com.noteu.noteu.member.entity.Member;
 import com.noteu.noteu.subject.dto.SubjectMemberRequestDto;
 import com.noteu.noteu.subject.dto.SubjectRequestDto;
 import com.noteu.noteu.subject.dto.SubjectResponseDto;
 import com.noteu.noteu.subject.entity.Subject;
+import com.noteu.noteu.subject.entity.SubjectMember;
 import com.noteu.noteu.subject.service.SubjectMemberService;
 import com.noteu.noteu.subject.service.SubjectService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +21,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @Slf4j
@@ -39,9 +46,6 @@ public class SubjectController {
     public String addSubject(@AuthenticationPrincipal MemberInfo memberInfo, SubjectRequestDto subjectRequestDto){
         SubjectResponseDto subjectResponseDto = subjectService.save(subjectRequestDto);
 
-        // Test Code
-        log.info("과목 코드: {}", subjectResponseDto.getSubjectCode());
-        log.info("memberInfo: {}", memberInfo.getId());
         subjectMemberService.save(subjectResponseDto.getSubjectCode(), memberInfo.getId());
         return "redirect:/subjects";
     }
@@ -54,17 +58,23 @@ public class SubjectController {
 
     // 과목 코드 입력
     @PostMapping("/input-code")
-    public String inputCode(@AuthenticationPrincipal MemberInfo memberInfo, SubjectMemberRequestDto subjectMemberRequestDto){
-        // Test Code
-        log.info("memberInfo: {}", memberInfo);
-        subjectMemberService.save(subjectMemberRequestDto.getSubjectCode(), memberInfo.getId());
-        return "redirect:/subjects";
+    public ResponseEntity<String> inputCode(@AuthenticationPrincipal MemberInfo memberInfo, SubjectMemberRequestDto subjectMemberRequestDto){
+        String subjectCode = subjectMemberRequestDto.getSubjectCode();
+
+        Subject subject = subjectService.getSubjectByCode(subjectCode);
+
+        Member result = subjectMemberService.getMemberBySubjectCode(memberInfo.getId(), subject.getId());
+        if (result == null) {
+            subjectMemberService.save(subjectCode, memberInfo.getId());
+            return ResponseEntity.ok("가입이 완료되었습니다");
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 가입된 과목입니다");
+        }
     }
 
     // 과목 리스트
     @GetMapping
     public String list(@AuthenticationPrincipal MemberInfo memberInfo, Model m){
-        log.info("memberInfo: {}", memberInfo);
         List<Subject> list = subjectService.getAll(memberInfo.getId());
 
         if (list != null)
@@ -72,15 +82,6 @@ public class SubjectController {
                 m.addAttribute("list", list);
         return "layout/subject/list";
 
-    }
-
-//     과목 상세보기
-    @GetMapping("/{subjectId}")
-    public String detailSubject(@PathVariable Long subjectId, Model m){
-        log.info("subjectId: {}", subjectId);
-        SubjectResponseDto subjectResponseDto = subjectService.getSubject(subjectId);
-        m.addAttribute("subject", subjectResponseDto);
-        return "layout/subject/detail";
     }
 
 //    // 과목 삭제
