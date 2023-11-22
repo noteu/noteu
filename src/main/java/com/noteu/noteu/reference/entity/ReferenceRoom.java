@@ -7,15 +7,15 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 public class ReferenceRoom extends AuditingFields {
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -30,6 +30,8 @@ public class ReferenceRoom extends AuditingFields {
     @Column(nullable = false, length = 1024)
     private String referenceRoomContent;
 
-    @Column(nullable = false, length = 50)
-    private String referenceRoomFileName;
+    public void update(String newTitle, String newContent) {
+        this.referenceRoomTitle = newTitle;
+        this.referenceRoomContent = newContent;
+    }
 }
