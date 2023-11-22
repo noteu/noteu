@@ -21,7 +21,7 @@ public class AuthController {
 
     @GetMapping("/sign-up")
     public String signup(SignUpDto signUpDto) {
-        return "fragments/member/sign_up";
+        return "layout/member/sign_up";
     }
 
     @PostMapping("/sign-up")
@@ -29,23 +29,23 @@ public class AuthController {
 
         // 오류 메세지
         if (bindingResult.hasErrors()) {
-            return "fragments/member/sign_up";
+            return "layout/member/sign_up";
         }
 
         // 비밀번호 확인
         if (!signUpDto.getPassword1().equals(signUpDto.getPassword2())) {
             bindingResult.rejectValue("password2", "passwordInCorrect",
                     "비밀번호와 비밀번호 확인이 일치하지 않습니다.");
-            return "fragments/member/sign_up";
+            return "layout/member/sign_up";
         }
 
         memberDetailsService.createUser(signUpDto);
-        return "redirect:/members/login";
+        return "redirect:/auth/login";
     }
 
     @GetMapping("/login")
     public String login() {
-        return "fragments/member/login";
+        return "layout/member/login";
     }
 
 }

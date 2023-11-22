@@ -9,7 +9,6 @@ public interface MemberConverter {
         return MemberDto.builder()
                 .id(member.getId())
                 .username(member.getUsername())
-                .password(member.getPassword())
                 .profile(member.getProfile())
                 .memberName(member.getMemberName())
                 .email(member.getEmail())

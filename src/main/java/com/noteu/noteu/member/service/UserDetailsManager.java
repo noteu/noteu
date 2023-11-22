@@ -1,5 +1,6 @@
 package com.noteu.noteu.member.service;
 
+import com.noteu.noteu.member.dto.MemberEditDto;
 import com.noteu.noteu.member.dto.SignUpDto;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,12 +15,12 @@ public interface UserDetailsManager extends UserDetailsService {
     /**
      * Update the specified user.
      */
-    void updateUser(UserDetails user);
+    void updateUser(MemberEditDto user);
 
     /**
      * Remove the user with the given login name from the system.
      */
-    void deleteUser(String username);
+    void deleteUser(Long memberId, String username);
 
     /**
      * Modify the current user's password. This should change the user's password in the
