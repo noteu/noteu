@@ -26,17 +26,25 @@
 
                 <div class="row mb-2">
                     <div class="col-sm-4">
-                        <a href="/subjects/add-form" class="btn btn-danger rounded-pill mb-3"><i class="mdi mdi-plus"></i> Create Subject</a>
-                        <a href="/subjects/input-code-form" class="btn btn-success rounded-pill mb-3"><i class="mdi mdi-plus"></i> Join Subject</a>
+                        <a th:if="${#authorization.expression('hasRole(''ROLE_TEACHER'')')}" href="/subjects/add-form" class="btn btn-danger rounded-pill mb-3">
+                            <i class="mdi mdi-plus"></i> Create Subject
+                        </a>
+                
+                        <a th:if="${#authorization.expression('hasRole(''ROLE_STUDENT'')')}" href="/subjects/input-code-form" class="btn btn-success rounded-pill mb-3">
+                            <i class="mdi mdi-plus"></i> Join Subject
+                        </a>
                     </div>
-                </div> 
+                </div>
+                 
 
                 <div  class="row">
                     <div th:each="l : ${list}" class="col-md-6 col-xxl-3">
                         <div class="card d-block">
                             <div class="card-body mt-0">
-                                <!-- <a th:href="@{/subject/${l.getId()}" class="text-title" th:text="${l.subjectName}"></a> -->
                                 <a th:href="@{'/subjects/' + ${l.id} + '/notices'}" class="text-title" th:text="${l.subjectName}"></a>
+                                <hr th:if="${#authorization.expression('hasRole(''ROLE_TEACHER'')')}">
+                                <input type="hidden" th:id="'subjectCode_' + ${l.id}" class="card-text" th:value="${l.subjectCode}">
+                                <span th:if="${#authorization.expression('hasRole(''ROLE_TEACHER'')')}" th:text="${l.subjectCode}" th:onclick="'copy_to_clipboard(\'subjectCode_' + ${l.id} + '\')'" style="cursor: pointer;"></span>
                             </div>
                         </div>
                     </div>

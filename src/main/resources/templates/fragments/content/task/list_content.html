@@ -24,7 +24,7 @@
                 </div>
                 <!-- end page title -->
 
-                <div class="row mb-2">
+                <div class="row mb-2" th:if="${#authorization.expression('hasRole(''ROLE_TEACHER'')')}">
                     <div class="col-sm-4">
                         <a th:href="@{'/subjects/' + ${subjectId} + '/tasks/add-form'}" class="btn btn-success rounded-pill mb-3"><i class="mdi mdi-plus"></i>Create Task</a>
                     </div>
