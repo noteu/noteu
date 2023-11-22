@@ -9,30 +9,6 @@ $(document).ready(function() {
     var taskId = document.getElementById("taskId").value;
     var subjectId = document.getElementById("subjectId").value;
 
-    console.log(taskId)
-
-    div_delete.addEventListener("click", () => {
-        $.ajax({
-            type: "POST",
-            url: `/subjects/${subjectId}/tasks/${taskId}`,
-            data: {
-                "taskId": taskId
-            },
-            datatype: "JSON",
-            success: function(data) {
-                alert("삭제가 완료되었습니다.");
-                location.href=`/subjects/${taskId}/tasks`;
-            },
-            error: function(error) {
-                alert("삭제에 실패되었습니다.");
-            },
-        });
-    });
-
-    div_edit.addEventListener("click", () => {
-        location.href = `/subjects/${subjectId}/tasks/${taskId}/edit-form`;
-    });
-
     btn_task_comment.addEventListener("click", (e) => {
         e.preventDefault();
         taskCommentFile.click();
@@ -90,7 +66,29 @@ $(document).ready(function() {
                 alert("과제 삭제 실패");
             },
         });
-    })
+    });
+
+    div_delete.addEventListener("click", () => {
+        $.ajax({
+            type: "POST",
+            url: `/subjects/${subjectId}/tasks/${taskId}`,
+            data: {
+                "taskId": taskId
+            },
+            datatype: "JSON",
+            success: function(data) {
+                alert("삭제가 완료되었습니다.");
+                location.href=`/subjects/${taskId}/tasks`;
+            },
+            error: function(error) {
+                alert("삭제에 실패되었습니다.");
+            },
+        });
+    });
+
+    div_edit.addEventListener("click", () => {
+        location.href = `/subjects/${subjectId}/tasks/${taskId}/edit-form`;
+    });
     
 });
 
