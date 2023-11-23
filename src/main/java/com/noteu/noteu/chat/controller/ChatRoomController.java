@@ -1,10 +1,12 @@
 package com.noteu.noteu.chat.controller;
 
+import com.noteu.noteu.chat.dto.ChatRoomResponse;
 import com.noteu.noteu.chat.dto.response.ChatMessageResponseDto;
 import com.noteu.noteu.chat.dto.response.ChatRoomInfoResponseDto;
 import com.noteu.noteu.chat.dto.response.ChatRoomResponseDto;
 import com.noteu.noteu.chat.service.RestChatService;
 import com.noteu.noteu.member.dto.MemberInfo;
+import com.noteu.noteu.member.dto.response.MemberResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -39,22 +41,34 @@ public class ChatRoomController {
     // 모든 채팅방 목록 반환
     @GetMapping("/rooms")
     @ResponseBody
-    public ChatRoomInfoResponseDto room(@PathVariable("subject-id") Long subjectId,
-                                        @AuthenticationPrincipal MemberInfo memberInfo) {
+    public ChatRoomInfoResponseDto getAllRoom(@PathVariable("subject-id") Long subjectId,
+                                              @AuthenticationPrincipal MemberInfo memberInfo) {
 
         return restChatService.findAllById(subjectId, memberInfo.getId());
+    }
+
+    // 같은반 친구들 목록 반환
+    @GetMapping("/friends")
+    @ResponseBody
+    public List<MemberResponseDto> getAllFriend(@PathVariable("subject-id") Long subjectId,
+                                                @AuthenticationPrincipal MemberInfo memberInfo) {
+        List<MemberResponseDto> allSubjectsBySubjectId = restChatService.findAllSubjectsBySubjectId(subjectId, memberInfo.getId());
+        log.info("멤버 정보들을 다 가져옵니다. {}", allSubjectsBySubjectId);
+        return allSubjectsBySubjectId;
     }
 
     // 채팅방 생성 (친구창에서 채팅 모양을 누르면 채팅이 생성됨) 이미 방이 생성되어 있다면??? 처리해야함..
     @PostMapping("/rooms")
     @ResponseBody
-    public ResponseEntity<ChatRoomResponseDto> createRoom(@RequestBody Map<String, Long> requestBody,
-                                                          @AuthenticationPrincipal MemberInfo memberInfo,
-                                                          @PathVariable("subject-id") Long subjectId) {
-        Long friendId = requestBody.get("riendId");
+    public ResponseEntity<ChatRoomResponse> createRoom(@RequestBody Map<String, Long> requestBody,
+                                                       @AuthenticationPrincipal MemberInfo memberInfo,
+                                                       @PathVariable("subject-id") Long subjectId) {
+        Long friendId = requestBody.get("friendId");
+        ChatRoomResponse chatRoomResponseDto = restChatService.createRoom(subjectId, friendId, memberInfo.getId());
 
-        return ResponseEntity.created(URI.create("/subjects/" + subjectId + "/chats"))
-                .body(restChatService.createRoom(subjectId, friendId, memberInfo.getId()));
+        return ResponseEntity
+                .created(URI.create("/subjects/" + subjectId + "/chats"))
+                .body(chatRoomResponseDto);
     }
 
     // 채팅방 입장 화면

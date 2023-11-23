@@ -1,6 +1,7 @@
 package com.noteu.noteu.chat.service.impl;
 
 import com.noteu.noteu.chat.converter.ChatConverter;
+import com.noteu.noteu.chat.dto.ChatRoomResponse;
 import com.noteu.noteu.chat.dto.response.ChatMessageResponseDto;
 import com.noteu.noteu.chat.dto.response.ChatRoomInfoResponseDto;
 import com.noteu.noteu.chat.dto.response.ChatRoomResponseDto;
@@ -11,9 +12,11 @@ import com.noteu.noteu.chat.repository.ChatMessageRepository;
 import com.noteu.noteu.chat.repository.ChatParticipantRepository;
 import com.noteu.noteu.chat.repository.ChatRoomRepository;
 import com.noteu.noteu.chat.service.RestChatService;
+import com.noteu.noteu.member.dto.response.MemberResponseDto;
 import com.noteu.noteu.member.entity.Member;
 import com.noteu.noteu.member.repository.MemberRepository;
 import com.noteu.noteu.subject.entity.Subject;
+import com.noteu.noteu.subject.repository.SubjectMemberRepository;
 import com.noteu.noteu.subject.repository.SubjectRepository;
 import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +25,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -33,6 +38,7 @@ public class RestChatServiceImpl implements RestChatService {
     private final ChatMessageRepository chatMessageRepository;
     private final ChatParticipantRepository chatParticipantRepository;
     private final SubjectRepository subjectRepository;
+    private final SubjectMemberRepository subjectMemberRepository;
     private final MemberRepository memberRepository;
     private final ChatConverter converter;
 
@@ -55,6 +61,15 @@ public class RestChatServiceImpl implements RestChatService {
 
     @Transactional(readOnly = true)
     @Override
+    public List<MemberResponseDto> findAllSubjectsBySubjectId(Long subjectId, Long loginId) {
+        return subjectMemberRepository.findAllSubjectsBySubjectId(subjectId).stream()
+                .map(converter::memberEntityToMemberResponseDto)
+                .filter(m -> !Objects.equals(m.getId(), loginId))
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
     public List<ChatMessageResponseDto> findPastChat(Long roomId) {
         return chatMessageRepository.getAllByRoomId(roomId).stream()
                 .map(converter::chatMessageEntityToChatMessageResponsedto)
@@ -62,17 +77,15 @@ public class RestChatServiceImpl implements RestChatService {
     }
 
     @Override
-    public ChatRoomResponseDto createRoom(Long subjectId, Long friendId, Long loginId) {
-        boolean existsRoom = chatRoomRepository.existsChatRoom(subjectId, friendId, loginId);
-
-        if (existsRoom) {
-            throw new EntityExistsException("해당 사람과는 이미 방이 존재합니다!!!!!!");
-        }
-        Subject subject = subjectRepository.getReferenceById(subjectId);
-        ChatRoom chatRoom = chatRoomRepository.save(new ChatRoom(subject));
-        enterRoom(chatRoom, friendId, loginId);
-
-        return converter.chatRoomEntityToChatRoomDto(chatRoom, loginId, null);
+    public ChatRoomResponse createRoom(Long subjectId, Long friendId, Long loginId) {
+        return chatRoomRepository.existsChatRoom(subjectId, friendId, loginId)
+                .map(chatRoom -> converter.chatRoomEntityToChatRoomExistResponseDto(chatRoom, friendId, loginId))
+                .orElseGet(() -> {
+                    Subject subject = subjectRepository.getReferenceById(subjectId);
+                    ChatRoom chatRoom = chatRoomRepository.save(new ChatRoom(subject));
+                    enterRoom(chatRoom, friendId, loginId);
+                    return converter.chatRoomEntityToChatRoomDto(chatRoom, loginId, new ChatMessage(null, null, null, ""));
+                });
     }
 
     // 생성된 방에 멤버 넣기

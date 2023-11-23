@@ -1,23 +1,134 @@
 window.onload = function () {
-    findAllRoom();
+    subjectId = document.getElementById("subjectId").value;
+    token = document.cookie.split("=")[1];
+    document.querySelector("#chat-message").innerHTML = '';
+
+    findAllRoomAndSocketConnect(subjectId, token);
     messageInput = document.getElementById('message-input');
     senderId = document.getElementById("memberId").value;
     senderName = document.getElementById("memberName").value;
     sendBtn = document.getElementById('send-btn');
     sendBtn.onclick = sendMessage;
     chatMessage = document.getElementById('chat-message');
+
+    chatsToggleBtn = document.getElementById('chats');
+    friendsToggleBtn = document.getElementById('friends');
+    chatsToggleBtn.onclick = function () {
+        findAllRoom(subjectId, token);
+    };
+
+    friendsToggleBtn.onclick = function () {
+        findAllFriend(subjectId, token);
+    };
 };
+let token;
+let subjectId;
 let chatMessage;
 let selectRoomId;
 
-async function findAllRoom() {
+function findAllFriend(subjectId, token) {
+    console.log(`subjectId : ${subjectId}`);
+    console.log(`token : ${token}`);
+    console.log("친구목록 가져오기 버튼이 눌렷ㅅ다");
 
-    let subjectId = document.getElementById("subjectId").value;
-    let loginMemberId = document.getElementById("memberId").value;
-    let token = document.cookie.split("=")[1];
+    axios
+        .get(`/subjects/${subjectId}/chats/friends`, {
+            headers: {
+                Authorization: `${token}`
+            }
+        })
+        .then(response => {
+            console.log(response);
+            console.log(response.data);
+            const friends = response.data; // 같은반 친구 목록
 
-    await axios
-        .get(`/subjects/${subjectId}/chats/rooms?loginMemberId=${loginMemberId}`, {
+            // 기존 html 초기화
+            document.querySelector("#users").innerHTML = '';
+
+            const rowDiv = document.createElement("div");
+            rowDiv.className = "row";
+
+            const colDiv = document.createElement("div");
+            colDiv.className = "col";
+
+            const cardDiv = document.createElement("div");
+            cardDiv.className = "card-body py-0";
+            cardDiv.style.maxHeight = "565px";
+            cardDiv.setAttribute("data-simplebar", "");
+
+
+            // 각 방에 대한 정보를 반복하여 HTML 요소를 생성
+            friends.forEach(friend => {
+                const friendId = friend.id;
+                const email = friend.email;
+                const profile = friend.profile;
+                const tel = friend.tel;
+                const username = friend.username;
+
+                const a = document.createElement("a");
+                a.href = "javascript:void(0);";
+                a.className = "text-body";
+
+                const div2 = document.createElement("div");
+                div2.className = "d-flex align-items-start mt-1 p-2";
+                div2.onclick = function () {
+                    toggleMessageStyle(this);
+                    memberDetailHead(subjectId, friendId, email, profile, tel, username);
+                    memberDetailBody(friendId, email, profile, tel, username);
+                };
+
+                const img = document.createElement("img");
+                img.className = "me-2 rounded-circle";
+                img.src = profile;
+                img.height = "48";
+                img.alt = username;
+
+                const innerDiv = document.createElement("div");
+                innerDiv.className = "w-100 overflow-hidden";
+
+                const h5 = document.createElement("h5");
+                h5.className = "mt-0 mb-0 font-14";
+                h5.textContent = username;
+
+                const span1 = document.createElement("span");
+
+                const p = document.createElement("p");
+                p.className = "mt-1 mb-0 text-muted font-14";
+
+                const span2 = document.createElement("span");
+                span2.className = "w-25 float-end text-end";
+
+                const span3 = document.createElement("span");
+                span3.className = "badge badge-danger-lighten";
+
+                const span4 = document.createElement("span");
+                span4.className = "w-75";
+                span4.textContent = "어떤걸 넣으면 좋을지 고민중..";
+
+                cardDiv.appendChild(a);
+                a.appendChild(div2);
+                div2.appendChild(img);
+                div2.appendChild(innerDiv);
+                innerDiv.appendChild(h5);
+                h5.appendChild(span1);
+                innerDiv.appendChild(p);
+                p.appendChild(span2);
+                span2.appendChild(span3);
+                p.appendChild(span4);
+            });
+
+            rowDiv.appendChild(colDiv);
+            colDiv.appendChild(cardDiv);
+
+            // 생성한 HTML 요소를 기존의 HTML에 추가
+            document.querySelector("#users").appendChild(rowDiv);
+        });
+}
+
+function findAllRoom(subjectId, token) {
+
+    axios
+        .get(`/subjects/${subjectId}/chats/rooms`, {
             headers: {
                 Authorization: `${token}`
             }
@@ -86,8 +197,6 @@ async function findAllRoom() {
                 const ampm = hours >= 12 ? 'pm' : 'am';
                 const twelveHourFormat = (hours % 12) || 12;
                 const formattedTime = twelveHourFormat + ':' + minutes + ampm;
-                console.log("parsedTime : " + parsedTime);
-                console.log("formattedTime : " + formattedTime);
                 span1.id = `time${roomId}`;
                 span1.className = "float-end text-muted font-12";
                 span1.textContent = formattedTime;
@@ -104,7 +213,6 @@ async function findAllRoom() {
 
                 const span4 = document.createElement("span");
                 span4.id = `lastmessage${roomId}`;
-                console.log("span4 id : " + roomId);
                 span4.className = "w-75";
                 span4.textContent = lastMessage;
 
@@ -117,20 +225,129 @@ async function findAllRoom() {
                 p.appendChild(span2);
                 span2.appendChild(span3);
                 p.appendChild(span4);
-                console.log("p태그에 span을 붙힙니다.")
+            });
+
+            rowDiv.appendChild(colDiv);
+            colDiv.appendChild(cardDiv);
+
+            // 생성한 HTML 요소를 기존의 HTML에 추가
+            document.querySelector("#users").appendChild(rowDiv);
+        });
+}
+
+
+async function findAllRoomAndSocketConnect() {
+
+    // let subjectId = document.getElementById("subjectId").value;
+    // let token = document.cookie.split("=")[1];
+
+    await axios
+        .get(`/subjects/${subjectId}/chats/rooms`, {
+            headers: {
+                Authorization: `${token}`
+            }
+        })
+        .then(response => {
+            console.log(response);
+            console.log(response.data);
+            const rooms = response.data.chatRoomResponseDtos; // 채팅 방 배열
+            const loginId = response.data.loginId; // 채팅 방 배열
+
+            // 기존 html 초기화
+            document.querySelector("#users").innerHTML = '';
+
+            const rowDiv = document.createElement("div");
+            rowDiv.className = "row";
+
+            const colDiv = document.createElement("div");
+            colDiv.className = "col";
+
+            const cardDiv = document.createElement("div");
+            cardDiv.className = "card-body py-0";
+            cardDiv.style.maxHeight = "565px";
+            cardDiv.setAttribute("data-simplebar", "");
+
+
+            // 각 방에 대한 정보를 반복하여 HTML 요소를 생성
+            rooms.forEach(room => {
+                const roomId = room.id;
+                const participants = room.participants; // 참가자 배열
+                const email = participants[0].email;
+                const friendId = participants[0].id;
+                const profile = participants[0].profile;
+                const tel = participants[0].tel;
+                const username = participants[0].username;
+                const lastMessage = room.lastMessage;
+                const parsedTime = room.lastMessageDateTime;
+
+                console.log(roomId)
+                console.log(participants);
+
+                const a = document.createElement("a");
+                a.href = "javascript:void(0);";
+                a.className = "text-body";
+
+                const div2 = document.createElement("div");
+                div2.className = "d-flex align-items-start mt-1 p-2";
+                div2.onclick = function () {
+                    selectRoomId = roomId;
+                    toggleMessageStyle(this);
+                    memberDetailHead(subjectId, friendId, email, profile, tel, username);
+                    memberDetailBody(friendId, email, profile, tel, username);
+                    pastChat(roomId, friendId, loginId);
+                };
+
+                const innerDiv = document.createElement("div");
+                innerDiv.className = "w-100 overflow-hidden";
+
+                const h5 = document.createElement("h5");
+                h5.className = "mt-0 mb-0 font-14";
+                h5.textContent = username;
+
+                const span1 = document.createElement("span");
+                const date = new Date(parsedTime);
+                const hours = date.getHours();
+                const minutes = date.getMinutes();
+                const ampm = hours >= 12 ? 'pm' : 'am';
+                const twelveHourFormat = (hours % 12) || 12;
+                const formattedTime = twelveHourFormat + ':' + minutes + ampm;
+                span1.id = `time${roomId}`;
+                span1.className = "float-end text-muted font-12";
+                span1.textContent = formattedTime;
+
+                const p = document.createElement("p");
+                p.className = "mt-1 mb-0 text-muted font-14";
+
+                const span2 = document.createElement("span");
+                span2.className = "w-25 float-end text-end";
+
+                const span3 = document.createElement("span");
+                span3.className = "badge badge-danger-lighten";
+                span3.textContent = "2";
+
+                const span4 = document.createElement("span");
+                span4.id = `lastmessage${roomId}`;
+                span4.className = "w-75";
+                span4.textContent = lastMessage;
+
+                cardDiv.appendChild(a);
+                a.appendChild(div2);
+                div2.appendChild(innerDiv);
+                innerDiv.appendChild(h5);
+                h5.appendChild(span1);
+                innerDiv.appendChild(p);
+                p.appendChild(span2);
+                span2.appendChild(span3);
+                p.appendChild(span4);
 
                 connect(roomId, senderName);
             });
 
             rowDiv.appendChild(colDiv);
-            console.log("rowdiv태그에 coldiv을 붙힙니다.");
             colDiv.appendChild(cardDiv);
-            console.log("coldiv태그에 carddiv을 붙힙니다.");
 
             // 생성한 HTML 요소를 기존의 HTML에 추가
             document.querySelector("#users").appendChild(rowDiv);
-            console.log("마지막으로 html에 추가합니다.");
-
         });
 }
 
@@ -164,10 +381,9 @@ function memberDetailHead(subjectId, friendId, email, profile, tel, username) {
     const i = document.createElement("i");
     button.className = "btn btn-primary btn-sm mt-1"
     button.onclick = function () {
-        createChatRoom(subjectId, memberId);
+        createChatRoom(subjectId, friendId);
     };
     i.className = "uil ri-chat-new-line me-1";
-    i.textContent = "send chat"
 
     const p = document.createElement("p")
     const strong = document.createElement("strong");
@@ -179,6 +395,7 @@ function memberDetailHead(subjectId, friendId, email, profile, tel, username) {
     div.appendChild(h4);
     div.appendChild(button);
     button.appendChild(i);
+    button.appendChild(document.createTextNode(" send chat"));
     div.appendChild(p);
     p.appendChild(strong);
 
@@ -189,11 +406,25 @@ function createChatRoom(subjectId, friendId) {
     axios.post(`/subjects/${subjectId}/chats/rooms`, {friendId: friendId})
         .then(response => {
             console.log(response);
-            console.log("방 생성!!");
+
+            if(!response.data.hasOwnProperty('id')){
+                const roomId = response.data.roomId;
+                const friendId = response.data.friendId;
+                const loginId = response.data.loginId;
+                pastChat(roomId, friendId, loginId)
+                console.log("이미 방이 존재해서 뜨는 로그");
+            } else {
+                console.log("방이 존재하지 않아서 뜨는 로그");
+                const roomId = response.data.id;
+                const friendId = response.data.participants[0].friendId;
+                const loginId = response.data.loginId;
+                connect(roomId, senderName);
+                pastChat(roomId, friendId, loginId)
+            }
         })
         .catch(response => {
-            console.log(response);
-            console.log("이미 방이 존재합니다!!");
+            console.log(`에러 리스폰스를 확인하고 싶다고 : ${response}`);
+            // pastChat();
         });
 }
 
@@ -244,8 +475,8 @@ function memberDetailBody(friendId, email, profile, tel, username) {
 
 // 채팅 불러오기
 function pastChat(roomId, friendId, loginId) {
-    const subjectId = 1;
-    const token = document.cookie.split("=")[1];
+    // const subjectId = 1;
+    // const token = document.cookie.split("=")[1];
 
     axios
         .get(`/subjects/${subjectId}/chats/rooms/api?roomId=${roomId}`, {

@@ -1,7 +1,9 @@
 package com.noteu.noteu.chat.converter;
 
+import com.noteu.noteu.chat.dto.ChatRoomResponse;
 import com.noteu.noteu.chat.dto.request.ChatMessageRequestDto;
 import com.noteu.noteu.chat.dto.response.ChatMessageResponseDto;
+import com.noteu.noteu.chat.dto.response.ChatRoomExistResponseDto;
 import com.noteu.noteu.chat.dto.response.ChatRoomResponseDto;
 import com.noteu.noteu.chat.entity.ChatMessage;
 import com.noteu.noteu.chat.entity.ChatParticipant;
@@ -27,6 +29,14 @@ public interface ChatConverter {
                 .build();
     }
 
+    default ChatRoomResponse chatRoomEntityToChatRoomExistResponseDto(ChatRoom chatRoom, Long friendId, Long loginId) {
+        return ChatRoomExistResponseDto.builder()
+                .loginId(loginId)
+                .friendId(friendId)
+                .RoomId(chatRoom.getId())
+                .build();
+    }
+
     default MemberResponseDto memberEntityToMemberResponseDto(Member member) {
         return MemberResponseDto.builder()
                 .id(member.getId())
@@ -46,7 +56,7 @@ public interface ChatConverter {
                 .build();
     }
 
-    default ChatMessageResponseDto chatMessageEntityToChatMessageResponsedto(ChatMessage chatMessage){
+    default ChatMessageResponseDto chatMessageEntityToChatMessageResponsedto(ChatMessage chatMessage) {
         return ChatMessageResponseDto.builder()
                 .roomId(chatMessage.getRoomId())
                 .senderId(chatMessage.getSenderId())

@@ -37,7 +37,7 @@ insert into chat_room (created_at, modified_at, subject_id) values ('2023-11-17 
 insert into chat_room (created_at, modified_at, subject_id) values ('2023-11-17 16:27:51.67171', '2023-11-17 16:27:51.67171', 1);
 insert into chat_room (created_at, modified_at, subject_id) values ('2023-11-17 16:27:51.67171', '2023-11-17 16:27:51.67171', 1);
 insert into chat_room (created_at, modified_at, subject_id) values ('2023-11-17 16:27:51.67171', '2023-11-17 16:27:51.67171', 1);
-insert into chat_room (created_at, modified_at, subject_id) values ('2023-11-17 16:27:51.67171', '2023-11-17 16:27:51.67171', 1);
+-- insert into chat_room (created_at, modified_at, subject_id) values ('2023-11-17 16:27:51.67171', '2023-11-17 16:27:51.67171', 1);
 
 -- 채팅방에 포함된 사람들
 insert into chat_participant (created_at, modified_at, chat_room_id, member_id) values ('2023-11-17 16:27:51.67171', '2023-11-17 16:27:51.67171', 1, 2);
@@ -52,9 +52,10 @@ insert into chat_participant (created_at, modified_at, chat_room_id, member_id) 
 insert into chat_participant (created_at, modified_at, chat_room_id, member_id) values ('2023-11-17 16:27:51.67171', '2023-11-17 16:27:51.67171', 5, 1);
 insert into chat_participant (created_at, modified_at, chat_room_id, member_id) values ('2023-11-17 16:27:51.67171', '2023-11-17 16:27:51.67171', 6, 7);
 insert into chat_participant (created_at, modified_at, chat_room_id, member_id) values ('2023-11-17 16:27:51.67171', '2023-11-17 16:27:51.67171', 6, 1);
-insert into chat_participant (created_at, modified_at, chat_room_id, member_id) values ('2023-11-17 16:27:51.67171', '2023-11-17 16:27:51.67171', 7, 8);
-insert into chat_participant (created_at, modified_at, chat_room_id, member_id) values ('2023-11-17 16:27:51.67171', '2023-11-17 16:27:51.67171', 7, 1);
+-- insert into chat_participant (created_at, modified_at, chat_room_id, member_id) values ('2023-11-17 16:27:51.67171', '2023-11-17 16:27:51.67171', 7, 8);
+-- insert into chat_participant (created_at, modified_at, chat_room_id, member_id) values ('2023-11-17 16:27:51.67171', '2023-11-17 16:27:51.67171', 7, 1);
 
+-- 채팅 추가
 insert into chat_message (created_at, modified_at, room_id, sender_id, sender_name, message) values ('2023-11-17 16:27:51.67171', '2023-11-17 16:27:51.67171', 1, 1, 'aaaa', '테스트 메시지란 말이에요111~~~~~');
 insert into chat_message (created_at, modified_at, room_id, sender_id, sender_name, message) values ('2023-11-17 16:27:51.67171', '2023-11-17 16:27:51.67171', 1, 1, 'aaaa', '테스트 메시지란 말이에요222~~~~~');
 insert into chat_message (created_at, modified_at, room_id, sender_id, sender_name, message) values ('2023-11-17 16:27:51.67171', '2023-11-17 16:27:51.67171', 1, 2, 'bbbb', '테스트 메시지란 말이에요333~~~~~');
