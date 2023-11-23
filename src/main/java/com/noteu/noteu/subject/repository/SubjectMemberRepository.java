@@ -19,4 +19,7 @@ public interface SubjectMemberRepository extends JpaRepository<SubjectMember, Lo
 
     @Query(value = "select sm.member from SubjectMember as sm where sm.member=:member and sm.subject=:subject")
     Member findBySubjectAndMember(@Param("member") Member member, @Param("subject") Subject subject);
+
+    @Query(value = "select sm.member from SubjectMember as sm where sm.subject.id=:subjectId")
+    List<Member> findAllSubjectsBySubjectId(@Param("subjectId") Long subjectId);
 }
