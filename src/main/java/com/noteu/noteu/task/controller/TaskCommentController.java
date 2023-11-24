@@ -39,13 +39,23 @@ public class TaskCommentController {
     public String addTaskComment(@AuthenticationPrincipal MemberInfo memberInfo,
                                  @PathVariable("subject-id") Long subjectId, @PathVariable("task-id") Long taskId,
                                  String taskCommentTitle, MultipartFile taskCommentFile
-                                 ){
+    ){
 
         log.info("taskCommentFile: {}", taskCommentFile);
         String fileName = taskCommentFile.getOriginalFilename();
 
-        File newFile = new File(path + "/task/" + fileName);
-        try{
+        File directory = new File(path + "/task/");
+        if (!directory.exists()) {
+            if (directory.mkdirs()) {
+                log.info("Directory is created!");
+            } else {
+                log.error("Failed to create directory!");
+                throw new RuntimeException("Failed to create directory for task files");
+            }
+        }
+
+        File newFile = new File(directory, fileName);
+        try {
             taskCommentFile.transferTo(newFile);
 
             TaskCommentRequestDto taskCommentRequestDto = TaskCommentRequestDto.builder()
@@ -54,7 +64,7 @@ public class TaskCommentController {
                     .build();
             taskCommentService.save(taskCommentRequestDto, taskId, memberInfo.getId());
 
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
