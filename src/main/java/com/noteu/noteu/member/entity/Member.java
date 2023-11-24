@@ -51,4 +51,8 @@ public class Member extends AuditingFields {
     public void modifyPassword(String password) {
         this.password = password;
     }
+
+    public void modifyProfile(String profile) {
+        this.profile = profile;
+    }
 }
