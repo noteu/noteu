@@ -361,10 +361,10 @@
                     <li class="dropdown" sec:authorize="isAuthenticated()">
                         <a class="nav-link dropdown-toggle arrow-none nav-user px-2" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                             <span class="account-user-avatar">
-                                <img th:src="${#authentication.getPrincipal().getProfile()}" alt="user-image" width="32" class="rounded-circle">
+                                <img th:src="${#authentication.principal.profile}" alt="user-image" width="32" height="32" class="rounded-circle">
                             </span>
                             <span class="d-lg-flex flex-column gap-1 d-none">
-                                <h5 class="my-0" th:text="${#authentication.getPrincipal().getMemberName()}"></h5>
+                                <h5 class="my-0" th:text="${#authentication.principal.memberName}"></h5>
                                 <h6 class="my-0 fw-normal" sec:authorize="hasRole('ROLE_ADMIN')">admin</h6>
                                 <h6 class="my-0 fw-normal" sec:authorize="hasRole('ROLE_TEACHER')">teacher</h6>
                                 <h6 class="my-0 fw-normal" sec:authorize="hasRole('ROLE_STUDENT')">student</h6>
@@ -377,25 +377,25 @@
                             </div>
 
                             <!-- item-->
-                            <a th:href="@{|/members/account/${#authentication.getPrincipal().getId()}|}" class="dropdown-item">
+                            <a th:href="@{|/members/account/${#authentication.principal.id}|}" class="dropdown-item">
                                 <i class="mdi mdi-account-circle me-1"></i>
                                 <span>My Account</span>
                             </a>
 
                             <!-- item-->
-                            <a th:href="@{|/members/account/${#authentication.getPrincipal().getId()}|}" class="dropdown-item">
+                            <a th:href="@{|/members/account/${#authentication.principal.id}|}" class="dropdown-item">
                                 <i class="mdi mdi-lifebuoy me-1"></i>
                                 <span>My Post</span>
                             </a>
 
                             <!-- item-->
-                            <a th:href="@{|/members/account/${#authentication.getPrincipal().getId()}|}" class="dropdown-item">
+                            <a th:href="@{|/members/account/${#authentication.principal.id}|}" class="dropdown-item">
                                 <i class="mdi mdi-account-edit me-1"></i>
                                 <span>Settings</span>
                             </a>
 
                             <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">
+                            <a th:href="@{|/members/password/${#authentication.principal.id}|}" class="dropdown-item">
                                 <i class="mdi mdi-lock-outline me-1"></i>
                                 <span>Change Password</span>
                             </a>

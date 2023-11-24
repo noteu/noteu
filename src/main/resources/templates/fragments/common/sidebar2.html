@@ -42,8 +42,8 @@
                 <!-- Leftbar User -->
                 <div class="leftbar-user" sec:authorize="isAuthenticated()">
                     <a href="pages-profile.html">
-                        <img th:src="${#authentication.getPrincipal().getProfile()}" alt="user-image" height="42" class="rounded-circle shadow-sm">
-                        <span class="leftbar-user-name mt-2" th:text="${#authentication.getPrincipal().getMemberName()}"></span>
+                        <img th:src="${#authentication.principal.profile}" alt="user-image" width="42" height="42" class="rounded-circle shadow-sm">
+                        <span class="leftbar-user-name mt-2" th:text="${#authentication.principal.memberName}"></span>
                     </a>
                 </div>
 

@@ -5,15 +5,19 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <th:block th:replace="fragments/common/header :: headerFragment"></th:block>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><!-- 폰트어썸 아이콘 -->
+    <script type="text/javascript">
+
+    </script>
 </head>
 <body>
 <div class="wrapper">
     <th:block th:replace="fragments/common/topbar :: topbarFragment"></th:block>
     <th:block th:replace="fragments/common/sidebar1 :: sidebar1Fragment"></th:block>
     <div class="content-page">
-        <th:block th:replace="fragments/content/member/login :: loginFragment"></th:block>
-        <th:block th:replace="fragments/common/footer :: footerFragment"></th:block>
+        <th:block th:replace="fragments/content/member/change_profile :: changeProfileFragment"></th:block>
+        <footer class="footer footer-alt">
+            2018 - <script>document.write(new Date().getFullYear())</script> © Hyper - Coderthemes.com
+        </footer>
     </div>
 </div>
 </body>

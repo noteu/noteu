@@ -147,12 +147,31 @@ public class MemberDetailsService implements UserDetailsManager{
                 .build();
     }
 
-    public void passwordCheck(Long memberId, String previousPassword, HttpServletResponse response) throws IOException {
-        Member member = memberRepository.findById(memberId).orElse(null);
+    public void changeProfile(Long memberId, String newProfile) {
+        Member member = memberRepository.findById(memberId).orElseThrow();
+        member.modifyProfile(newProfile);
+        memberRepository.save(member);
 
-        if (passwordEncoder.matches(previousPassword, member.getPassword())) {
-            response.getWriter().print("1");
-        }
-        response.getWriter().print("0"); // 불일치
+        // SecurityContextHolder에 있는 Authentication 객체 다시 저장
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        // 권한 정보
+        Collection<? extends GrantedAuthority> authorities = (Collection<? extends GrantedAuthority>) ((List) authentication.getAuthorities()).stream()
+                .map(role -> new SimpleGrantedAuthority(role.toString()))
+                .collect(Collectors.toUnmodifiableSet());
+
+        log.info("authorities : {} ", authorities);
+
+        Authentication memberInfo = new UsernamePasswordAuthenticationToken(
+                MemberInfo.builder()
+                        .id(member.getId())
+                        .username(member.getUsername())
+                        .memberName(member.getMemberName())
+                        .profile(newProfile)
+                        .authorities(authorities)
+                        .build()
+                , null, authorities);
+
+        // SecurityContextHolder에 MemberInfo 저장
+        SecurityContextHolder.getContext().setAuthentication(memberInfo);
     }
 }
