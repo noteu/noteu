@@ -47,4 +47,8 @@ public class Member extends AuditingFields {
         this.tel = tel;
         this.introduction = introduction;
     }
+
+    public void modifyPassword(String password) {
+        this.password = password;
+    }
 }

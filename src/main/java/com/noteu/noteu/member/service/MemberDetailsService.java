@@ -5,6 +5,7 @@ import com.noteu.noteu.member.entity.Member;
 import com.noteu.noteu.member.entity.Role;
 import com.noteu.noteu.member.exception.UserAlreadyExistAuthenticationException;
 import com.noteu.noteu.member.repository.MemberRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -100,8 +102,14 @@ public class MemberDetailsService implements UserDetailsManager{
     }
 
     @Override
-    public void changePassword(String oldPassword, String newPassword) {
+    public void changePassword(MemberPasswordDto memberPasswordDto) {
 
+        Member member = findById(memberPasswordDto.getId());
+        String newPassword = memberPasswordDto.getNewPassword();
+
+        member.modifyPassword(passwordEncoder.encode(newPassword));
+        memberRepository.save(member);
+        log.info("[log] 비밀번호 변경 완료!");
     }
 
     @Override
@@ -137,5 +145,14 @@ public class MemberDetailsService implements UserDetailsManager{
                 .memberName(member.getMemberName())
                 .authorities(list)
                 .build();
+    }
+
+    public void passwordCheck(Long memberId, String previousPassword, HttpServletResponse response) throws IOException {
+        Member member = memberRepository.findById(memberId).orElse(null);
+
+        if (passwordEncoder.matches(previousPassword, member.getPassword())) {
+            response.getWriter().print("1");
+        }
+        response.getWriter().print("0"); // 불일치
     }
 }
