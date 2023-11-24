@@ -1,4 +1,10 @@
 $(document).ready(function (){
+    $('.createdAt').each(function() {
+        var createdAt = $(this).text();
+        var formattedCreatedAt = formatCreatedAt(createdAt);
+        $(this).text(formattedCreatedAt);
+    });
+
    $(".detail").click(function (){
        var referenceId = $(this).find("input:eq(0)").val();
        var subjectId = $(this).find("input:eq(1)").val();
@@ -19,3 +25,13 @@ $(document).ready(function (){
        });
    });
 });
+
+function formatCreatedAt(createdAt) {
+    var date = new Date(createdAt);
+    var year = date.getFullYear();
+    var month = ('0' + (date.getMonth() + 1)).slice(-2);
+    var day = ('0' + date.getDate()).slice(-2);
+    var hours = ('0' + date.getHours()).slice(-2);
+    var minutes = ('0' + date.getMinutes()).slice(-2);
+    return year + '-' + month + '-' + day + ' ' + hours + '시 ' + minutes + '분';
+}

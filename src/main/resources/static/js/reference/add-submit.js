@@ -17,6 +17,7 @@ $(document).ready(function() {
 
    // 작성 클릭 시
    $("#submitBtn").click(function() {
+      var subjectId = $("#subjectId").val();
       //formData 생성
       var formData = new FormData();
       // 제목과 내용 입력값 가져오기
@@ -34,6 +35,8 @@ $(document).ready(function() {
          formData.append("referenceFile", selectedFiles[i]);
       }
 
+      console.log(subjectId);
+
       // FormData의 key 확인
       for (let key of formData.keys()) {
          console.log(key);
@@ -46,7 +49,7 @@ $(document).ready(function() {
 
       // AJAX 요청 생성
       $.ajax({
-         url: "/subjects/1/references",
+         url: "/subjects/" + subjectId + "/references",
          type: "POST",
          data: formData,
          enctype: "multipart/form-data",
@@ -54,7 +57,7 @@ $(document).ready(function() {
          contentType: false,
          success: function(response) {
             console.log("데이터 전송 성공");
-            location.href = "/subjects/1/references";
+            location.href = "/subjects/" + subjectId + "/references";
          },
          error: function() {
             console.error("데이터 전송 실패");

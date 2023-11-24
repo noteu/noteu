@@ -93,9 +93,10 @@ public class ReferenceRoomServiceImpl implements ReferenceRoomService {
         ReferenceRoom referenceRoom = referenceRoomRepository.findById(referenceRoomId)
                 .orElseThrow(() -> new EntityNotFoundException("Entity가 존재하지 않습니다." + referenceRoomId));
 
-        List<Reference> entityList = referenceRepository.findByReferenceRoom(referenceRoom);
+        List<Reference> referenceList = referenceRepository.findByReferenceRoom(referenceRoom);
 
-        DetailResponseReferenceRoomDTO detailResponseReferenceRoomDTO = referenceRoomConverter.toDetailResponseReferenceRoomDto(referenceRoom, entityList);
+        DetailResponseReferenceRoomDTO detailResponseReferenceRoomDTO =
+                referenceRoomConverter.toDetailResponseReferenceRoomDto(referenceRoom, referenceList);
 
         return detailResponseReferenceRoomDTO;
     }
