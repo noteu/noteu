@@ -1,6 +1,7 @@
 package com.noteu.noteu.member.service;
 
 import com.noteu.noteu.member.dto.MemberEditDto;
+import com.noteu.noteu.member.dto.MemberPasswordDto;
 import com.noteu.noteu.member.dto.SignUpDto;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -28,7 +29,7 @@ public interface UserDetailsManager extends UserDetailsService {
      * @param oldPassword current password (for re-authentication if required)
      * @param newPassword the password to change to
      */
-    void changePassword(String oldPassword, String newPassword);
+    void changePassword(MemberPasswordDto memberPasswordDto);
 
     /**
      * Check if a user with the supplied login name exists in the system.
