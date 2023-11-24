@@ -109,7 +109,7 @@ public class ReferenceRoomController {
     }
 
     @GetMapping("/{referenceId}")
-    public String getById(@AuthenticationPrincipal MemberInfo memberInfo, @PathVariable("subject-id") Long subjectId, @PathVariable Long referenceId, ModelMap map){
+    public String getReferenceRoomById(@AuthenticationPrincipal MemberInfo memberInfo, @PathVariable("subject-id") Long subjectId, @PathVariable Long referenceId, ModelMap map){
         try {
             DetailResponseReferenceRoomDTO detailResponseReferenceRoomDTO = referenceRoomService.getById(referenceId);
             map.put("referenceRoom", detailResponseReferenceRoomDTO);

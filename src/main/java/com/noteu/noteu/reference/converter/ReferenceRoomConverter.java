@@ -115,7 +115,6 @@ public interface ReferenceRoomConverter {
                 .build();
     }
 
-
     /**
      * < ReferenceRoom Entity to GetAllResponseReferenceRoomDTO >
      * @param referenceRoom
