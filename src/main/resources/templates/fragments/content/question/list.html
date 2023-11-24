@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-mode="detached" data-topbar-color="dark" data-menu-color="light" data-sidenav-user="true"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<th:block th:fragment="questions">
+  <!-- start page title -->
+  <div class="row">
+    <div class="col-12">
+      <div class="page-title-box">
+        <div class="page-title-right">
+          <ol class="breadcrumb m-0">
+            <li class="breadcrumb-item"><a href="javascript: void(0);">Subject(getById)</a></li>
+            <li class="breadcrumb-item"><a href="javascript: void(0);">QuestionPost</a></li>
+            <li class="breadcrumb-item active">Question Post List</li>
+          </ol>
+        </div>
+        <h4 class="page-title">Question Post List</h4>
+      </div>
+    </div>
+  </div>
+  <!-- end page title -->
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+
+          <h4 class="header-title">질문게시판</h4>
+          <p class="text-muted font-14">
+            공부 중 궁금한 점이 생기면 질문글을 작성 해 주세요
+          </p>
+
+          <button type="button" id="addForm" class="btn btn-success rounded-pill" th:onclick="|location.href='@{/subjects/{subjectId}/questions/add-form(subjectId = ${subjectId})}'|">
+            + Create Question
+          </button>
+
+          <div class="tab-content">
+            <div class="tab-pane show active" id="buttons-table-preview">
+              <table id="datatable-buttons" class="table table-striped table-hover dt-responsive nowrap w-100">
+                <thead>
+                <tr>
+                  <th>작성자</th>
+                  <th>제목</th>
+                  <th>작성일</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="q:${questionPost}" class="detail">
+                  <input type="hidden" class="qid" th:value="${q.questionPostId}">
+                  <input type="hidden" class="sid" th:value="${q.subject.id}">
+                  <td th:text="${q.memberName}"></td>
+                  <td th:text="${q.questionPostTitle}"></td>
+                  <td class="createdAt" th:text="${q.createdAt}"></td>
+                </tr>
+                </tbody>
+              </table>
+            </div> <!-- end preview-->
+          </div> <!-- end tab-content-->
+
+        </div> <!-- end card body-->
+      </div> <!-- end card -->
+    </div><!-- end col-->
+  </div> <!-- end row-->
+</th:block>
+</html>
