@@ -30,8 +30,8 @@
                         </p>
 
                         <!-- { Role : TEACHER } Only -->
-                        <input type="button" id="addForm" class="btn btn-outline-primary" value="자료 추가" th:onclick="|location.href='/subjects/1/references/add-form'|"
-                               sec:authorize="hasRole('ROLE_TEACHER')">
+                        <button type="button" id="addForm" class="btn btn-success rounded-pill" th:onclick="|location.href='@{/subjects/{subjectId}/references/add-form(subjectId = ${subjectId})}'|"
+                                sec:authorize="hasRole('ROLE_TEACHER')">+ Create Reference</button>
 
                         <div class="tab-content">
                             <div class="tab-pane show active" id="buttons-table-preview">
@@ -50,7 +50,7 @@
                                         <input type="hidden" class="sid" th:value="${r.subject.id}">
                                         <td th:text="${r.memberName}"></td>
                                         <td th:text="${r.referenceRoomTitle}"></td>
-                                        <td th:text="${r.createdAt}"></td>
+                                        <td class="createdAt" th:text="${r.createdAt}"></td>
                                     </tr>
                                     </tbody>
                                 </table>
