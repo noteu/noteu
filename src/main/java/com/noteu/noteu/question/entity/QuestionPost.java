@@ -4,15 +4,13 @@ import com.noteu.noteu.audit.AuditingFields;
 import com.noteu.noteu.member.entity.Member;
 import com.noteu.noteu.subject.entity.Subject;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 public class QuestionPost extends AuditingFields {
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -27,6 +25,4 @@ public class QuestionPost extends AuditingFields {
     @Column(nullable = false, length = 1024)
     private String questionPostContent;
 
-    @Column(nullable = false, length = 50)
-    private String questionPostFileName;
 }

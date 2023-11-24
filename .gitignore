@@ -323,6 +323,10 @@ gradle-app.setting
 ### queryDSL
 /src/main/generated
 
-# End of https://www.toptal.com/developers/gitignore/api/macos,windows,intellij+all,eclipse,java,visualstudiocode,sonarqube,gradle,maven
+### referenceFiles
+src/main/resources/static/file/reference/**
 
+### profile
 src/main/resources/static/file/profile/**
+
+# End of https://www.toptal.com/developers/gitignore/api/macos,windows,intellij+all,eclipse,java,visualstudiocode,sonarqube,gradle,maven
