@@ -2,7 +2,7 @@ package com.noteu.noteu.question.controller;
 
 import com.noteu.noteu.common.CommonUtil;
 import com.noteu.noteu.member.dto.MemberInfo;
-import com.noteu.noteu.question.dto.request.AddRequestQuestionPostDTO;
+import com.noteu.noteu.question.dto.request.RequestQuestionPostDTO;
 import com.noteu.noteu.question.dto.response.DetailResponseQuestionPostDTO;
 import com.noteu.noteu.question.dto.response.GetAllResponseQuestionPostDTO;
 import com.noteu.noteu.question.service.QuestionPostService;
@@ -34,11 +34,11 @@ public class QuestionPostController {
 
     @PostMapping
     public String addQuestionPost(@AuthenticationPrincipal MemberInfo memberInfo, @PathVariable("subject-id") Long subjectId,
-                                  @ModelAttribute AddRequestQuestionPostDTO addRequestQuestionPostDTO) {
+                                  @ModelAttribute RequestQuestionPostDTO requestQuestionPostDTO) {
 
-        String renderedContent = commonUtil.markdown(addRequestQuestionPostDTO.getQuestionPostContent());
-        addRequestQuestionPostDTO.setQuestionPostContent(renderedContent);
-        questionPostService.save(addRequestQuestionPostDTO, subjectId, memberInfo.getId());
+        String renderedContent = commonUtil.markdown(requestQuestionPostDTO.getQuestionPostContent());
+        requestQuestionPostDTO.setQuestionPostContent(renderedContent);
+        questionPostService.save(requestQuestionPostDTO, subjectId, memberInfo.getId());
 
         return "redirect:/subjects/{subject-id}/questions";
     }
@@ -66,5 +66,36 @@ public class QuestionPostController {
         map.put("subjectId", subjectId);
 
         return "layout/question/detail";
+    }
+
+    @GetMapping("/edit-form/{questionPostId}")
+    public String updateForm(@AuthenticationPrincipal MemberInfo memberInfo, @PathVariable("subject-id") Long subjectId,
+                             @PathVariable Long questionPostId ,Map map) {
+        try {
+            DetailResponseQuestionPostDTO detailResponseQuestionPostDTO = questionPostService.getById(questionPostId);
+            map.put("questionPost", detailResponseQuestionPostDTO);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        map.put("subjectId", subjectId);
+
+        return "layout/question/edit";
+    }
+
+    @PostMapping("/edit/{questionPostId}")
+    public String updateQuestionPostById(@AuthenticationPrincipal MemberInfo memberInfo, @PathVariable("subject-id") Long subjectId,
+                                         @PathVariable Long questionPostId, RequestQuestionPostDTO requestQuestionPostDTO){
+        questionPostService.updateById(requestQuestionPostDTO, questionPostId);
+
+        return "redirect:/subjects/{subject-id}/questions";
+    }
+
+    @GetMapping("/delete/{questionPostId}")
+    public String deleteQuestionPostById(@AuthenticationPrincipal MemberInfo memberInfo, @PathVariable("subject-id") Long subjectId,
+                                         @PathVariable Long questionPostId){
+        questionPostService.deleteById(questionPostId);
+
+        return "redirect:/subjects/{subject-id}/questions";
     }
 }

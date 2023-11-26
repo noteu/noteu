@@ -3,7 +3,7 @@ package com.noteu.noteu.question.service.impl;
 import com.noteu.noteu.member.repository.MemberRepository;
 import com.noteu.noteu.question.converter.impl.QuestionPostConverterImpl;
 import com.noteu.noteu.question.dto.QuestionPostDTO;
-import com.noteu.noteu.question.dto.request.AddRequestQuestionPostDTO;
+import com.noteu.noteu.question.dto.request.RequestQuestionPostDTO;
 import com.noteu.noteu.question.dto.response.DetailResponseQuestionPostDTO;
 import com.noteu.noteu.question.dto.response.GetAllResponseQuestionPostDTO;
 import com.noteu.noteu.question.entity.QuestionComment;
@@ -35,9 +35,9 @@ public class QuestionPostServiceImpl implements QuestionPostService {
     private final SubjectRepository subjectRepository;
 
     @Override
-    public void save(AddRequestQuestionPostDTO addRequestQuestionPostDTO, Long subjectId, Long memberId) {
+    public void save(RequestQuestionPostDTO requestQuestionPostDTO, Long subjectId, Long memberId) {
 
-        QuestionPostDTO questionPostDTO = questionPostConverter.addRequestQuestionPostDtoToQuestionPostDto(addRequestQuestionPostDTO);
+        QuestionPostDTO questionPostDTO = questionPostConverter.addRequestQuestionPostDtoToQuestionPostDto(requestQuestionPostDTO);
         questionPostDTO.setSubject(subjectRepository.getReferenceById(subjectId));
         questionPostDTO.setMember(memberRepository.getReferenceById(memberId));
 
@@ -74,7 +74,18 @@ public class QuestionPostServiceImpl implements QuestionPostService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void updateById(RequestQuestionPostDTO requestQuestionPostDTO, Long questionPostId) {
+        QuestionPost questionPost = questionPostRepository.findById(questionPostId)
+                .orElseThrow(() -> new EntityNotFoundException("Entity가 존재하지 않습니다" + questionPostId));
 
+        String newTitle = requestQuestionPostDTO.getQuestionPostTitle();
+        String newContent = requestQuestionPostDTO.getQuestionPostContent();
+
+        questionPost.update(newTitle, newContent);
+    }
+
+    @Override
+    public void deleteById(Long questionPostId) {
+        questionPostRepository.deleteById(questionPostId);
     }
 }
