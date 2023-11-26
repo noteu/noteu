@@ -25,4 +25,8 @@ public class QuestionPost extends AuditingFields {
     @Column(nullable = false, length = 1024)
     private String questionPostContent;
 
+    public void update(String newTitle, String newContent) {
+        this.questionPostTitle = newTitle;
+        this.questionPostContent = newContent;
+    }
 }
