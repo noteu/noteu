@@ -7,6 +7,10 @@ import com.noteu.noteu.member.dto.MemberPasswordDto;
 import com.noteu.noteu.member.entity.Member;
 import com.noteu.noteu.member.entity.Role;
 import com.noteu.noteu.member.service.MemberDetailsService;
+import com.noteu.noteu.subject.dto.SubjectInfoDto;
+import com.noteu.noteu.subject.entity.Subject;
+import com.noteu.noteu.subject.service.SubjectMemberService;
+import com.noteu.noteu.subject.service.SubjectService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,19 +35,17 @@ import java.util.List;
 public class MemberController {
 
     private final MemberDetailsService memberDetailsService;
+    private final SubjectService subjectService;
     private final PasswordEncoder passwordEncoder;
     @Value("${spring.servlet.multipart.location}")
     private String path;
+    private final SubjectMemberService subjectMemberService;
 
     @GetMapping("/account/{id}")
-    public String account(@PathVariable("id") Long memberId, @AuthenticationPrincipal MemberInfo memberInfo, Model model) {
-
-        if (!memberId.equals(memberInfo.getId())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "권한이 없습니다.");
-        }
-
+    public String account(@PathVariable("id") Long memberId, Model model) throws ClassNotFoundException {
+        // 회원 정보 수정
         Member member = memberDetailsService.findById(memberId);
-        List<Role> list = new ArrayList<>(member.getRole());
+        List<Role> roleList = new ArrayList<>(member.getRole());
         MemberDto memberDto = MemberDto.builder()
                 .id(member.getId())
                 .username(member.getUsername())
@@ -52,16 +54,24 @@ public class MemberController {
                 .tel(member.getTel())
                 .introduction(member.getIntroduction())
                 .profile(member.getProfile())
-                .role(list)
+                .role(roleList)
                 .build();
 
         model.addAttribute("member", memberDto);
+
+        // 과목 목록
+        List<SubjectInfoDto> subjectInfoList = subjectMemberService.getSubjectInfoList(memberId);
+        model.addAttribute("subjectInfoList", subjectInfoList);
 
         return "layout/member/account";
     }
 
     @PostMapping("/account/{id}")
-    public String editInformation(MemberEditDto memberEditDto) {
+    public String editInformation(@PathVariable("id") Long memberId, @AuthenticationPrincipal MemberInfo memberInfo, MemberEditDto memberEditDto) {
+        if (!memberId.equals(memberInfo.getId())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "권한이 없습니다.");
+        }
+
         memberDetailsService.updateUser(memberEditDto);
         return "redirect:/members/account/{id}";
     }
@@ -74,7 +84,6 @@ public class MemberController {
 
     @GetMapping("/password/{id}")
     public String passwordForm(@PathVariable("id") Long memberId, @AuthenticationPrincipal MemberInfo memberInfo, Model model) {
-
         if (!memberId.equals(memberInfo.getId())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "권한이 없습니다.");
         }
@@ -103,7 +112,6 @@ public class MemberController {
 
     @GetMapping("/profile/{id}")
     public String profileForm(@PathVariable("id") Long memberId, @AuthenticationPrincipal MemberInfo memberInfo, Model model) {
-
         if (!memberId.equals(memberInfo.getId())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "권한이 없습니다.");
         }
@@ -113,7 +121,6 @@ public class MemberController {
 
     @PostMapping("/profile/{id}")
     public String changeProfile(@PathVariable("id") Long memberId, MultipartFile profileFile) throws IOException {
-
         log.info("profileFile: {}", profileFile);
         String OriginalfileName = profileFile.getOriginalFilename();
 

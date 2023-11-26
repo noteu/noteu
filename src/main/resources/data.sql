@@ -17,7 +17,12 @@ insert into member_role (member_id, role) values (7, 2);
 insert into member_role (member_id, role) values (8, 2);
 
 -- 과목 생성
-insert into subject (created_at, modified_at, subject_code, subject_name) values ('2023-11-12 21:47:04.657531', '2023-11-12 21:47:04.657531', 'ac605eec-d', 'test subject');
+insert into subject (created_at, modified_at, subject_code, subject_name) values ('2023-11-12 21:47:04.657531', '2023-11-12 21:47:04.657531', 'ac605eec-d', 'test subject1');
+insert into subject (created_at, modified_at, subject_code, subject_name) values ('2023-11-12 21:47:04.657531', '2023-11-12 21:47:04.657531', 'ac605eec-a', 'test subject2');
+insert into subject (created_at, modified_at, subject_code, subject_name) values ('2023-11-12 21:47:04.657531', '2023-11-12 21:47:04.657531', 'ac605eec-b', 'test subject3');
+insert into subject (created_at, modified_at, subject_code, subject_name) values ('2023-11-12 21:47:04.657531', '2023-11-12 21:47:04.657531', 'ac605eec-c', 'test subject4');
+insert into subject (created_at, modified_at, subject_code, subject_name) values ('2023-11-12 21:47:04.657531', '2023-11-12 21:47:04.657531', 'ac605eec-e', 'test subject5');
+
 
 -- 과목에 수강신청한 학생들
 insert into subject_member (created_at, modified_at, member_id, subject_id) values ('2023-11-12 21:47:04.657531', '2023-11-12 21:47:04.657531', 2, 1);
@@ -27,6 +32,14 @@ insert into subject_member (created_at, modified_at, member_id, subject_id) valu
 insert into subject_member (created_at, modified_at, member_id, subject_id) values ('2023-11-12 21:47:04.657531', '2023-11-12 21:47:04.657531', 6, 1);
 insert into subject_member (created_at, modified_at, member_id, subject_id) values ('2023-11-12 21:47:04.657531', '2023-11-12 21:47:04.657531', 7, 1);
 insert into subject_member (created_at, modified_at, member_id, subject_id) values ('2023-11-12 21:47:04.657531', '2023-11-12 21:47:04.657531', 8, 1);
+insert into subject_member (created_at, modified_at, member_id, subject_id) values ('2023-11-12 21:47:04.657531', '2023-11-12 21:47:04.657531', 2, 2);
+insert into subject_member (created_at, modified_at, member_id, subject_id) values ('2023-11-12 21:47:04.657531', '2023-11-12 21:47:04.657531', 2, 3);
+insert into subject_member (created_at, modified_at, member_id, subject_id) values ('2023-11-12 21:47:04.657531', '2023-11-12 21:47:04.657531', 2, 4);
+insert into subject_member (created_at, modified_at, member_id, subject_id) values ('2023-11-12 21:47:04.657531', '2023-11-12 21:47:04.657531', 2, 5);
+insert into subject_member (created_at, modified_at, member_id, subject_id) values ('2023-11-12 21:47:04.657531', '2023-11-17 16:27:51.67171', 3, 2);
+insert into subject_member (created_at, modified_at, member_id, subject_id) values ('2023-11-12 21:47:04.657531', '2023-11-18 16:27:51.67171', 3, 3);
+insert into subject_member (created_at, modified_at, member_id, subject_id) values ('2023-11-12 21:47:04.657531', '2023-11-19 16:27:51.67171', 3, 4);
+insert into subject_member (created_at, modified_at, member_id, subject_id) values ('2023-11-12 21:47:04.657531', '2023-11-20 16:27:51.67171', 3, 5);
 
 -- 채팅방 생성
 insert into chat_room (created_at, modified_at, subject_id) values ('2023-11-17 16:27:51.67171', '2023-11-17 16:27:51.67171', 1);

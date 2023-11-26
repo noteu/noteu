@@ -9,14 +9,17 @@ import lombok.*;
 
 @Getter
 @Entity
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 public class SubjectMember extends AuditingFields {
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
     private Subject subject;
 }

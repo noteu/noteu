@@ -10,12 +10,12 @@
                 <div class="page-title-box">
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Noteu</a></li>
                             <li class="breadcrumb-item"><a href="javascript: void(0);">Pages</a></li>
-                            <li class="breadcrumb-item active">Profile 2</li>
+                            <li class="breadcrumb-item active">Profile</li>
                         </ol>
                     </div>
-                    <h4 class="page-title">Profile 2</h4>
+                    <h4 class="page-title">Profile</h4>
                 </div>
             </div>
         </div>
@@ -74,70 +74,7 @@
                         </ul>
                     </div> <!-- end card-body -->
                 </div> <!-- end card -->
-
-                <!-- Messages-->
-                <!--                                <div class="card">-->
-                <!--                                    <div class="card-body">-->
-                <!--                                        <div class="d-flex justify-content-between align-items-center mb-2">-->
-                <!--                                            <h4 class="header-title">Messages</h4>-->
-                <!--                                            <div class="dropdown">-->
-                <!--                                                <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">-->
-                <!--                                                    <i class="mdi mdi-dots-vertical"></i>-->
-                <!--                                                </a>-->
-                <!--                                                <div class="dropdown-menu dropdown-menu-end">-->
-                <!--                                                    &lt;!&ndash; item&ndash;&gt;-->
-                <!--                                                    <a href="javascript:void(0);" class="dropdown-item">Settings</a>-->
-                <!--                                                    &lt;!&ndash; item&ndash;&gt;-->
-                <!--                                                    <a href="javascript:void(0);" class="dropdown-item">Action</a>-->
-                <!--                                                </div>-->
-                <!--                                            </div>-->
-                <!--                                        </div>-->
-
-                <!--                                        <div class="inbox-widget">-->
-                <!--                                            <div class="inbox-item">-->
-                <!--                                                <div class="inbox-item-img"><img src="assets/images/users/avatar-2.jpg" class="rounded-circle" alt=""></div>-->
-                <!--                                                <p class="inbox-item-author">Tomaslau</p>-->
-                <!--                                                <p class="inbox-item-text">I've finished it! See you so...</p>-->
-                <!--                                                <p class="inbox-item-date">-->
-                <!--                                                    <a href="#" class="btn btn-sm btn-link text-info font-13"> Reply </a>-->
-                <!--                                                </p>-->
-                <!--                                            </div>-->
-                <!--                                            <div class="inbox-item">-->
-                <!--                                                <div class="inbox-item-img"><img src="assets/images/users/avatar-3.jpg" class="rounded-circle" alt=""></div>-->
-                <!--                                                <p class="inbox-item-author">Stillnotdavid</p>-->
-                <!--                                                <p class="inbox-item-text">This theme is awesome!</p>-->
-                <!--                                                <p class="inbox-item-date">-->
-                <!--                                                    <a href="#" class="btn btn-sm btn-link text-info font-13"> Reply </a>-->
-                <!--                                                </p>-->
-                <!--                                            </div>-->
-                <!--                                            <div class="inbox-item">-->
-                <!--                                                <div class="inbox-item-img"><img src="assets/images/users/avatar-4.jpg" class="rounded-circle" alt=""></div>-->
-                <!--                                                <p class="inbox-item-author">Kurafire</p>-->
-                <!--                                                <p class="inbox-item-text">Nice to meet you</p>-->
-                <!--                                                <p class="inbox-item-date">-->
-                <!--                                                    <a href="#" class="btn btn-sm btn-link text-info font-13"> Reply </a>-->
-                <!--                                                </p>-->
-                <!--                                            </div>-->
-
-                <!--                                            <div class="inbox-item">-->
-                <!--                                                <div class="inbox-item-img"><img src="assets/images/users/avatar-5.jpg" class="rounded-circle" alt=""></div>-->
-                <!--                                                <p class="inbox-item-author">Shahedk</p>-->
-                <!--                                                <p class="inbox-item-text">Hey! there I'm available...</p>-->
-                <!--                                                <p class="inbox-item-date">-->
-                <!--                                                    <a href="#" class="btn btn-sm btn-link text-info font-13"> Reply </a>-->
-                <!--                                                </p>-->
-                <!--                                            </div>-->
-                <!--                                            <div class="inbox-item">-->
-                <!--                                                <div class="inbox-item-img"><img src="assets/images/users/avatar-6.jpg" class="rounded-circle" alt=""></div>-->
-                <!--                                                <p class="inbox-item-author">Adhamdannaway</p>-->
-                <!--                                                <p class="inbox-item-text">This theme is awesome!</p>-->
-                <!--                                                <p class="inbox-item-date">-->
-                <!--                                                    <a href="#" class="btn btn-sm btn-link text-info font-13"> Reply </a>-->
-                <!--                                                </p>-->
-                <!--                                            </div>-->
-                <!--                                        </div>-->
-                <!--                                    </div>-->
-                <!--                                </div>-->
+                <!-- 추후 대화방 추가 -->
             </div>
 
             <div class="col-xl-8 col-lg-7">
@@ -166,124 +103,33 @@
                         <div class="tab-content">
                             <div class="tab-pane" id="subject">
 
-                                <h5 class="text-uppercase"><i class="mdi mdi-briefcase me-1"></i>
-                                    Experience</h5>
+                                <h5 class="text-uppercase"><i class="mdi mdi-cards-variant me-1"></i>
+                                    My Subject List</h5>
 
-                                <div class="timeline-alt pb-0">
-                                    <div class="timeline-item">
+                                <div class="timeline-alt pt-2 pb-0">
+                                    <h5 class="mt-1 mb-2 text-center" th:if="${#lists.isEmpty(subjectInfoList)}">
+                                        가입한 과목이 없습니다.
+                                    </h5>
+                                    <div th:each="subjectInfo : ${subjectInfoList}" class="timeline-item">
                                         <i class="mdi mdi-circle bg-info-lighten text-info timeline-icon"></i>
                                         <div class="timeline-item-info">
-                                            <h5 class="mt-0 mb-1">Lead designer / Developer</h5>
-                                            <p class="font-14">websitename.com <span class="ms-2 font-12">Year: 2015 - 18</span>
-                                            </p>
-                                            <p class="text-muted mt-2 mb-0 pb-3">Everyone realizes why a new common
-                                                language
-                                                would be desirable: one could refuse to pay expensive translators.
-                                                To achieve this, it would be necessary to have uniform grammar,
-                                                pronunciation and more common words.</p>
+                                            <h5 class="mt-1 mb-2" th:text="${subjectInfo.subjectName}"></h5>
+                                            <div class="d-flex align-items-center mb-2">
+                                                <span class="badge badge-secondary-lighten rounded-pill me-1">Teacher</span>
+                                                <p class="font-14 my-1" th:text="${subjectInfo.teacherName}"></p>
+                                                <span class="badge bg-light text-dark ms-auto" th:text="'Joined At : ' + ${#temporals.format(subjectInfo.joinedAt, 'yyyy-MM-dd')}"></span>
+                                            </div>
+                                            <!--                                            <p class="text-muted mt-2 mb-0 pb-3">Everyone realizes why a new common-->
+<!--                                                language-->
+<!--                                                would be desirable: one could refuse to pay expensive translators.-->
+<!--                                                To achieve this, it would be necessary to have uniform grammar,-->
+<!--                                                pronunciation and more common words.</p>-->
                                         </div>
                                     </div>
-
-                                    <div class="timeline-item">
-                                        <i class="mdi mdi-circle bg-primary-lighten text-primary timeline-icon"></i>
-                                        <div class="timeline-item-info">
-                                            <h5 class="mt-0 mb-1">Senior Graphic Designer</h5>
-                                            <p class="font-14">Software Inc. <span
-                                                    class="ms-2 font-12">Year: 2012 - 15</span></p>
-                                            <p class="text-muted mt-2 mb-0 pb-3">If several languages coalesce, the
-                                                grammar
-                                                of the resulting language is more simple and regular than that of
-                                                the individual languages. The new common language will be more
-                                                simple and regular than the existing European languages.</p>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="timeline-item">
-                                        <i class="mdi mdi-circle bg-info-lighten text-info timeline-icon"></i>
-                                        <div class="timeline-item-info">
-                                            <h5 class="mt-0 mb-1">Graphic Designer</h5>
-                                            <p class="font-14">Coderthemes Design LLP <span class="ms-2 font-12">Year: 2010 - 12</span>
-                                            </p>
-                                            <p class="text-muted mt-2 mb-0 pb-2">The European languages are members of
-                                                the same family. Their separate existence is a myth. For science
-                                                music sport etc, Europe uses the same vocabulary. The languages
-                                                only differ in their grammar their pronunciation.</p>
-                                        </div>
-                                    </div>
-
                                 </div>
                                 <!-- end timeline -->
 
-                                <h5 class="mb-3 mt-4 text-uppercase"><i class="mdi mdi-cards-variant me-1"></i>
-                                    Projects</h5>
-                                <div class="table-responsive">
-                                    <table class="table table-borderless table-nowrap mb-0">
-                                        <thead class="table-light">
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Clients</th>
-                                            <th>Project Name</th>
-                                            <th>Start Date</th>
-                                            <th>Due Date</th>
-                                            <th>Status</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td><img src="assets/images/users/avatar-2.jpg" alt="table-user"
-                                                     class="me-2 rounded-circle" height="24"> Halette Boivin
-                                            </td>
-                                            <td>App design and development</td>
-                                            <td>01/01/2015</td>
-                                            <td>10/15/2018</td>
-                                            <td><span class="badge badge-info-lighten">Work in Progress</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td><img src="assets/images/users/avatar-3.jpg" alt="table-user"
-                                                     class="me-2 rounded-circle" height="24"> Durandana Jolicoeur
-                                            </td>
-                                            <td>Coffee detail page - Main Page</td>
-                                            <td>21/07/2016</td>
-                                            <td>12/05/2018</td>
-                                            <td><span class="badge badge-danger-lighten">Pending</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td><img src="assets/images/users/avatar-4.jpg" alt="table-user"
-                                                     class="me-2 rounded-circle" height="24"> Lucas Sabourin
-                                            </td>
-                                            <td>Poster illustation design</td>
-                                            <td>18/03/2018</td>
-                                            <td>28/09/2018</td>
-                                            <td><span class="badge badge-success-lighten">Done</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>4</td>
-                                            <td><img src="assets/images/users/avatar-6.jpg" alt="table-user"
-                                                     class="me-2 rounded-circle" height="24"> Donatien Brunelle
-                                            </td>
-                                            <td>Drinking bottle graphics</td>
-                                            <td>02/10/2017</td>
-                                            <td>07/05/2018</td>
-                                            <td><span class="badge badge-info-lighten">Work in Progress</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>5</td>
-                                            <td><img src="assets/images/users/avatar-5.jpg" alt="table-user"
-                                                     class="me-2 rounded-circle" height="24"> Karel Auberjo
-                                            </td>
-                                            <td>Landing page design - Home</td>
-                                            <td>17/01/2017</td>
-                                            <td>25/05/2021</td>
-                                            <td><span class="badge badge-warning-lighten">Coming soon</span></td>
-                                        </tr>
-
-                                        </tbody>
-                                    </table>
-                                </div>
+                                <!-- 추후 과제 목록 추가 -->
 
                             </div> <!-- end tab-pane -->
                             <!-- end about me section content -->

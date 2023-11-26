@@ -13,6 +13,7 @@ import java.util.List;
 @Getter
 @Entity
 @Builder
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends AuditingFields {
