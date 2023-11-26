@@ -2,14 +2,11 @@ package com.noteu.noteu.question.converter;
 
 import com.noteu.noteu.question.dto.QuestionCommentDTO;
 import com.noteu.noteu.question.dto.QuestionPostDTO;
-import com.noteu.noteu.question.dto.request.AddRequestQuestionPostDTO;
+import com.noteu.noteu.question.dto.request.RequestQuestionPostDTO;
 import com.noteu.noteu.question.dto.response.DetailResponseQuestionPostDTO;
 import com.noteu.noteu.question.dto.response.GetAllResponseQuestionPostDTO;
 import com.noteu.noteu.question.entity.QuestionComment;
 import com.noteu.noteu.question.entity.QuestionPost;
-import com.noteu.noteu.reference.dto.ReferenceDTO;
-import com.noteu.noteu.reference.dto.response.GetAllResponseReferenceRoomDTO;
-import com.noteu.noteu.reference.entity.Reference;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,13 +15,13 @@ public interface QuestionPostConverter {
 
     /**
      *
-     * @param addRequestQuestionPostDTO
+     * @param requestQuestionPostDTO
      * @return QuestionPostDTO
      */
-    default QuestionPostDTO addRequestQuestionPostDtoToQuestionPostDto(AddRequestQuestionPostDTO addRequestQuestionPostDTO) {
+    default QuestionPostDTO addRequestQuestionPostDtoToQuestionPostDto(RequestQuestionPostDTO requestQuestionPostDTO) {
         return QuestionPostDTO.builder()
-                .questionPostTitle(addRequestQuestionPostDTO.getQuestionPostTitle())
-                .questionPostContent(addRequestQuestionPostDTO.getQuestionPostContent())
+                .questionPostTitle(requestQuestionPostDTO.getQuestionPostTitle())
+                .questionPostContent(requestQuestionPostDTO.getQuestionPostContent())
                 .build();
     }
 

@@ -29,15 +29,15 @@
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center mb-2">
               <h3 class="" th:text="${questionPost.questionPostTitle}"></h3>
-              <div class="dropdown">
+              <div class="dropdown" th:if="${questionPost.memberId != null and #authentication.getPrincipal().getId() == questionPost.memberId}">
                 <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
                   <i class="ri-more-fill"></i>
                 </a>
-                <div class="dropdown-menu dropdown-menu-end" th:if="${questionPost.memberId != null and #authentication.getPrincipal().getId() == questionPost.memberId}">
+                <div class="dropdown-menu dropdown-menu-end">
                   <!-- item-->
-                  <a th:href="@{/subjects/{subjectId}(subjectId = ${questionPost.subject.id})/question/edit-form/{questionPostId}(questionPostId = ${questionPost.questionPostId})}" class="dropdown-item"><i class="mdi mdi-pencil me-1"></i>Edit</a>
+                  <a th:href="@{/subjects/{subjectId}/questions/edit-form/{questionPostId}(subjectId = ${subjectId}, questionPostId = ${questionPost.questionPostId})}" class="dropdown-item"><i class="mdi mdi-pencil me-1"></i>Edit</a>
                   <!-- item-->
-                  <a th:href="@{/subjects/{subjectId}(subjectId = ${questionPost.subject.id})/question/delete/{questionPostId}(questionPostId = ${questionPost.questionPostId})}" class="dropdown-item"><i class="mdi mdi-delete me-1"></i>Delete</a>
+                  <a th:href="@{/subjects/{subjectId}/questions/delete/{questionPostId}(subjectId = ${subjectId}, questionPostId = ${questionPost.questionPostId})}" class="dropdown-item"><i class="mdi mdi-delete me-1"></i>Delete</a>
                 </div>
               </div>
               <!-- project title-->

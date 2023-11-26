@@ -2,7 +2,7 @@
 <html lang="en" data-layout-mode="detached" data-topbar-color="dark" data-menu-color="light" data-sidenav-user="true" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
-    <title>Question Post Add-Form</title>
+    <title>Question Post Edit-Form</title>
     <th:block th:replace="fragments/common/header :: headerFragment"></th:block>
 
     <!-- SimpleMDE css -->
@@ -14,7 +14,7 @@
     <th:block th:replace="fragments/common/sidebar2 :: sidebar2Fragment"></th:block>
     <div class="content-page">
         <div class="content">
-            <th:block th:replace="fragments/content/question/add-form :: questionAddForm"></th:block>
+            <th:block th:replace="fragments/content/question/edit-form :: questionEditForm"></th:block>
         </div>
         <th:block th:replace="fragments/common/footer :: footerFragment"></th:block>
     </div>
@@ -28,6 +28,6 @@
 <!-- Simplemde Demo js -->
 <script src="/assets/js/pages/demo.simplemde.js"></script>
 
-<!-- add-submit.js -->
-<script src="/js/question/add-submit.js"></script>
+<!-- edit-submit.js -->
+<script src="/js/question/edit-submit.js"></script>
 </html>
