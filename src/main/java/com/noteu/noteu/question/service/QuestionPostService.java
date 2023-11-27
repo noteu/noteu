@@ -1,6 +1,7 @@
 package com.noteu.noteu.question.service;
 
 
+import com.noteu.noteu.question.dto.RecentQuestionDto;
 import com.noteu.noteu.question.dto.request.RequestQuestionPostDTO;
 import com.noteu.noteu.question.dto.response.DetailResponseQuestionPostDTO;
 import com.noteu.noteu.question.dto.response.GetAllResponseQuestionPostDTO;
@@ -18,6 +19,8 @@ public interface QuestionPostService {
     void updateById(RequestQuestionPostDTO requestQuestionPostDTO, Long questionPostId);
 
     void deleteById(Long questionPostId);
+
+    List<RecentQuestionDto> getRecentQuestionList(Long memberId);
 
 
 }

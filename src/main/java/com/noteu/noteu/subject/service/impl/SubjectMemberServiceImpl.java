@@ -63,6 +63,7 @@ public class SubjectMemberServiceImpl implements SubjectMemberService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<SubjectInfoDto> getSubjectInfoList(Long memberId) {
         List<Long> subjectIdList = new ArrayList<>();
         Member member = memberRepository.findById(memberId).orElseThrow();

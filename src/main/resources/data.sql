@@ -73,3 +73,16 @@ insert into chat_message (created_at, modified_at, room_id, sender_id, sender_na
 insert into chat_message (created_at, modified_at, room_id, sender_id, sender_name, message) values ('2023-11-17 16:27:51.67171', '2023-11-17 16:27:51.67171', 1, 1, 'aaaa', '테스트 메시지란 말이에요222~~~~~');
 insert into chat_message (created_at, modified_at, room_id, sender_id, sender_name, message) values ('2023-11-17 16:27:51.67171', '2023-11-17 16:27:51.67171', 1, 2, 'bbbb', '테스트 메시지란 말이에요333~~~~~');
 insert into chat_message (created_at, modified_at, room_id, sender_id, sender_name, message) values ('2023-11-17 16:27:51.67171', '2023-11-17 16:27:51.67171', 1, 2, 'bbbb', '테스트 메시지란 말이에요444~~~~~');
+
+-- 질문 게시글
+insert into question_post (subject_id, member_id, question_post_title, question_post_content, created_at, modified_at) values (1, 3, 'test title1', 'test content1', '2023-11-17 16:27:51.67171', '2023-11-17 16:27:51.67171');
+insert into question_post (subject_id, member_id, question_post_title, question_post_content, created_at, modified_at) values (2, 3, 'test title2', 'test content2', '2023-11-18 16:27:51.67171', '2023-11-17 16:27:51.67171');
+insert into question_post (subject_id, member_id, question_post_title, question_post_content, created_at, modified_at) values (4, 3, 'test title3', 'test content3', '2023-11-19 16:27:51.67171', '2023-11-17 16:27:51.67171');
+insert into question_post (subject_id, member_id, question_post_title, question_post_content, created_at, modified_at) values (3, 3, 'test title4', 'test content4', '2023-11-20 16:27:51.67171', '2023-11-17 16:27:51.67171');
+insert into question_post (subject_id, member_id, question_post_title, question_post_content, created_at, modified_at) values (1, 3, 'test title5', 'test content5', '2023-11-21 16:27:51.67171', '2023-11-17 16:27:51.67171');
+insert into question_post (subject_id, member_id, question_post_title, question_post_content, created_at, modified_at) values (3, 3, 'test title6', 'test content6', '2023-11-22 16:27:51.67171', '2023-11-17 16:27:51.67171');
+insert into question_post (subject_id, member_id, question_post_title, question_post_content, created_at, modified_at) values (3, 3, 'test title7',                                                                                                                     '<h1>안녕하세요</h1>
+<h2>부제목</h2>
+<pre><code>priavate String content;
+</code></pre>
+<p>테스트 내용입니다.</p>', '2023-11-27 09:57:12.152042', '2023-11-27 09:57:12.152042');

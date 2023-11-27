@@ -7,10 +7,10 @@ import com.noteu.noteu.member.dto.MemberPasswordDto;
 import com.noteu.noteu.member.entity.Member;
 import com.noteu.noteu.member.entity.Role;
 import com.noteu.noteu.member.service.MemberDetailsService;
+import com.noteu.noteu.question.dto.RecentQuestionDto;
+import com.noteu.noteu.question.service.QuestionPostService;
 import com.noteu.noteu.subject.dto.SubjectInfoDto;
-import com.noteu.noteu.subject.entity.Subject;
 import com.noteu.noteu.subject.service.SubjectMemberService;
-import com.noteu.noteu.subject.service.SubjectService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,13 +33,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/members")
 public class MemberController {
-
-    private final MemberDetailsService memberDetailsService;
-    private final SubjectService subjectService;
-    private final PasswordEncoder passwordEncoder;
     @Value("${spring.servlet.multipart.location}")
     private String path;
+    private final MemberDetailsService memberDetailsService;
+    private final PasswordEncoder passwordEncoder;
     private final SubjectMemberService subjectMemberService;
+    private final QuestionPostService questionPostService;
 
     @GetMapping("/account/{id}")
     public String account(@PathVariable("id") Long memberId, Model model) throws ClassNotFoundException {
@@ -63,7 +62,16 @@ public class MemberController {
         List<SubjectInfoDto> subjectInfoList = subjectMemberService.getSubjectInfoList(memberId);
         model.addAttribute("subjectInfoList", subjectInfoList);
 
+        // 최근 질문글 목록
+        List<RecentQuestionDto> recentQuestionList = questionPostService.getRecentQuestionList(memberId);
+        model.addAttribute("resentQuestionList", recentQuestionList);
+
         return "layout/member/account";
+    }
+
+    @GetMapping("/test")
+    public void qTest() {
+        questionPostService.getRecentQuestionList(3L);
     }
 
     @PostMapping("/account/{id}")
