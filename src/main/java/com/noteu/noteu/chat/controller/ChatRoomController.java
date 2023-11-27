@@ -7,6 +7,8 @@ import com.noteu.noteu.chat.dto.response.ChatRoomResponseDto;
 import com.noteu.noteu.chat.service.RestChatService;
 import com.noteu.noteu.member.dto.MemberInfo;
 import com.noteu.noteu.member.dto.response.MemberResponseDto;
+import com.noteu.noteu.sse.SseEmitterService;
+import com.noteu.noteu.sse.dto.SseNewChatDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,7 @@ import java.util.Map;
 public class ChatRoomController {
 
     private final RestChatService restChatService;
+    private final SseEmitterService sseEmitterService;
 
     @GetMapping
     public String room(@PathVariable("subject-id") Long subjectId,
@@ -57,7 +60,6 @@ public class ChatRoomController {
         return allSubjectsBySubjectId;
     }
 
-    // 채팅방 생성 (친구창에서 채팅 모양을 누르면 채팅이 생성됨) 이미 방이 생성되어 있다면??? 처리해야함..
     @PostMapping("/rooms")
     @ResponseBody
     public ResponseEntity<ChatRoomResponse> createRoom(@RequestBody Map<String, Long> requestBody,
@@ -65,6 +67,18 @@ public class ChatRoomController {
                                                        @PathVariable("subject-id") Long subjectId) {
         Long friendId = requestBody.get("friendId");
         ChatRoomResponse chatRoomResponseDto = restChatService.createRoom(subjectId, friendId, memberInfo.getId());
+
+        if (chatRoomResponseDto instanceof ChatRoomResponseDto) {
+            Long roomId = ((ChatRoomResponseDto) chatRoomResponseDto).getId();
+            SseNewChatDto sseNewChatDto = SseNewChatDto.builder()
+                    .memberId(friendId)
+                    .friendId(memberInfo.getId())
+                    .subjectId(subjectId)
+                    .roomId(roomId)
+                    .build();
+            log.info("sseNewChatDto 생성 확인 : {}", sseNewChatDto);
+            sseEmitterService.newChatRoom(sseNewChatDto);
+        }
 
         return ResponseEntity
                 .created(URI.create("/subjects/" + subjectId + "/chats"))

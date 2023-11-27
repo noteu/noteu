@@ -11,8 +11,8 @@ window.onload = function () {
     sendBtn.onclick = sendMessage;
     chatMessage = document.getElementById('chat-message');
 
-    chatsToggleBtn = document.getElementById('chats');
-    friendsToggleBtn = document.getElementById('friends');
+    let chatsToggleBtn = document.getElementById('chats');
+    let friendsToggleBtn = document.getElementById('friends');
     chatsToggleBtn.onclick = function () {
         findAllRoom(subjectId, token);
     };
@@ -22,7 +22,7 @@ window.onload = function () {
     };
 };
 let token;
-let subjectId;
+export let subjectId;
 let chatMessage;
 let selectRoomId;
 
@@ -63,7 +63,7 @@ function findAllFriend(subjectId, token) {
                 const email = friend.email;
                 const profile = friend.profile;
                 const tel = friend.tel;
-                const username = friend.username;
+                const username = friend.membername;
 
                 const a = document.createElement("a");
                 a.href = "javascript:void(0);";
@@ -125,7 +125,8 @@ function findAllFriend(subjectId, token) {
         });
 }
 
-function findAllRoom(subjectId, token) {
+export function findAllRoom(subjectId, token) {
+    console.log("친구를 불러옵니다.")
 
     axios
         .get(`/subjects/${subjectId}/chats/rooms`, {
@@ -163,6 +164,7 @@ function findAllRoom(subjectId, token) {
                 const profile = participants[0].profile;
                 const tel = participants[0].tel;
                 const username = participants[0].username;
+                const membername = participants[0].membername;
                 const lastMessage = room.lastMessage;
                 const parsedTime = room.lastMessageDateTime;
 
@@ -178,8 +180,8 @@ function findAllRoom(subjectId, token) {
                 div2.onclick = function () {
                     selectRoomId = roomId;
                     toggleMessageStyle(this);
-                    memberDetailHead(subjectId, friendId, email, profile, tel, username);
-                    memberDetailBody(friendId, email, profile, tel, username);
+                    memberDetailHead(subjectId, friendId, email, profile, tel, membername);
+                    memberDetailBody(friendId, email, profile, tel, membername);
                     pastChat(roomId, friendId, loginId);
                 };
 
@@ -188,7 +190,7 @@ function findAllRoom(subjectId, token) {
 
                 const h5 = document.createElement("h5");
                 h5.className = "mt-0 mb-0 font-14";
-                h5.textContent = username;
+                h5.textContent = membername;
 
                 const span1 = document.createElement("span");
                 const date = new Date(parsedTime);
@@ -411,15 +413,17 @@ function createChatRoom(subjectId, friendId) {
                 const roomId = response.data.roomId;
                 const friendId = response.data.friendId;
                 const loginId = response.data.loginId;
-                pastChat(roomId, friendId, loginId)
+                selectRoomId = roomId;
+                pastChat(roomId, friendId, loginId);
                 console.log("이미 방이 존재해서 뜨는 로그");
             } else {
                 console.log("방이 존재하지 않아서 뜨는 로그");
                 const roomId = response.data.id;
                 const friendId = response.data.participants[0].friendId;
                 const loginId = response.data.loginId;
+                selectRoomId = roomId;
                 connect(roomId, senderName);
-                pastChat(roomId, friendId, loginId)
+                pastChat(roomId, friendId, loginId);
             }
         })
         .catch(response => {
@@ -474,7 +478,7 @@ function memberDetailBody(friendId, email, profile, tel, username) {
 
 
 // 채팅 불러오기
-function pastChat(roomId, friendId, loginId) {
+export function pastChat(roomId, friendId, loginId) {
     // const subjectId = 1;
     // const token = document.cookie.split("=")[1];
 
@@ -533,7 +537,7 @@ function pastChat(roomId, friendId, loginId) {
 let messageInput;
 let sendBtn;
 let senderId;
-let senderName;
+export let senderName;
 let reconnect = 0;
 let sock;
 let ws
@@ -602,7 +606,7 @@ function recvMessage(recv) {
     document.getElementById(`lastmessage${recv.roomId}`).innerHTML = recv.message;
 }
 
-function connect(roomId, senderName) {
+export function connect(roomId, senderName) {
     console.log("소켓 연결 시작");
     sock = new SockJS("/ws/chat");
     ws = Stomp.over(sock);
