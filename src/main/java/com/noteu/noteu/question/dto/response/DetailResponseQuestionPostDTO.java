@@ -31,5 +31,5 @@ public class DetailResponseQuestionPostDTO {
 
     private LocalDateTime modifiedAt;
 
-    private List<QuestionCommentDTO> comment;
+    private List<ResponseQuestionCommentDTO> comment;
 }
