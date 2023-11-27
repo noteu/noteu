@@ -2,9 +2,11 @@ package com.noteu.noteu.question.converter;
 
 import com.noteu.noteu.question.dto.QuestionCommentDTO;
 import com.noteu.noteu.question.dto.QuestionPostDTO;
+import com.noteu.noteu.question.dto.request.RequestQuestionCommentDTO;
 import com.noteu.noteu.question.dto.request.RequestQuestionPostDTO;
 import com.noteu.noteu.question.dto.response.DetailResponseQuestionPostDTO;
 import com.noteu.noteu.question.dto.response.GetAllResponseQuestionPostDTO;
+import com.noteu.noteu.question.dto.response.ResponseQuestionCommentDTO;
 import com.noteu.noteu.question.entity.QuestionComment;
 import com.noteu.noteu.question.entity.QuestionPost;
 
@@ -41,14 +43,28 @@ public interface QuestionPostConverter {
 
     /**
      *
-     * @param questionComment
-     * @return QuestionCommentDTO
+     * @param requestQuestionCommentDTO
+     * @return
      */
-    default QuestionCommentDTO questionCommentEntityToQuestionCommentDTO(QuestionComment questionComment) {
-        return QuestionCommentDTO.builder()
-                .id(questionComment.getId())
+    default QuestionComment requestQuestionCommentDtoToQuestionCommentEntity(RequestQuestionCommentDTO requestQuestionCommentDTO) {
+        return QuestionComment.builder()
+                .questionPost(requestQuestionCommentDTO.getQuestionPost())
+                .member(requestQuestionCommentDTO.getMember())
+                .questionCommentContent(requestQuestionCommentDTO.getQuestionCommentContent())
+                .build();
+    }
+
+    /**
+     *
+     * @param questionComment
+     * @return ResponseQuestionCommentDTO
+     */
+    default ResponseQuestionCommentDTO questionCommentEntityToResponseQuestionCommentDTO(QuestionComment questionComment) {
+        return ResponseQuestionCommentDTO.builder()
+                .questionCommentId(questionComment.getId())
                 .questionPost(questionComment.getQuestionPost())
-                .member(questionComment.getMember())
+                .memberId(questionComment.getMember().getId())
+                .memberName(questionComment.getMember().getMemberName())
                 .questionCommentContent(questionComment.getQuestionCommentContent())
                 .createdAt(questionComment.getCreatedAt())
                 .modifiedAt(questionComment.getModifiedAt())
@@ -63,12 +79,12 @@ public interface QuestionPostConverter {
      */
     default DetailResponseQuestionPostDTO toDetailResponseQuestionPostDto(QuestionPost questionPost, List<QuestionComment> questionComments) {
 
-        List<QuestionComment> matchingReferences = questionComments.stream()
+        List<QuestionComment> matchingComments = questionComments.stream()
                 .filter(questionComment -> questionComment.getQuestionPost().getId() == questionPost.getId())
                 .toList();
 
-        List<QuestionCommentDTO> questionCommentDTOList = matchingReferences.stream()
-                .map(this::questionCommentEntityToQuestionCommentDTO)
+        List<ResponseQuestionCommentDTO> responseQuestionCommentDTOList = matchingComments.stream()
+                .map(this::questionCommentEntityToResponseQuestionCommentDTO)
                 .collect(Collectors.toList());
 
         return DetailResponseQuestionPostDTO.builder()
@@ -78,7 +94,7 @@ public interface QuestionPostConverter {
                 .memberName(questionPost.getMember().getMemberName())
                 .questionPostTitle(questionPost.getQuestionPostTitle())
                 .questionPostContent(questionPost.getQuestionPostContent())
-                .comment(questionCommentDTOList)
+                .comment(responseQuestionCommentDTOList)
                 .createdAt(questionPost.getCreatedAt())
                 .modifiedAt(questionPost.getModifiedAt())
                 .build();

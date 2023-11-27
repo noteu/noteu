@@ -18,8 +18,8 @@ $(document).ready(function (){
                 console.log("데이터 전송 성공");
                 location.href = "/subjects/" + subjectId + "/questions";
             },
-            error:function (error){
-                console.log("error:" + error);
+            error:function (){
+                console.log("데이터 전송 실패");
             }
         })
     });
