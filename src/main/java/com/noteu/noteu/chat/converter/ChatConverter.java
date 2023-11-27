@@ -41,6 +41,7 @@ public interface ChatConverter {
         return MemberResponseDto.builder()
                 .id(member.getId())
                 .username(member.getUsername())
+                .membername(member.getMemberName())
                 .profile(member.getProfile())
                 .email(member.getEmail())
                 .tel(member.getTel())
