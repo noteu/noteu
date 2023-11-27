@@ -55,20 +55,27 @@
 
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title mb-3">Comment</h5>
+            <input type="hidden" id="subjectId" th:value="${subjectId}">
+            <input type="hidden" id="questionPostId" th:value="${questionPost.questionPostId}">
+            <h5 class="card-title mb-3">Comments</h5>
 
-            <div class="card mb-1 shadow-none border">
-              <div class="p-2">
-                <div class="row align-items-center" th:each="c:${questionPost.comment}">
-                  <div class="col ps-0">
-                    <p th:text="${c.questionCommentContent}"></p>
-                  </div>
-                  <div class="col-auto">
-                    <!-- Button -->
-                    <a href="#" class="btn btn-link btn-lg text-muted">
-                      <i class="ri-download-2-line"></i>
-                    </a>
-                  </div>
+            <label for="questionComment" class="form-label">Comment</label>
+            <input type="text" id="questionComment" class="form-control">
+            <div class="text-end">
+              <div class="btn-group mt-1 mb-2 ms-2">
+                <button id="submitBtn" type="button" class="btn btn-primary btn-sm">Submit</button>
+              </div>
+            </div>
+
+            <div th:each="c : ${questionPost.comment}" class="d-flex flex-column mt-2">
+              <input type="hidden" id="questionPostCommentId" th:value="${c.questionCommentId}">
+              <div class="d-flex justify-content-between align-items-start w-100 overflow-hidden">
+                <h5 class="mt-9">
+                  <span th:text="${c.memberName}"></span>
+                  <span th:text="' : ' + ${c.questionCommentContent}"></span>
+                </h5>
+                <div id="deleteBtn" class="text-end" style="cursor: pointer;" th:if="${c.memberId != null and #authentication.getPrincipal().getId() == c.memberId}">
+                  <i class="ri-close-fill"></i>
                 </div>
               </div>
             </div>

@@ -10,4 +10,39 @@ $(document).ready(function() {
             $("#contentPreview").html(content);
         });
     }
+
+    $("#submitBtn").click(function (){
+        var subjectId = $("#subjectId").val();
+        var questionPostId = $("#questionPostId").val();
+        var questionComment = $("#questionComment").val();
+
+        $.ajax({
+            url: "/subjects/" + subjectId + "/questions/" + questionPostId + "/question-comment",
+            type:"POST",
+            data:{"questionCommentContent": questionComment},
+            success:function (response) {
+                location.reload();
+            },
+            error:function () {
+                console.log("데이터 전송 실패");
+            }
+        })
+    });
+
+    $("#deleteBtn").on("click", function () {
+        var subjectId = $("#subjectId").val();
+        var questionPostId = $("#questionPostId").val();
+        var questionCommentId = $("#questionPostCommentId").val();
+
+        $.ajax({
+            url: "/subjects/" + subjectId + "/questions/" + questionPostId + "/delete/" + questionCommentId,
+            type:"GET",
+            success:function (response){
+                location.reload();
+            },
+            error:function () {
+                console.log("데이터 전송 실패");
+            }
+        })
+    });
 });
