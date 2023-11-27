@@ -17,7 +17,7 @@ import com.noteu.noteu.subject.repository.SubjectRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -114,19 +114,42 @@ public class ReferenceRoomServiceImpl implements ReferenceRoomService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<GetAllResponseReferenceRoomDTO> getAll() {
+    public Page<GetAllResponseReferenceRoomDTO> getAll(int page) {
         /**
-         * 1. ReferenceRoom Entity의 전체 목록을 id 기준 내림차순 정렬(최신순 정렬)해서 List에 담음
-         * 2. 위 List를 GetAllResponseRefeRenceRoomDTO 타입의 List로 변환 후 반환
+         * 1. ReferenceRoom Entity의 전체 목록을 id 기준 내림차순 정렬(최신순 정렬)해서 Page에 담음
+         * 2. 위 Page를 GetAllResponseRefeRenceRoomDTO 타입의 List로 변환
+         * 3. 위 List를 PageImpl에 담아서 반환
          */
-        List<ReferenceRoom> entityList = referenceRoomRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
+        Page<ReferenceRoom> pageNationList = referenceRoomRepository.findAll(pageable);
         List<GetAllResponseReferenceRoomDTO> dtoList  = new ArrayList<>();
-        for(ReferenceRoom referenceRoom : entityList) {
+        for(ReferenceRoom referenceRoom : pageNationList) {
             GetAllResponseReferenceRoomDTO getAllResponseReferenceRoomDTO = referenceRoomConverter.toGetAllResponseReferenceRoomDto(referenceRoom);
             dtoList.add(getAllResponseReferenceRoomDTO);
         }
+        PageImpl<GetAllResponseReferenceRoomDTO> pageNationDtoList = new PageImpl<>(dtoList, pageable, pageNationList.getTotalElements());
 
-        return dtoList;
+        return pageNationDtoList;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Page<GetAllResponseReferenceRoomDTO> getByTitleOrContent(int page, String searchWord) {
+
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
+        Page<ReferenceRoom> pageNationList = referenceRoomRepository.findByReferenceRoomTitleContaining(pageable, searchWord);
+        List<GetAllResponseReferenceRoomDTO> dtoList = new ArrayList<>();
+        for(ReferenceRoom referenceRoom : pageNationList) {
+            GetAllResponseReferenceRoomDTO getAllResponseReferenceRoomDTO = referenceRoomConverter.toGetAllResponseReferenceRoomDto(referenceRoom);
+            dtoList.add(getAllResponseReferenceRoomDTO);
+        }
+        PageImpl<GetAllResponseReferenceRoomDTO> pageNationDtoList = new PageImpl<>(dtoList, pageable, pageNationList.getTotalElements());
+
+        return pageNationDtoList;
     }
 
     @Override

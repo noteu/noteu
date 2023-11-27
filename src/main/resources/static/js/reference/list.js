@@ -5,6 +5,14 @@ $(document).ready(function (){
         $(this).text(formattedCreatedAt);
     });
 
+    $("#search").on("submit", function (){
+       var searchWord = $("#searchWord").val();
+       if(searchWord.length < 2) {
+           alert("두 음절 이상의 단어로 검색 해 주세요.");
+           event.preventDefault();
+       }
+    });
+
    $(".detail").click(function (){
        var referenceId = $(this).find("input:eq(0)").val();
        var subjectId = $(this).find("input:eq(1)").val();

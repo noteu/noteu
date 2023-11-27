@@ -6,6 +6,7 @@ import com.noteu.noteu.reference.dto.request.EditRequestReferenceRoomDTO;
 import com.noteu.noteu.reference.dto.request.AddRequestReferenceRoomDTO;
 import com.noteu.noteu.reference.dto.response.DetailResponseReferenceRoomDTO;
 import com.noteu.noteu.reference.dto.response.GetAllResponseReferenceRoomDTO;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -19,7 +20,9 @@ public interface ReferenceRoomService {
 
     ReferenceDTO getFileById(Long referenceId);
 
-    List<GetAllResponseReferenceRoomDTO> getAll();
+    Page<GetAllResponseReferenceRoomDTO> getAll(int page);
+
+    Page<GetAllResponseReferenceRoomDTO> getByTitleOrContent(int page, String searchWord);
 
     void updateById(EditRequestReferenceRoomDTO requestReferenceRoomDTO, Long referenceRoomId);
 

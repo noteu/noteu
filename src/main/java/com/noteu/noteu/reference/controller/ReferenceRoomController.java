@@ -12,6 +12,7 @@ import com.noteu.noteu.reference.service.impl.ReferenceRoomServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -100,8 +101,19 @@ public class ReferenceRoomController {
     }
 
     @GetMapping
-    public String referenceRoomList(@AuthenticationPrincipal MemberInfo memberInfo, @PathVariable("subject-id") Long subjectId, ModelMap map){
-        List<GetAllResponseReferenceRoomDTO> dtoList = referenceRoomService.getAll();
+    public String referenceRoomList(@AuthenticationPrincipal MemberInfo memberInfo, @PathVariable("subject-id") Long subjectId,
+                                    @RequestParam(value="page", defaultValue="0") int page, ModelMap map){
+        Page<GetAllResponseReferenceRoomDTO> dtoList = referenceRoomService.getAll(page);
+        map.put("list", dtoList);
+        map.put("subjectId", subjectId);
+
+        return "layout/reference/list";
+    }
+
+    @PostMapping("/search")
+    public String referenceRoomListByTitle(@AuthenticationPrincipal MemberInfo memberInfo, @PathVariable("subject-id") Long subjectId,
+                                           @RequestParam(value="page", defaultValue="0") int page, String searchWord, Map map) {
+        Page<GetAllResponseReferenceRoomDTO> dtoList = referenceRoomService.getByTitleOrContent(page, searchWord);
         map.put("list", dtoList);
         map.put("subjectId", subjectId);
 
