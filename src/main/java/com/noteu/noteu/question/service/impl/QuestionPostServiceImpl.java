@@ -18,9 +18,7 @@ import com.noteu.noteu.subject.repository.SubjectRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,16 +64,68 @@ public class QuestionPostServiceImpl implements QuestionPostService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<GetAllResponseQuestionPostDTO> getAll() {
+    public Page<GetAllResponseQuestionPostDTO> getAll(int page, Long subjectId) {
 
-        List<QuestionPost> entityList = questionPostRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+        Subject subject = subjectRepository.getReferenceById(subjectId);
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        Page<QuestionPost> entityList = questionPostRepository.findBySubject(pageable, subject);
         List<GetAllResponseQuestionPostDTO> dtoList = new ArrayList<>();
         for (QuestionPost questionPost : entityList) {
             GetAllResponseQuestionPostDTO getAllResponseQuestionPostDTO = questionPostConverter.toGetAllResponseReferenceRoomDTO(questionPost);
             dtoList.add(getAllResponseQuestionPostDTO);
         }
+        PageImpl<GetAllResponseQuestionPostDTO> pageNationDtoList = new PageImpl<>(dtoList, pageable, entityList.getTotalElements());
 
-        return dtoList;
+        return pageNationDtoList;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Page<GetAllResponseQuestionPostDTO> getByTitle(int page, Long subjectId, String title) {
+
+        Subject subject = subjectRepository.getReferenceById(subjectId);
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        Page<QuestionPost> entityList = questionPostRepository.findBySubjectAndQuestionPostTitleContaining(pageable, subject, title);
+        List<GetAllResponseQuestionPostDTO> dtoList = new ArrayList<>();
+        for (QuestionPost questionPost : entityList) {
+            GetAllResponseQuestionPostDTO getAllResponseQuestionPostDTO = questionPostConverter.toGetAllResponseReferenceRoomDTO(questionPost);
+            dtoList.add(getAllResponseQuestionPostDTO);
+        }
+        PageImpl<GetAllResponseQuestionPostDTO> pageNationDtoList = new PageImpl<>(dtoList, pageable, entityList.getTotalElements());
+
+        return pageNationDtoList;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Page<GetAllResponseQuestionPostDTO> getByMember(int page, Long subjectId, String memberName) {
+
+        Subject subject = subjectRepository.getReferenceById(subjectId);
+        List<Member> memberList = memberRepository.findByMemberNameContaining(memberName);
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        List<QuestionPost> entityList = new ArrayList<>();
+        for(Member member : memberList) {
+            Page<QuestionPost> memberQuestionPosts = questionPostRepository.findBySubjectAndMember(pageable, subject, member);
+            if(memberQuestionPosts.hasContent()) {
+                entityList.addAll(memberQuestionPosts.getContent());
+            }
+        }
+        Page<QuestionPost> pageNationEntityList = new PageImpl<>(entityList, pageable, entityList.size());
+
+        List<GetAllResponseQuestionPostDTO> dtoList = new ArrayList<>();
+        for (QuestionPost questionPost : pageNationEntityList) {
+            GetAllResponseQuestionPostDTO getAllResponseQuestionPostDTO = questionPostConverter.toGetAllResponseReferenceRoomDTO(questionPost);
+            dtoList.add(getAllResponseQuestionPostDTO);
+        }
+        PageImpl<GetAllResponseQuestionPostDTO> pageNationDtoList = new PageImpl<>(dtoList, pageable, pageNationEntityList.getTotalElements());
+
+        return pageNationDtoList;
     }
 
     @Override

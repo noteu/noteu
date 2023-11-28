@@ -21,6 +21,8 @@ public class ResponseQuestionCommentDTO {
     
     private String memberName;
 
+    private String profile;
+
     private String questionCommentContent;
 
     private LocalDateTime createdAt;

@@ -20,6 +20,8 @@ public class GetAllResponseQuestionPostDTO {
 
     private String memberName;
 
+    private String profile;
+
     private String questionPostTitle;
 
     private LocalDateTime createdAt;

@@ -3,11 +3,13 @@ package com.noteu.noteu.question.controller;
 import com.noteu.noteu.common.CommonUtil;
 import com.noteu.noteu.member.dto.MemberInfo;
 import com.noteu.noteu.question.dto.request.RequestQuestionPostDTO;
+import com.noteu.noteu.question.dto.request.SearchRequestQuestionPostDTO;
 import com.noteu.noteu.question.dto.response.DetailResponseQuestionPostDTO;
 import com.noteu.noteu.question.dto.response.GetAllResponseQuestionPostDTO;
 import com.noteu.noteu.question.service.QuestionPostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -44,8 +46,24 @@ public class QuestionPostController {
     }
 
     @GetMapping
-    public String questionPostList(@AuthenticationPrincipal MemberInfo memberInfo, @PathVariable("subject-id") Long subjectId, Map map) {
-        List<GetAllResponseQuestionPostDTO> dtoList = questionPostService.getAll();
+    public String questionPostList(@AuthenticationPrincipal MemberInfo memberInfo, @PathVariable("subject-id") Long subjectId,
+                                   @RequestParam(value="page", defaultValue="0") int page, Map map) {
+        Page<GetAllResponseQuestionPostDTO> dtoList = questionPostService.getAll(page, subjectId);
+        map.put("questionPost", dtoList);
+        map.put("subjectId", subjectId);
+
+        return "layout/question/list";
+    }
+
+    @PostMapping("/search")
+    public String getQuestionPostBySearchWord(@AuthenticationPrincipal MemberInfo memberInfo, @PathVariable("subject-id") Long subjectId,
+                                              @RequestParam(value="page", defaultValue="0") int page, @ModelAttribute SearchRequestQuestionPostDTO searchRequestQuestionPostDTO, Map map) {
+        Page<GetAllResponseQuestionPostDTO> dtoList = null;
+        if(searchRequestQuestionPostDTO.getSearchType().equals("title")) {
+            dtoList = questionPostService.getByTitle(page, subjectId, searchRequestQuestionPostDTO.getSearchWord());
+        } else if (searchRequestQuestionPostDTO.getSearchType().equals("member")) {
+            dtoList = questionPostService.getByMember(page, subjectId, searchRequestQuestionPostDTO.getSearchWord());
+        }
         map.put("questionPost", dtoList);
         map.put("subjectId", subjectId);
 
