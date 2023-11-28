@@ -23,63 +23,67 @@ $(document).ready(function() {
 
     // 수정 클릭 시
     $("#submitBtn").click(function() {
-        var subjectId = $("#subjectId").val();
-        var referencId = $("#referenceId").val();
+        if(confirm("해당 게시물을 수정 하시겠습니까?")){
+            var subjectId = $("#subjectId").val();
+            var referencId = $("#referenceId").val();
 
-        // formData 생성
-        var formData = new FormData();
-        // 제목과 내용 입력값 가져오기
-        var title = $("#title").val();
-        var content = $("#content").val();
-        formData.append("referenceRoomTitle", title);
-        formData.append("referenceRoomContent", content);
+            // formData 생성
+            var formData = new FormData();
+            // 제목과 내용 입력값 가져오기
+            var title = $("#title").val();
+            var content = $("#content").val();
+            formData.append("referenceRoomTitle", title);
+            formData.append("referenceRoomContent", content);
 
-        if (selectedFiles.length === 0 && fileArr.length === 0) {
-            alert("파일을 추가해 주세요.");
-            return;
-        }
-
-        for(var j = 0; j < fileArr.length; j++) {
-            formData.append("referenceId", fileArr[j]);
-        }
-
-        for (var i = 0; i < selectedFiles.length; i++) {
-            formData.append("referenceFile", selectedFiles[i]);
-        }
-
-        // FormData의 key 확인
-        for (let key of formData.keys()) {
-            console.log(key);
-        }
-
-        // FormData의 value 확인
-        for (let value of formData.values()) {
-            console.log(value);
-        }
-
-        // AJAX 요청 생성
-        $.ajax({
-            url: "/subjects/" + subjectId + "/references/edit/" + referencId,
-            type: "POST",
-            data: formData,
-            enctype: "multipart/form-data",
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                console.log("데이터 전송 성공");
-                location.href = "/subjects/" + subjectId + "/references/" + referencId;
-            },
-            error: function() {
-                console.error("데이터 전송 실패");
+            if (selectedFiles.length === 0 && fileArr.length === 0) {
+                alert("파일을 추가해 주세요.");
+                return;
             }
-        });
+
+            for(var j = 0; j < fileArr.length; j++) {
+                formData.append("referenceId", fileArr[j]);
+            }
+
+            for (var i = 0; i < selectedFiles.length; i++) {
+                formData.append("referenceFile", selectedFiles[i]);
+            }
+
+            // FormData의 key 확인
+            for (let key of formData.keys()) {
+                console.log(key);
+            }
+
+            // FormData의 value 확인
+            for (let value of formData.values()) {
+                console.log(value);
+            }
+
+            // AJAX 요청 생성
+            $.ajax({
+                url: "/subjects/" + subjectId + "/references/edit/" + referencId,
+                type: "POST",
+                data: formData,
+                enctype: "multipart/form-data",
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    location.href = "/subjects/" + subjectId + "/references/" + referencId;
+                    alert("게시물 수정이 완료되었습니다.");
+                },
+                error: function(request, status, error) {
+                    console.log("code:"+request.status+"\n"+"error:"+error);
+                }
+            });
+        }
     });
 
     // 취소 버튼 클릭 시
     $("#cancelBtn").click(function (){
-        var subjectId = $("#subjectId").val();
-        var referencId = $("#referenceId").val();
-        location.href = "/subjects/" + subjectId + "/references/" + referencId;
+        if(confirm("수정중인 게시물은 저장되지 않습니다.\n취소하시겠습니까?")){
+            var subjectId = $("#subjectId").val();
+            var referencId = $("#referenceId").val();
+            location.href = "/subjects/" + subjectId + "/references/" + referencId;
+        }
     });
 
     // 파일 삭제 버튼 클릭 시 (이벤트 위임)
