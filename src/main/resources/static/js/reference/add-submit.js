@@ -59,8 +59,8 @@ $(document).ready(function() {
             console.log("데이터 전송 성공");
             location.href = "/subjects/" + subjectId + "/references";
          },
-         error: function() {
-            console.error("데이터 전송 실패");
+         error: function(request, status, error) {
+            console.log("code:"+request.status+"\n"+"error:"+error);
          }
       });
    });

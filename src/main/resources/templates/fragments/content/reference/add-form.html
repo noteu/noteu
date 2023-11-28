@@ -9,11 +9,11 @@
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="javascript: void(0);">Subject(getById)</a></li>
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">ReferenceRoom</a></li>
-                            <li class="breadcrumb-item active">Create Reference Article</li>
+                            <li class="breadcrumb-item"><a th:href="@{/subjects/{subjectId}/references(subjectId = ${subjectId})}">ReferenceRoom</a></li>
+                            <li class="breadcrumb-item active">Create Reference Room</li>
                         </ol>
                     </div>
-                    <h4 class="page-title">Create Reference Article</h4>
+                    <h4 class="page-title">Create Reference Room</h4>
                 </div>
             </div>
         </div>
@@ -52,8 +52,8 @@
                             </div>
                         </div>
                         <!-- end row -->
-                        <div class="d-grid">
-                            <input type="button" class="btn btn-outline-primary font-20" id="submitBtn" value="작성">
+                        <div>
+                            <button type="button" class="btn btn-primary" id="submitBtn">Create</button>
                         </div>
                     </div> <!-- end card-body -->
                 </div> <!-- end card-->
