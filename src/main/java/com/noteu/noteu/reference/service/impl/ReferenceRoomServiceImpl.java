@@ -13,6 +13,7 @@ import com.noteu.noteu.reference.entity.ReferenceRoom;
 import com.noteu.noteu.reference.repository.ReferenceRepository;
 import com.noteu.noteu.reference.repository.ReferenceRoomRepository;
 import com.noteu.noteu.reference.service.ReferenceRoomService;
+import com.noteu.noteu.subject.entity.Subject;
 import com.noteu.noteu.subject.repository.SubjectRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -114,16 +115,17 @@ public class ReferenceRoomServiceImpl implements ReferenceRoomService {
 
     @Transactional(readOnly = true)
     @Override
-    public Page<GetAllResponseReferenceRoomDTO> getAll(int page) {
+    public Page<GetAllResponseReferenceRoomDTO> getAll(int page, Long subjectId) {
         /**
          * 1. ReferenceRoom Entity의 전체 목록을 id 기준 내림차순 정렬(최신순 정렬)해서 Page에 담음
          * 2. 위 Page를 GetAllResponseRefeRenceRoomDTO 타입의 List로 변환
          * 3. 위 List를 PageImpl에 담아서 반환
          */
+        Subject subject = subjectRepository.getReferenceById(subjectId);
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("id"));
-        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
-        Page<ReferenceRoom> pageNationList = referenceRoomRepository.findAll(pageable);
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        Page<ReferenceRoom> pageNationList = referenceRoomRepository.findBySubject(pageable, subject);
         List<GetAllResponseReferenceRoomDTO> dtoList  = new ArrayList<>();
         for(ReferenceRoom referenceRoom : pageNationList) {
             GetAllResponseReferenceRoomDTO getAllResponseReferenceRoomDTO = referenceRoomConverter.toGetAllResponseReferenceRoomDto(referenceRoom);
@@ -136,12 +138,13 @@ public class ReferenceRoomServiceImpl implements ReferenceRoomService {
 
     @Transactional(readOnly = true)
     @Override
-    public Page<GetAllResponseReferenceRoomDTO> getByTitleOrContent(int page, String searchWord) {
+    public Page<GetAllResponseReferenceRoomDTO> getByTitle(int page, Long subjectId, String searchWord) {
 
+        Subject subject = subjectRepository.getReferenceById(subjectId);
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("id"));
-        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
-        Page<ReferenceRoom> pageNationList = referenceRoomRepository.findByReferenceRoomTitleContaining(pageable, searchWord);
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        Page<ReferenceRoom> pageNationList = referenceRoomRepository.findBySubjectAndReferenceRoomTitleContaining(pageable, subject, searchWord);
         List<GetAllResponseReferenceRoomDTO> dtoList = new ArrayList<>();
         for(ReferenceRoom referenceRoom : pageNationList) {
             GetAllResponseReferenceRoomDTO getAllResponseReferenceRoomDTO = referenceRoomConverter.toGetAllResponseReferenceRoomDto(referenceRoom);
