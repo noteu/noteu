@@ -62,7 +62,7 @@ $(document).ready(function() {
             });
         }
     });
-
+8
     $(".deleteCommentBtn").on("click", function () {
         if(confirm("해당 댓글을 삭제 하시겠습니까?")){
             var subjectId = $("#subjectId").val();
