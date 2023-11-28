@@ -7,6 +7,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -33,13 +34,15 @@ public class SseEmitterService {
 
     public void newChatRoom(SseNewChatDto sseNewChatDto){
         log.info("newChatRoom는 만들어짐");
-        SseEmitter emitter = emitterMap.get(sseNewChatDto.getMemberId());
-        try {
-            emitter.send(SseEmitter.event()
-                    .name("newChatRoom")
-                    .data(sseNewChatDto));
-        } catch (IOException e) {
-            log.info("현재 접속하지 않은 유저 입니다.");
-        }
+        Optional<SseEmitter> emitter = Optional.ofNullable(emitterMap.get(sseNewChatDto.getMemberId()));
+        emitter.ifPresent(e -> {
+            try {
+                e.send(SseEmitter.event()
+                        .name("newChatRoom")
+                        .data(sseNewChatDto));
+            } catch (IOException ex) {
+                log.info("현재 접속하지 않은 유저 입니다.");
+            }
+        });
     }
 }

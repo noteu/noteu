@@ -13,6 +13,7 @@ public class MemberResponseDto {
     private Long id;
     private String username;
     private String membername;
+    private String introduction;
     private String profile;
     private String email;
     private String tel;

@@ -7,12 +7,28 @@ window.onload = function () {
     messageInput = document.getElementById('message-input');
     senderId = document.getElementById("memberId").value;
     senderName = document.getElementById("memberName").value;
-    sendBtn = document.getElementById('send-btn');
-    sendBtn.onclick = sendMessage;
     chatMessage = document.getElementById('chat-message');
-
     let chatsToggleBtn = document.getElementById('chats');
     let friendsToggleBtn = document.getElementById('friends');
+
+    sendBtn = document.getElementById('send-btn');
+    sendBtn.onclick = function() {
+        sendMessage();
+        // id가 "chats"인 요소를 변경
+        chatsToggleBtn.href = "#alwaysopen-accordions-preview";
+        chatsToggleBtn.className = "nav-link active";
+        chatsToggleBtn.setAttribute("aria-controls", "nav-preview");
+        chatsToggleBtn.setAttribute("aria-selected", "true");
+        chatsToggleBtn.innerText = "Chats";
+
+        // id가 "friends"인 요소를 변경
+        friendsToggleBtn.href = "#alwaysopen-accordions-code";
+        friendsToggleBtn.className = "nav-link";
+        friendsToggleBtn.setAttribute("aria-controls", "nav-code");
+        friendsToggleBtn.setAttribute("aria-selected", "false");
+        friendsToggleBtn.innerText = "Friends";
+    };
+
     chatsToggleBtn.onclick = function () {
         findAllRoom(subjectId, token);
     };
@@ -20,6 +36,7 @@ window.onload = function () {
     friendsToggleBtn.onclick = function () {
         findAllFriend(subjectId, token);
     };
+
 };
 let token;
 export let subjectId;
@@ -64,6 +81,7 @@ function findAllFriend(subjectId, token) {
                 const profile = friend.profile;
                 const tel = friend.tel;
                 const username = friend.membername;
+                const introduction = friend.introduction;
 
                 const a = document.createElement("a");
                 a.href = "javascript:void(0);";
@@ -103,7 +121,7 @@ function findAllFriend(subjectId, token) {
 
                 const span4 = document.createElement("span");
                 span4.className = "w-75";
-                span4.textContent = "어떤걸 넣으면 좋을지 고민중..";
+                span4.textContent = introduction;
 
                 cardDiv.appendChild(a);
                 a.appendChild(div2);
@@ -126,8 +144,6 @@ function findAllFriend(subjectId, token) {
 }
 
 export function findAllRoom(subjectId, token) {
-    console.log("친구를 불러옵니다.")
-
     axios
         .get(`/subjects/${subjectId}/chats/rooms`, {
             headers: {
@@ -183,7 +199,14 @@ export function findAllRoom(subjectId, token) {
                     memberDetailHead(subjectId, friendId, email, profile, tel, membername);
                     memberDetailBody(friendId, email, profile, tel, membername);
                     pastChat(roomId, friendId, loginId);
+                    updateLastStay(roomId);
                 };
+
+                const img = document.createElement("img");
+                img.className = "me-2 rounded-circle";
+                img.src = profile;
+                img.height = "48";
+                img.alt = username;
 
                 const innerDiv = document.createElement("div");
                 innerDiv.className = "w-100 overflow-hidden";
@@ -220,6 +243,7 @@ export function findAllRoom(subjectId, token) {
 
                 cardDiv.appendChild(a);
                 a.appendChild(div2);
+                div2.appendChild(img);
                 div2.appendChild(innerDiv);
                 innerDiv.appendChild(h5);
                 h5.appendChild(span1);
@@ -234,6 +258,15 @@ export function findAllRoom(subjectId, token) {
 
             // 생성한 HTML 요소를 기존의 HTML에 추가
             document.querySelector("#users").appendChild(rowDiv);
+        });
+}
+
+function updateLastStay(roomId){
+    axios
+        .get(`/subjects/${subjectId}/chats/rooms/stay?room-id=${roomId}`, {
+            headers: {
+                Authorization: `${token}`
+            }
         });
 }
 
@@ -278,7 +311,7 @@ async function findAllRoomAndSocketConnect() {
                 const friendId = participants[0].id;
                 const profile = participants[0].profile;
                 const tel = participants[0].tel;
-                const username = participants[0].username;
+                const username = participants[0].membername;
                 const lastMessage = room.lastMessage;
                 const parsedTime = room.lastMessageDateTime;
 
@@ -298,6 +331,12 @@ async function findAllRoomAndSocketConnect() {
                     memberDetailBody(friendId, email, profile, tel, username);
                     pastChat(roomId, friendId, loginId);
                 };
+
+                const img = document.createElement("img");
+                img.className = "me-2 rounded-circle";
+                img.src = profile;
+                img.height = "48";
+                img.alt = username;
 
                 const innerDiv = document.createElement("div");
                 innerDiv.className = "w-100 overflow-hidden";
@@ -334,6 +373,7 @@ async function findAllRoomAndSocketConnect() {
 
                 cardDiv.appendChild(a);
                 a.appendChild(div2);
+                div2.appendChild(img);
                 div2.appendChild(innerDiv);
                 innerDiv.appendChild(h5);
                 h5.appendChild(span1);
@@ -498,7 +538,9 @@ export function pastChat(roomId, friendId, loginId) {
                 let date = new Date(chat.createdAt);
                 let hours = date.getHours();
                 let minutes = date.getMinutes().toString().padStart(2, '0');
-                let parsedTime = `${hours}:${minutes}`;
+                const ampm = hours >= 12 ? 'pm' : 'am';
+                const twelveHourFormat = (hours % 12) || 12;
+                const formattedTime = twelveHourFormat + ':' + minutes + ampm;
 
                 const li = document.createElement("li");
                 if (chat.senderId === loginId) {
@@ -510,7 +552,10 @@ export function pastChat(roomId, friendId, loginId) {
                 const chatAvatar = document.createElement("div");
                 const time = document.createElement("i");
                 chatAvatar.className = "chat-avatar";
-                time.textContent = parsedTime;
+                chatAvatar.style.display = "inline";
+                time.textContent = formattedTime;
+                time.style.display = "inline";
+                time.style.whiteSpace = "nowrap";
 
                 const conversationText = document.createElement("div");
                 const ctextWrap = document.createElement("div");
@@ -530,6 +575,8 @@ export function pastChat(roomId, friendId, loginId) {
                 document.querySelector("#chat-message").appendChild(li);
             });
         });
+
+
 }
 
 ////////////////////////////////////// socket chat ////////////////////////////////////////////
@@ -558,7 +605,9 @@ function recvMessage(recv) {
         let date = new Date(recv.createdAt);
         let hours = date.getHours();
         let minutes = date.getMinutes().toString().padStart(2, '0');
-        let parsedTime = `${hours}:${minutes}`;
+        const ampm = hours >= 12 ? 'pm' : 'am';
+        const twelveHourFormat = (hours % 12) || 12;
+        const formattedTime = twelveHourFormat + ':' + minutes + ampm;
 
         const li = document.createElement("li");
 
@@ -571,7 +620,10 @@ function recvMessage(recv) {
         const chatAvatar = document.createElement("div");
         const time = document.createElement("i");
         chatAvatar.className = "chat-avatar";
-        time.textContent = parsedTime;
+        chatAvatar.style.display = "inline";
+        time.textContent = formattedTime;
+        time.style.display = "inline";
+        time.style.whiteSpace = "nowrap";
 
         const conversationText = document.createElement("div");
         const ctextWrap = document.createElement("div");
@@ -590,6 +642,7 @@ function recvMessage(recv) {
         ctextWrap.appendChild(p);
 
         document.querySelector("#chat-message").appendChild(li);
+        findAllRoom(subjectId, token);
     }
 
     // 실시간으로 메시지온거 그려주기

@@ -42,6 +42,7 @@ public interface ChatConverter {
                 .id(member.getId())
                 .username(member.getUsername())
                 .membername(member.getMemberName())
+                .introduction(member.getIntroduction())
                 .profile(member.getProfile())
                 .email(member.getEmail())
                 .tel(member.getTel())

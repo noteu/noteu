@@ -2,9 +2,12 @@ package com.noteu.noteu.chat.entity;
 
 import com.noteu.noteu.audit.AuditingFields;
 import com.noteu.noteu.member.entity.Member;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Getter
 @ToString
@@ -20,4 +23,11 @@ public class ChatParticipant extends AuditingFields {
 
     @ManyToOne
     private Member member;
+
+//    @Column
+//    LocalDateTime lastStay;
+
+//    public void updateLastStay() {
+//        this.lastStay = LocalDateTime.now();
+//    }
 }
