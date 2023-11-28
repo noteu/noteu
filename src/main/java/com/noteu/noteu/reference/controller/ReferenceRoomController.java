@@ -103,7 +103,7 @@ public class ReferenceRoomController {
     @GetMapping
     public String referenceRoomList(@AuthenticationPrincipal MemberInfo memberInfo, @PathVariable("subject-id") Long subjectId,
                                     @RequestParam(value="page", defaultValue="0") int page, ModelMap map){
-        Page<GetAllResponseReferenceRoomDTO> dtoList = referenceRoomService.getAll(page);
+        Page<GetAllResponseReferenceRoomDTO> dtoList = referenceRoomService.getAll(page, subjectId);
         map.put("list", dtoList);
         map.put("subjectId", subjectId);
 
@@ -113,7 +113,7 @@ public class ReferenceRoomController {
     @PostMapping("/search")
     public String referenceRoomListByTitle(@AuthenticationPrincipal MemberInfo memberInfo, @PathVariable("subject-id") Long subjectId,
                                            @RequestParam(value="page", defaultValue="0") int page, String searchWord, Map map) {
-        Page<GetAllResponseReferenceRoomDTO> dtoList = referenceRoomService.getByTitleOrContent(page, searchWord);
+        Page<GetAllResponseReferenceRoomDTO> dtoList = referenceRoomService.getByTitle(page, subjectId, searchWord);
         map.put("list", dtoList);
         map.put("subjectId", subjectId);
 
@@ -259,7 +259,7 @@ public class ReferenceRoomController {
     }
 
     @GetMapping("/delete/{referenceRoomId}")
-    public String deleteReferenceRoom(@PathVariable Long referenceRoomId) {
+    public String deleteReferenceRoom(@PathVariable("subject-id") Long subjectId, @PathVariable Long referenceRoomId) {
 
         File delDir = new File(path + "/reference/" + referenceRoomId);
 

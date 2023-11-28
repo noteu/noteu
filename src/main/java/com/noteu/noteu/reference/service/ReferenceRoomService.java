@@ -20,9 +20,9 @@ public interface ReferenceRoomService {
 
     ReferenceDTO getFileById(Long referenceId);
 
-    Page<GetAllResponseReferenceRoomDTO> getAll(int page);
+    Page<GetAllResponseReferenceRoomDTO> getAll(int page, Long subjectId);
 
-    Page<GetAllResponseReferenceRoomDTO> getByTitleOrContent(int page, String searchWord);
+    Page<GetAllResponseReferenceRoomDTO> getByTitle(int page, Long subjectId, String searchWord);
 
     void updateById(EditRequestReferenceRoomDTO requestReferenceRoomDTO, Long referenceRoomId);
 
