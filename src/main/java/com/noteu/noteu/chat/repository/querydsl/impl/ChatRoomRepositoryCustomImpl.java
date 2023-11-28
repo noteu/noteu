@@ -1,8 +1,6 @@
 package com.noteu.noteu.chat.repository.querydsl.impl;
 
-import com.noteu.noteu.chat.entity.ChatRoom;
-import com.noteu.noteu.chat.entity.QChatParticipant;
-import com.noteu.noteu.chat.entity.QChatRoom;
+import com.noteu.noteu.chat.entity.*;
 import com.noteu.noteu.chat.repository.querydsl.ChatRoomRepositoryCustom;
 import com.noteu.noteu.member.entity.QMember;
 import lombok.extern.slf4j.Slf4j;
@@ -23,12 +21,15 @@ public class ChatRoomRepositoryCustomImpl extends QuerydslRepositorySupport impl
         QChatRoom chatRoom = QChatRoom.chatRoom;
         QChatParticipant chatParticipant = QChatParticipant.chatParticipant;
         QMember member = QMember.member;
+        QChatMessage chatMessage = QChatMessage.chatMessage;
 
         return from(chatRoom)
-                .leftJoin(chatRoom.participants, chatParticipant)
-                .leftJoin(chatParticipant.member, member)
+                .join(chatRoom.participants, chatParticipant)
+                .join(chatParticipant.member, member)
+                .join(chatMessage).on(chatRoom.id.eq(chatMessage.roomId))
                 .where(chatRoom.subject.id.eq(subjectId)
                         .and(member.id.eq(loginId)))
+                .orderBy(chatMessage.createdAt.desc())
                 .select(chatRoom)
                 .fetch();
     }

@@ -19,14 +19,17 @@ import com.noteu.noteu.subject.entity.Subject;
 import com.noteu.noteu.subject.repository.SubjectMemberRepository;
 import com.noteu.noteu.subject.repository.SubjectRepository;
 import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -75,6 +78,13 @@ public class RestChatServiceImpl implements RestChatService {
                 .map(converter::chatMessageEntityToChatMessageResponsedto)
                 .toList();
     }
+
+//    public void updateLastStay(Long roomId, Long loginId) {
+//        ChatParticipant chatParticipant = chatParticipantRepository.findByChatRoomIdAndMemberId(roomId, loginId)
+//                .orElseThrow(EntityNotFoundException::new);
+//
+//        chatParticipant.updateLastStay();
+//    }
 
     @Override
     public ChatRoomResponse createRoom(Long subjectId, Long friendId, Long loginId) {
