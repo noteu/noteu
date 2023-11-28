@@ -65,6 +65,7 @@ public interface QuestionPostConverter {
                 .questionPost(questionComment.getQuestionPost())
                 .memberId(questionComment.getMember().getId())
                 .memberName(questionComment.getMember().getMemberName())
+                .profile(questionComment.getMember().getProfile())
                 .questionCommentContent(questionComment.getQuestionCommentContent())
                 .createdAt(questionComment.getCreatedAt())
                 .modifiedAt(questionComment.getModifiedAt())
@@ -92,9 +93,11 @@ public interface QuestionPostConverter {
                 .subject(questionPost.getSubject())
                 .memberId(questionPost.getMember().getId())
                 .memberName(questionPost.getMember().getMemberName())
+                .profile(questionPost.getMember().getProfile())
                 .questionPostTitle(questionPost.getQuestionPostTitle())
                 .questionPostContent(questionPost.getQuestionPostContent())
                 .comment(responseQuestionCommentDTOList)
+                .commentCount(responseQuestionCommentDTOList.size())
                 .createdAt(questionPost.getCreatedAt())
                 .modifiedAt(questionPost.getModifiedAt())
                 .build();
@@ -106,6 +109,7 @@ public interface QuestionPostConverter {
                 .subject(questionPost.getSubject())
                 .memberId(questionPost.getMember().getId())
                 .memberName(questionPost.getMember().getMemberName())
+                .profile(questionPost.getMember().getProfile())
                 .questionPostTitle(questionPost.getQuestionPostTitle())
                 .createdAt(questionPost.getCreatedAt())
                 .build();

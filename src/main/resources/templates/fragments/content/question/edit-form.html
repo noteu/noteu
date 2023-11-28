@@ -9,7 +9,7 @@
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Question Post</a></li>
+                        <li class="breadcrumb-item"><a th:href="@{/subjects/{subjectId}/questions(subjectId = ${subjectId})}">Question Post</a></li>
                         <li class="breadcrumb-item active">Edit Question Post</li>
                     </ol>
                 </div>
@@ -35,8 +35,8 @@
                         </div> <!-- end preview-->
                     </div> <!-- end tab-content-->
                     <div>
-                        <button type="button" class="btn btn-primary" id="submitBtn">수정</button>
-                        <button type="button" class="btn btn-secondary" id="cancelBtn">취소</button>
+                        <button type="button" class="btn btn-primary" id="submitBtn">Edit</button>
+                        <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
                     </div>
                 </div> <!-- end card-body-->
             </div> <!-- end card-->

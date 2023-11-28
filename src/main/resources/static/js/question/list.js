@@ -5,9 +5,24 @@ $(document).ready(function (){
         $(this).text(formattedCreatedAt);
     });
 
+    $("#search").on("submit", function () {
+       var searchType = $("#searchType").val();
+       var searchWord = $("#searchWord").val();
+
+       if(searchType == 0) {
+           alert("검색 유형을 선택 해 주세요.");
+           event.preventDefault();
+       } else {
+           if(searchWord.length < 2) {
+               alert("두 음절 이상의 단어로 검색 해 주세요");
+               event.preventDefault();
+           }
+       }
+    });
+
     $(".detail").click(function (){
-        var questionId = $(this).find("input:eq(0)").val();
-        var subjectId = $(this).find("input:eq(1)").val();
+        var questionId = $(this).parents().siblings(".questionPostId").val();
+        var subjectId = $(this).parents().siblings(".subjectId").val();
 
         console.log(questionId);
         console.log(subjectId);
@@ -21,8 +36,13 @@ $(document).ready(function (){
             error:function(request, status, error){
                 console.log("code:"+request.status+"\n"+"error:"+error);
             }
-
         });
+    });
+
+    $(".userProfile").on("click", function(){
+        var memberId = $(this).parents().siblings(".memberId").val();
+
+        location.href = "/members/account/" + memberId;
     });
 });
 

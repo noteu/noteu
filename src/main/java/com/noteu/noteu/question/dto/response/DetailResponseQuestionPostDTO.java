@@ -23,6 +23,8 @@ public class DetailResponseQuestionPostDTO {
 
     private String memberName;
 
+    private String profile;
+
     private String questionPostTitle;
 
     private String questionPostContent;
@@ -32,4 +34,6 @@ public class DetailResponseQuestionPostDTO {
     private LocalDateTime modifiedAt;
 
     private List<ResponseQuestionCommentDTO> comment;
+
+    private int commentCount;
 }
