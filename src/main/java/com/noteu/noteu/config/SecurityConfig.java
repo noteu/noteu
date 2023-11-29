@@ -63,8 +63,8 @@ public class SecurityConfig {
                 )
                 // 로그아웃 설정
                 .logout(logout -> logout
-                        .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout"))
-                        .logoutSuccessUrl("/auth/login")
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/auth/sign-out"))
+                        .logoutSuccessUrl("/auth/logout")
                         .invalidateHttpSession(true) // 세션 삭제
                 );
         return http.build();
