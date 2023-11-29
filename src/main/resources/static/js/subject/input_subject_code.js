@@ -19,7 +19,7 @@ btn_submit.addEventListener("click", () => {
             }
         },
         error: function (error) {
-            alert(error.responseText);
+            alert("과목코드를 잘못 입력하셨습니다. \n 과목코드를 다시 확인해주세요.");
         },
     });
 });
