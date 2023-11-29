@@ -184,7 +184,7 @@ export function findAllRoom(subjectId, token) {
                 const lastMessage = room.lastMessage;
                 const parsedTime = room.lastMessageDateTime;
 
-                console.log(roomId)
+                console.log(roomId);
                 console.log(participants);
 
                 const a = document.createElement("a");
@@ -199,7 +199,7 @@ export function findAllRoom(subjectId, token) {
                     memberDetailHead(subjectId, friendId, email, profile, tel, membername);
                     memberDetailBody(friendId, email, profile, tel, membername);
                     pastChat(roomId, friendId, loginId);
-                    updateLastStay(roomId);
+                    // updateLastStay(roomId);
                 };
 
                 const img = document.createElement("img");
@@ -261,14 +261,14 @@ export function findAllRoom(subjectId, token) {
         });
 }
 
-function updateLastStay(roomId){
-    axios
-        .get(`/subjects/${subjectId}/chats/rooms/stay?room-id=${roomId}`, {
-            headers: {
-                Authorization: `${token}`
-            }
-        });
-}
+// function updateLastStay(roomId){
+//     axios
+//         .get(`/subjects/${subjectId}/chats/rooms/stay?room-id=${roomId}`, {
+//             headers: {
+//                 Authorization: `${token}`
+//             }
+//         });
+// }
 
 
 async function findAllRoomAndSocketConnect() {
@@ -575,8 +575,6 @@ export function pastChat(roomId, friendId, loginId) {
                 document.querySelector("#chat-message").appendChild(li);
             });
         });
-
-
 }
 
 ////////////////////////////////////// socket chat ////////////////////////////////////////////
@@ -610,13 +608,11 @@ function recvMessage(recv) {
         const formattedTime = twelveHourFormat + ':' + minutes + ampm;
 
         const li = document.createElement("li");
-
         if (recv.senderName === senderName) {
             li.className = "clearfix odd";
         } else {
             li.className = "clearfix";
         }
-
         const chatAvatar = document.createElement("div");
         const time = document.createElement("i");
         chatAvatar.className = "chat-avatar";
@@ -624,7 +620,7 @@ function recvMessage(recv) {
         time.textContent = formattedTime;
         time.style.display = "inline";
         time.style.whiteSpace = "nowrap";
-
+        console.log("이거 왜 안되는거임 안되는거임2");
         const conversationText = document.createElement("div");
         const ctextWrap = document.createElement("div");
         const i = document.createElement("i");
@@ -633,7 +629,7 @@ function recvMessage(recv) {
         ctextWrap.className = "ctext-wrap";
         i.textContent = recv.senderName;
         p.textContent = recv.message;
-
+        console.log("이거 왜 안되는거임 안되는거임3");
         li.appendChild(chatAvatar);
         chatAvatar.appendChild(time);
         li.appendChild(conversationText);
@@ -642,21 +638,24 @@ function recvMessage(recv) {
         ctextWrap.appendChild(p);
 
         document.querySelector("#chat-message").appendChild(li);
+
+        console.log("이거 왜 안되는거임 안되는거임4");
         findAllRoom(subjectId, token);
     }
 
     // 실시간으로 메시지온거 그려주기
     const date = new Date(recv.createdAt);
     const hours = date.getHours();
-    const minutes = date.getMinutes();
+    let minutes = date.getMinutes().toString().padStart(2, '0');
     const ampm = hours >= 12 ? 'pm' : 'am';
     const twelveHourFormat = (hours % 12) || 12;
     const formattedTime = twelveHourFormat + ':' + minutes + ampm;
     console.log(`log 확인 : time${recv.roomId}`);
     console.log(`log 확인 : lastmessage${recv.roomId}`);
-
-    document.getElementById(`time${recv.roomId}`).innerHTML = formattedTime;
-    document.getElementById(`lastmessage${recv.roomId}`).innerHTML = recv.message;
+    console.log(`log 확인 : lastmessage${recv.date}`);
+    findAllRoom(subjectId, token);
+    // document.getElementById(`time${recv.roomId}`).innerHTML = formattedTime;
+    // document.getElementById(`lastmessage${recv.roomId}`).innerHTML = recv.message;
 }
 
 export function connect(roomId, senderName) {
