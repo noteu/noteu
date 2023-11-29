@@ -26,7 +26,7 @@ public class ChatRoomRepositoryCustomImpl extends QuerydslRepositorySupport impl
         return from(chatRoom)
                 .join(chatRoom.participants, chatParticipant)
                 .join(chatParticipant.member, member)
-                .join(chatMessage).on(chatRoom.id.eq(chatMessage.roomId))
+                .leftJoin(chatMessage).on(chatRoom.id.eq(chatMessage.roomId))
                 .where(chatRoom.subject.id.eq(subjectId)
                         .and(member.id.eq(loginId)))
                 .orderBy(chatMessage.createdAt.desc())

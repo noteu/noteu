@@ -56,6 +56,8 @@ public class RestChatServiceImpl implements RestChatService {
                 })
                 .toList();
 
+        log.info("요녀석의 값이 왜 안나오냐고 chatRoomResponseDtos : {}", chatRoomResponseDtos);
+
         return ChatRoomInfoResponseDto.builder()
                 .chatRoomResponseDtos(chatRoomResponseDtos)
                 .loginId(loginId)
