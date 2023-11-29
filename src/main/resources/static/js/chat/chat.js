@@ -252,7 +252,7 @@ export function findAllRoom(subjectId, token) {
 
                 const span3 = document.createElement("span");
                 span3.className = "badge badge-danger-lighten";
-                span3.textContent = "2";
+                // span3.textContent = "2";
 
                 const span4 = document.createElement("span");
                 span4.id = `lastmessage${roomId}`;
@@ -383,7 +383,8 @@ async function findAllRoomAndSocketConnect() {
 
                 const span3 = document.createElement("span");
                 span3.className = "badge badge-danger-lighten";
-                span3.textContent = "2";
+                // todo : 채팅 안읽은 수 구해서 넣기
+                // span3.textContent = "2";
 
                 const span4 = document.createElement("span");
                 span4.id = `lastmessage${roomId}`;
