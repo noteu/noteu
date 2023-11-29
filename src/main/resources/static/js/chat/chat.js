@@ -7,12 +7,13 @@ window.onload = function () {
     messageInput = document.getElementById('message-input');
     senderId = document.getElementById("memberId").value;
     senderName = document.getElementById("memberName").value;
+    loginMemberProfile = document.getElementById("loginProfile").value;
     chatMessage = document.getElementById('chat-message');
     let chatsToggleBtn = document.getElementById('chats');
     let friendsToggleBtn = document.getElementById('friends');
 
     sendBtn = document.getElementById('send-btn');
-    sendBtn.onclick = function() {
+    sendBtn.onclick = function () {
         sendMessage();
         // id가 "chats"인 요소를 변경
         chatsToggleBtn.href = "#alwaysopen-accordions-preview";
@@ -36,12 +37,27 @@ window.onload = function () {
     friendsToggleBtn.onclick = function () {
         findAllFriend(subjectId, token);
     };
-
 };
+
 let token;
 export let subjectId;
 let chatMessage;
 let selectRoomId;
+let loginMemberProfile;
+let selectFriendProfile;
+
+function findMyProfile() {
+    axios
+        .get(`/subjects/${subjectId}/chats/my-profile`, {
+            headers: {
+                Authorization: `${token}`
+            }
+        })
+        .then(response => {
+            console.log(response.data);
+            loginMemberProfile = response.data;
+        });
+}
 
 function findAllFriend(subjectId, token) {
     console.log(`subjectId : ${subjectId}`);
@@ -91,6 +107,7 @@ function findAllFriend(subjectId, token) {
                 div2.className = "d-flex align-items-start mt-1 p-2";
                 div2.onclick = function () {
                     toggleMessageStyle(this);
+                    selectFriendProfile = profile;
                     memberDetailHead(subjectId, friendId, email, profile, tel, username);
                     memberDetailBody(friendId, email, profile, tel, username);
                 };
@@ -195,6 +212,7 @@ export function findAllRoom(subjectId, token) {
                 div2.className = "d-flex align-items-start mt-1 p-2";
                 div2.onclick = function () {
                     selectRoomId = roomId;
+                    selectFriendProfile = profile;
                     toggleMessageStyle(this);
                     memberDetailHead(subjectId, friendId, email, profile, tel, membername);
                     memberDetailBody(friendId, email, profile, tel, membername);
@@ -326,6 +344,7 @@ async function findAllRoomAndSocketConnect() {
                 div2.className = "d-flex align-items-start mt-1 p-2";
                 div2.onclick = function () {
                     selectRoomId = roomId;
+                    selectFriendProfile = profile;
                     toggleMessageStyle(this);
                     memberDetailHead(subjectId, friendId, email, profile, tel, username);
                     memberDetailBody(friendId, email, profile, tel, username);
@@ -431,7 +450,7 @@ function memberDetailHead(subjectId, friendId, email, profile, tel, username) {
     const strong = document.createElement("strong");
     p.className = "text-muted mt-2 font-14";
     p.textContent = "마지막 상호작용: ";
-    strong.textContent = "몇 시간 전"
+    strong.textContent = "몇 분 전"
 
     div.appendChild(img);
     div.appendChild(h4);
@@ -449,7 +468,7 @@ function createChatRoom(subjectId, friendId) {
         .then(response => {
             console.log(response);
 
-            if(!response.data.hasOwnProperty('id')){
+            if (!response.data.hasOwnProperty('id')) {
                 const roomId = response.data.roomId;
                 const friendId = response.data.friendId;
                 const loginId = response.data.loginId;
@@ -543,16 +562,22 @@ export function pastChat(roomId, friendId, loginId) {
                 const formattedTime = twelveHourFormat + ':' + minutes + ampm;
 
                 const li = document.createElement("li");
+                const img = document.createElement("img");
+
                 if (chat.senderId === loginId) {
                     li.className = "clearfix odd";
+                    img.src = loginMemberProfile;
                 } else {
                     li.className = "clearfix";
+                    img.src = selectFriendProfile;
                 }
 
                 const chatAvatar = document.createElement("div");
                 const time = document.createElement("i");
                 chatAvatar.className = "chat-avatar";
                 chatAvatar.style.display = "inline";
+                img.className = "rounded";
+                img.alt = chat.senderName;
                 time.textContent = formattedTime;
                 time.style.display = "inline";
                 time.style.whiteSpace = "nowrap";
@@ -567,6 +592,7 @@ export function pastChat(roomId, friendId, loginId) {
                 p.textContent = chat.message;
 
                 li.appendChild(chatAvatar);
+                chatAvatar.appendChild(img);
                 chatAvatar.appendChild(time);
                 li.appendChild(conversationText);
                 conversationText.appendChild(ctextWrap);
@@ -608,15 +634,20 @@ function recvMessage(recv) {
         const formattedTime = twelveHourFormat + ':' + minutes + ampm;
 
         const li = document.createElement("li");
+        const img = document.createElement("img");
         if (recv.senderName === senderName) {
             li.className = "clearfix odd";
+            img.src = loginMemberProfile;
         } else {
             li.className = "clearfix";
+            img.src = selectFriendProfile;
         }
         const chatAvatar = document.createElement("div");
         const time = document.createElement("i");
         chatAvatar.className = "chat-avatar";
         chatAvatar.style.display = "inline";
+        img.className = "rounded";
+        img.alt = recv.senderName;
         time.textContent = formattedTime;
         time.style.display = "inline";
         time.style.whiteSpace = "nowrap";
@@ -631,6 +662,7 @@ function recvMessage(recv) {
         p.textContent = recv.message;
         console.log("이거 왜 안되는거임 안되는거임3");
         li.appendChild(chatAvatar);
+        chatAvatar.appendChild(img);
         chatAvatar.appendChild(time);
         li.appendChild(conversationText);
         conversationText.appendChild(ctextWrap);
