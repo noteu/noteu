@@ -43,7 +43,7 @@ public class MemberController {
     @GetMapping("/account/{id}")
     public String account(@PathVariable("id") Long memberId, Model model) throws ClassNotFoundException {
         // 회원 정보 수정
-        Member member = memberDetailsService.findById(memberId);
+        Member member = memberDetailsService.getById(memberId);
         List<Role> roleList = new ArrayList<>(member.getRole());
         MemberDto memberDto = MemberDto.builder()
                 .id(member.getId())
@@ -100,15 +100,15 @@ public class MemberController {
     }
 
     @PostMapping("/password/{id}")
-    public String changePassword(@RequestBody MemberPasswordDto memberPasswordDto) {
+    public String changePassword(@PathVariable("id") Long memberId, MemberPasswordDto memberPasswordDto) {
         memberDetailsService.changePassword(memberPasswordDto);
-        return "redirect:/members/account/{id}";
+        return "redirect:/members/account/" + memberId;
     }
 
     @ResponseBody
     @PostMapping("/pw-check")
     public String passwordCheck(@AuthenticationPrincipal MemberInfo memberInfo, MemberPasswordDto memberPasswordDto) {
-        Member member = memberDetailsService.findById(memberInfo.getId());
+        Member member = memberDetailsService.getById(memberInfo.getId());
         String previousPassword = memberPasswordDto.getPreviousPassword();
 
         if (passwordEncoder.matches(previousPassword, member.getPassword())) {
@@ -131,6 +131,16 @@ public class MemberController {
     public String changeProfile(@PathVariable("id") Long memberId, MultipartFile profileFile) throws IOException {
         log.info("profileFile: {}", profileFile);
         String OriginalfileName = profileFile.getOriginalFilename();
+
+        File directory = new File(path + "/profile/");
+        if (!directory.exists()) {
+            if (directory.mkdirs()) {
+                log.info("Directory is created!");
+            } else {
+                log.error("Failed to create directory!");
+                throw new RuntimeException("Failed to create directory for task files");
+            }
+        }
 
         String fileName = getFileName(OriginalfileName);
         String contentType = getContentType(OriginalfileName);

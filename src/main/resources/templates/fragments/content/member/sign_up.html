@@ -1,53 +1,121 @@
 <!DOCTYPE html>
-<html lang="en" data-layout-mode="detached" data-topbar-color="dark" data-menu-color="light" data-sidenav-user="true"
-      xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="en" data-layout-mode="detached" data-topbar-color="dark" data-menu-color="light" data-sidenav-user="true">
 <th:block th:fragment="signUpFragment">
-    <div class="content">
-        <h3 class="my-3">회원가입</h3>
-        <form th:action="@{/auth/sign-up}" th:object="${signUpDto}" method="post">
-            <div th:if="${#fields.hasAnyErrors()}">
-                <div class="alert alert-danger" role="alert" th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
-            </div>
-            <div class="mb-2">
-                <label for="username" class="form-label">아이디</label>
-                <input id="username" name="username" th:field="*{username}" type="text" class="form-control">
-            </div>
-            <div class="mb-2">
-                <label for="password1" class="form-label">비밀번호</label>
-                <input id="password1" name="password1" th:field="*{password1}" type="password" class="form-control">
-            </div>
-            <div class="mb-2">
-                <label for="password2" class="form-label">비밀번호 확인</label>
-                <input id="password2" name="password2" th:field="*{password2}" type="password" class="form-control">
-            </div>
-            <div class="mb-2">
-                <label for="name" class="form-label">이름</label>
-                <input id="name" name="memberName" th:field="*{memberName}" type="text" class="form-control">
-            </div>
-            <div class="mb-2">
-                <label for="email" class="form-label">이메일</label>
-                <input id="email" name="email" th:field="*{email}" type="email" class="form-control">
-            </div>
-            <div class="mb-2">
-                <label for="tel" class="form-label">전화번호</label>
-                <input id="tel" name="tel" th:field="*{tel}" type="tel" class="form-control">
-            </div>
-            <div class="mb-2">
-                <label for="role" class="form-label">타입</label>
-                <div id="role">
-                    <input id="admin" type='radio' name='role' value='ROLE_ADMIN' th:field="*{role}"
-                           class="form-check-input">
-                    <label for="admin" class="form-check-label">관리자</label>
-                    <input id="teacher" type='radio' name='role' value='ROLE_TEACHER' th:field="*{role}"
-                           class="form-check-input">
-                    <label for="teacher" class="form-check-label">선생님</label>
-                    <input id="student" type='radio' name='role' value='ROLE_STUDENT' th:field="*{role}"
-                           class="form-check-input">
-                    <label for="student" class="form-check-label">학생</label>
+        <div class="account-pages pt-2 pt-sm-5 pb-4 pb-sm-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-xxl-4 col-lg-5">
+                        <div class="card">
+                            <!-- Logo-->
+                            <div class="card-header py-4 text-center bg-primary">
+                                <a href="index.html">
+                                    <span><img src="/assets/images/logo.png" alt="logo" height="22"></span>
+                                </a>
+                            </div>
+
+                            <div class="card-body p-4">
+                                
+                                <div class="text-center w-100 m-auto">
+                                    <h4 class="text-dark-50 text-center mt-0 fw-bold">Sign Up</h4>
+                                    <p class="text-muted mb-4">Don't have an account?<br/>Create your account, it takes less than a minute! </p>
+                                </div>
+
+                                <form action="/auth/sign-up" th:object="${signUpDto}" method="post" id="f">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label" for="username">ID</label>
+                                        <div class="input-group input-group-merge">
+                                            <input class="form-control" type="text" id="username" name="username" th:field="*{username}" placeholder="Enter your ID">
+                                            <div class="input-group-text" onclick="idCheck()" style="cursor: pointer;">ID Check</div>
+                                            <p class="invalid-feedback ms-1 mb-0" id="username_invalid_msg"></p>
+                                            <p class="valid-feedback ms-1 mb-0" id="username_valid_msg"></p>
+                                        </div>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label for="password1" class="form-label">Password</label>
+                                        <div class="input-group input-group-merge">
+                                            <input class="form-control" type="password" id="password1" name="password1" placeholder="Enter your password" onkeyup="passwordVaild()">
+                                             <div class="input-group-text" data-password="false">
+                                                <span class="password-eye"></span>
+                                            </div>
+                                            <p class="invalid-feedback ms-1 mb-0" id="password_msg"></p>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="password2" class="form-label">Password Check</label>
+                                        <div class="input-group input-group-merge">
+                                            <input class="form-control" type="password" id="password2" name="password2" placeholder="Enter password check" onkeyup="passwordCheck()">
+                                            <div class="input-group-text" data-password="false">
+                                                <span class="password-eye"></span>
+                                            </div>
+                                            <p class="invalid-feedback ms-1 mb-0" id="password_check_msg"></p>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label">Name</label>
+                                        <input class="form-control" type="text" id="name" name="memberName" th:field="*{memberName}" placeholder="Enter your name" onfocusout="nameCheck()">
+                                        <p class="invalid-feedback ms-1 mb-0" id="name_msg"></p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email address</label>
+                                        <input class="form-control" type="email" id="email" name="email" th:field="*{email}"  placeholder="Enter your email" onfocusout="emailCheck()">
+                                        <p class="invalid-feedback ms-1 mb-0" id="email_invalid_msg"></p>
+                                        <p class="valid-feedback ms-1 mb-0" id="email_valid_msg"></p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="tel" class="form-label">Mobile</label>
+                                        <input class="form-control" type="text" id="tel" name="tel" th:field="*{tel}" data-toggle="input-mask" data-mask-format="(000) 000-0000" placeholder="Enter your mobile" onfocusout="telCheck()">
+                                        <p class="invalid-feedback ms-1 mb-0" id="tel_invalid_msg"></p>
+                                        <p class="valid-feedback ms-1 mb-0" id="tel_valid_msg"></p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="role" class="form-label">Type</label>
+                                        <div id="role" class="col text-center">
+<!--                                            <div class="form-check-inline">-->
+<!--                                                <input class="form-check-input" id="admin" type='radio' name='role' value='ROLE_ADMIN' th:field="*{role}"  disabled>-->
+<!--                                                <label for="admin" class="form-check-label ms-1">Admin</label>-->
+<!--                                            </div>-->
+                                            <div class="form-check-inline">
+                                                <input class="form-check-input" id="teacher" type='radio' name='role' value='ROLE_TEACHER' th:field="*{role}">
+                                                <label for="teacher" class="form-check-label ms-1">Teacher</label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                                <input class="form-check-input" id="student" type='radio' name='role' value='ROLE_STUDENT' th:field="*{role}">
+                                                <label for="student" class="form-check-label ms-1">Student</label>
+                                            </div>
+                                            <p class="fs-6 ms-1 mb-0" id="role_msg" style="color:red;"></p>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <div class="form-check mb-3">
+                                            <input type="checkbox" class="form-check-input" id="term_checkbox">
+                                            <label class="form-check-label form-label mb-0" for="term_checkbox">Agree to terms
+                                                and conditions</label>
+                                            <div class="invalid-feedback mt-0 ms-1" id="term_msg"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3 text-center">
+                                        <button class="btn btn-primary" type="submit" onclick="join()"> Sign Up </button>
+                                    </div>
+                                </form>
+                            </div> <!-- end card-body -->
+                        </div>
+                        <!-- end card -->
+
+                        <div class="row mt-3">
+                            <div class="col-12 text-center">
+                                <p class="text-muted">Already have account? <a href="/auth/login" class="text-muted ms-1"><b>Log In</b></a></p>
+                            </div> <!-- end col-->
+                        </div>
+                        <!-- end row -->
+
+                    </div> <!-- end col -->
                 </div>
+                <!-- end row -->
             </div>
-            <button type="submit" class="btn btn-primary float-end">가입</button>
-        </form>
-    </div>
+            <!-- end container -->
+        </div>
+        <!-- end page -->
 </th:block>
 </html>
