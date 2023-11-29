@@ -33,8 +33,9 @@
                                 <form id="search" th:action="@{/subjects/{subjectId}/references/search(subjectId = ${subjectId})}" method="POST">
                                     <div class="input-group">
                                         <input type="search" class="form-control dropdown-toggle" id="searchWord" name="searchWord" placeholder="Search...">
-                                        <span class="mdi mdi-magnify search-icon"></span>
-                                        <button class="input-group-text btn btn-primary" type="submit">Search</button>
+                                        <button class="input-group-text btn btn-primary" type="submit">
+                                            <i class="mdi mdi-magnify search-icon"></i>
+                                        </button>
                                     </div>
                                 </form>
                             </div>
