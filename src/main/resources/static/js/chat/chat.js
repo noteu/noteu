@@ -210,6 +210,11 @@ export function findAllRoom(subjectId, token) {
 
                 const div2 = document.createElement("div");
                 div2.className = "d-flex align-items-start mt-1 p-2";
+                
+                if(roomId === selectRoomId){
+                    toggleMessageStyle(div2);
+                }
+
                 div2.onclick = function () {
                     selectRoomId = roomId;
                     selectFriendProfile = profile;
@@ -277,6 +282,8 @@ export function findAllRoom(subjectId, token) {
             // 생성한 HTML 요소를 기존의 HTML에 추가
             document.querySelector("#users").appendChild(rowDiv);
         });
+
+
 }
 
 // function updateLastStay(roomId){
@@ -323,7 +330,7 @@ async function findAllRoomAndSocketConnect() {
 
             // 각 방에 대한 정보를 반복하여 HTML 요소를 생성
             rooms.forEach(room => {
-                const roomId = room.id;
+                let roomId = room.id;
                 const participants = room.participants; // 참가자 배열
                 const email = participants[0].email;
                 const friendId = participants[0].id;
@@ -342,6 +349,7 @@ async function findAllRoomAndSocketConnect() {
 
                 const div2 = document.createElement("div");
                 div2.className = "d-flex align-items-start mt-1 p-2";
+
                 div2.onclick = function () {
                     selectRoomId = roomId;
                     selectFriendProfile = profile;
