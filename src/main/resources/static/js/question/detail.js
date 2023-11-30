@@ -23,6 +23,14 @@ $(document).ready(function() {
        location.href = "/members/account/" + memberId;
     });
 
+    $(".memberRole").each(function (index, element) {
+        console.log($(element).val());
+        if($(element).val() === "TEACHER") {
+            $(this).siblings(".answerMember").append("<span class='badge bg-primary me-1'>Teacher</span>");
+        }
+    });
+
+
     $("#deleteBtn").on("click", function (){
         if(confirm("해당 게시물을 삭제 하시겠습니까?")){
             var subjectId = $("#subjectId").val();
