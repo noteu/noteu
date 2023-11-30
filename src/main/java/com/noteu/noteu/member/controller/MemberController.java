@@ -154,7 +154,7 @@ public class MemberController {
         profileFile.transferTo(newFile);
         log.info("newFile: {}", newFile.getAbsolutePath());
 
-        memberDetailsService.changeProfile(memberId,  "/file/profile/" + editFileName);
+        memberDetailsService.changeProfile(memberId, path + "/profile/" + editFileName);
 
         return "redirect:/members/account/{id}";
     }
