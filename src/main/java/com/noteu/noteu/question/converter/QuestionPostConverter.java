@@ -65,6 +65,7 @@ public interface QuestionPostConverter {
                 .questionPost(questionComment.getQuestionPost())
                 .memberId(questionComment.getMember().getId())
                 .memberName(questionComment.getMember().getMemberName())
+                .memberRole(questionComment.getMember().getRole())
                 .profile(questionComment.getMember().getProfile())
                 .questionCommentContent(questionComment.getQuestionCommentContent())
                 .createdAt(questionComment.getCreatedAt())
