@@ -222,7 +222,6 @@ const preventSubmit = () => {
 };
 
 const join = () => {
-    console.log(idResult && passwordResult && nameResult && emailResult && telResult && roleResult && termResult);
     if (!idResult) {
         preventSubmit();
         var username = document.getElementById('username');
@@ -254,5 +253,4 @@ const join = () => {
     if (idResult && passwordResult && nameResult && emailResult && telResult && roleResult && termResult) {
         document.getElementById("f").submit();
     }
-    preventSubmit();
 }

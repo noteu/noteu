@@ -70,7 +70,7 @@ public class OauthDetailsService extends DefaultOAuth2UserService {
             }
             member = Member.builder()
                     .username(username)
-                    .password(passwordEncoder.encode(""))
+                    .password(passwordEncoder.encode("*OauthPassword*"))
                     .profile(profile)
                     .memberName(oAuth2UserInfo.getName())
                     .email(oAuth2UserInfo.getEmail())

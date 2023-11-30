@@ -9,8 +9,8 @@
 
                             <!-- Logo -->
                             <div class="card-header py-4 text-center bg-primary">
-                                <a href="index.html">
-                                    <span><img src="/assets/images/logo.png" alt="logo" height="22"></span>
+                                <a href="/">
+                                    <span><img src="/assets/images/noteuLogo.png" alt="logo" height="22"></span>
                                 </a>
                             </div>
 
@@ -23,24 +23,20 @@
 
                                 <form th:action="@{/auth/login}" method="post">
                                     <div th:if="${param.error}">
-                                        <div class="alert alert-danger text-center">
-                                            ID 또는 비밀번호를 확인해 주세요.
+                                        <div class="alert alert-info alert-dismissible fade show text-center" role="alert">
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                            <strong>ID</strong> 또는 <strong>Password</strong>를 확인해 주세요.
                                         </div>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="username" class="form-label">ID</label>
-                                        <input class="form-control" type="text" id="username" name="username" placeholder="Enter your ID">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="username" name="username" placeholder="Enter your ID">
+                                        <label for="username">ID</label>
                                     </div>
 
-                                    <div class="mb-3">
+                                    <div class="form-floating mb-3">
 <!--                                        <a href="pages-recoverpw.html" class="text-muted float-end"><small>Forgot your password?</small></a>-->
-                                        <label for="password" class="form-label">Password</label>
-                                        <div class="input-group input-group-merge">
-                                            <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password">
-                                            <div class="input-group-text" data-password="false">
-                                                <span class="password-eye"></span>
-                                            </div>
-                                        </div>
+                                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password">
+                                        <label for="password">Password</label>
                                     </div>
 
 <!--                                    <div class="mb-3 mb-3">-->
