@@ -41,7 +41,7 @@
             <div class="h-100" id="leftside-menu-container" data-simplebar>
                 <!-- Leftbar User -->
                 <div class="leftbar-user" sec:authorize="isAuthenticated()">
-                    <a href="pages-profile.html">
+                    <a th:href="@{|/members/account/${#authentication.principal.id}|}">
                         <img th:src="${#authentication.principal.profile}" alt="user-image" width="42" height="42" class="rounded-circle shadow-sm">
                         <span class="leftbar-user-name mt-2" th:text="${#authentication.principal.memberName}"></span>
                     </a>
