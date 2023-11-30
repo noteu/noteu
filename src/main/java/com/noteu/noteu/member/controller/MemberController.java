@@ -13,7 +13,6 @@ import com.noteu.noteu.subject.dto.SubjectInfoDto;
 import com.noteu.noteu.subject.service.SubjectMemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +24,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +33,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/members")
 public class MemberController {
-    @Value("${spring.servlet.multipart.location}")
-    private String path;
+    private String path = "/src/main/resources/static/file/";
     private final MemberDetailsService memberDetailsService;
     private final PasswordEncoder passwordEncoder;
     private final SubjectMemberService subjectMemberService;
@@ -129,10 +128,10 @@ public class MemberController {
 
     @PostMapping("/profile/{id}")
     public String changeProfile(@PathVariable("id") Long memberId, MultipartFile profileFile) throws IOException {
-        log.info("profileFile: {}", profileFile);
         String OriginalfileName = profileFile.getOriginalFilename();
+        String currentPath = Paths.get("").toAbsolutePath().toString();
 
-        File directory = new File(path + "/profile/");
+        File directory = new File(currentPath + path + "profile/");
         if (!directory.exists()) {
             if (directory.mkdirs()) {
                 log.info("Directory is created!");
@@ -145,17 +144,15 @@ public class MemberController {
         String fileName = getFileName(OriginalfileName);
         String contentType = getContentType(OriginalfileName);
 
-        log.info("getName: {}", fileName);
-        log.info("getContentType: {}", contentType);
         String editFileName = fileName + "_" + memberId + contentType;
 
-        String filePath = path + "profile/" + editFileName;
+        String filePath = currentPath + path + "profile/" + editFileName;
+        log.info("filePath: {}", filePath);
         File newFile = new File(filePath);
         profileFile.transferTo(newFile);
         log.info("newFile: {}", newFile.getAbsolutePath());
 
-        memberDetailsService.changeProfile(memberId, path + "profile/" + editFileName);
-
+        memberDetailsService.changeProfile(memberId, "/file/profile/" + editFileName);
         return "redirect:/members/account/{id}";
     }
 
