@@ -149,12 +149,12 @@ public class MemberController {
         log.info("getContentType: {}", contentType);
         String editFileName = fileName + "_" + memberId + contentType;
 
-        String filePath = path + "/profile/" + editFileName;
+        String filePath = path + "profile/" + editFileName;
         File newFile = new File(filePath);
         profileFile.transferTo(newFile);
         log.info("newFile: {}", newFile.getAbsolutePath());
 
-        memberDetailsService.changeProfile(memberId, path + "/profile/" + editFileName);
+        memberDetailsService.changeProfile(memberId, path + "profile/" + editFileName);
 
         return "redirect:/members/account/{id}";
     }
