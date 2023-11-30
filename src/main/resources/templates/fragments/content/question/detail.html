@@ -46,10 +46,12 @@
               </div>
             </div>
             <!-- project title-->
-            <div>
+            <div class="d-flex">
               <input type="hidden" class="memberId" th:value="${questionPost.memberId}">
-              <img th:src="${questionPost.profile}" class="me-2 rounded-circle userProfile" height="24">
-              <h5 th:text="${questionPost.memberName}"></h5>
+              <img th:src="${questionPost.profile}" class="rounded-circle me-2 userProfile" height="32" width="32">
+              <div class="w-100">
+                <h5 th:text="${questionPost.memberName}"></h5>
+              </div>
             </div>
             <hr>
             <div th:id="contentPreview" th:utext="${questionPost.questionPostContent}"></div>
@@ -68,7 +70,7 @@
           <div class="card-body">
             <div th:each="c : ${questionPost.comment}" class="d-flex">
               <input type="hidden" class="memberId" th:value="${c.memberId}">
-              <img class="me-2 rounded-circle userProfile" th:src="${c.profile}" height="32">
+              <img class="me-2 rounded-circle userProfile" th:src="${c.profile}" height="32" width="32">
               <div class="w-100">
                 <div class="d-flex justify-content-between">
                   <h5 class="mt-0" th:text="${c.memberName}"></h5>
