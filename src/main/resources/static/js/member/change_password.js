@@ -1,25 +1,31 @@
 let req = new XMLHttpRequest();
 var previousPasswordResult = false;
 var passwordResult = false;
-let msg = ""
+const previousPassword = document.getElementById('previous_password');
+const password1 = document.getElementById('password1');
+const password2 = document.getElementById('password2');
+const previousPasswordMsg = document.getElementById('previous_password_msg');
+const passwordMsg = document.getElementById('password_msg');
+const passwordCheckMsg = document.getElementById('password_check_msg');
+const passwordRegExp = "^.*(?=^.{8,15}$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$";
+
 function passwordChange() {
-    const previousPassword = $("#previous_password").val();
-    const newPassword = $("#new_password").val();
     $.ajax({
         url: "/members/pw-check",
         type: "POST",
-        data: {"previousPassword": previousPassword, "newPassword": newPassword},
+        data: {"previousPassword": previousPassword.value, "newPassword": password1.value},
         dataType: "text",
         success: function (data) {
-            console.log(data);
             if (data === "1") {
-                console.log("이전 비밀번호 일치");
+                previousPassword.classList.remove('is-invalid');
+                previousPassword.classList.add('is-valid');
+                previousPasswordMsg.innerHTML = '';
                 previousPasswordResult = true;
-                submit();
             } else if (data === "0") {
-                console.log("이전 비밀번호 불일치");
+                previousPassword.classList.remove('is-valid');
+                previousPassword.classList.add('is-invalid');
+                previousPasswordMsg.innerHTML = '이전 비밀번호가 일치하지 않습니다.';
                 previousPasswordResult = false;
-                submit();
             }
         },
         error: function () {
@@ -28,66 +34,52 @@ function passwordChange() {
     });
 }
 
-const submit = () => {
-    if (!previousPasswordResult) {
-        msg = "이전 비밀번호가 일치하지 않습니다."
-        const form = document.querySelector("form");
-        form.addEventListener("submit", (event) => {
-            event.preventDefault();
-            console.log(event.target);
-        });
-        const msgDiv = document.getElementById("msgDiv");
-        msgDiv.style.display = "block";
-        document.getElementById("msg").innerHTML = msg
-    } else if (!(previousPasswordResult && passwordResult)) {
-        msg = "입력 항목을 확인해주세요."
-        const $form = document.querySelector("form");
-        $form.addEventListener("submit", (event) => {
-            event.preventDefault();
-            console.log(event.target);
-        });
-        const msgDiv = document.getElementById("msgDiv");
-        msgDiv.style.display = "block";
-        document.getElementById("msg").innerHTML = msg
+const passwordVaild = () => {
+    if (!new RegExp(passwordRegExp).test(password1.value)) {
+        password1.classList.remove('is-valid');
+        password2.classList.remove('is-valid');
+        password1.classList.add('is-invalid');
+        passwordMsg.innerHTML = '영어, 숫자, 특수 문자를 포함하여 8자 이상, 15자 이하로 입력해주세요.';
+        passwordResult = false;
     } else {
-        const memberId = $("#memberId").val();
-        const previousPassword = $("#previous_password").val();
-        const newPassword = $("#new_password").val();
-        $.ajax({
-            url: "/members/password/" + memberId,
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify({
-                "id": memberId,
-                "previousPassword": previousPassword,
-                "newPassword": newPassword
-            }),
-            success: function () {
-                location.href = "/members/account/" + memberId;
-            },
-            error: function () {
-                console.log("POST /members/password error");
-            },
-        });
+        password1.classList.remove('is-invalid');
+        password1.classList.add('is-valid');
+        passwordCheck();
     }
-
-}
-const setMessage = (elementId, message, color) => {
-    const element = document.getElementById(elementId);
-    element.style.color = color;
-    element.innerHTML = message;
 };
 
 const passwordCheck = () => {
-    const newPassword = f.newPassword.value;
-    const passwordConfirm = f.passwordConfirm.value;
-
-    if (!new RegExp("^.*(?=^.{8,15}$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$").test(newPassword)) {
-        setMessage("password_msg", "영어, 숫자, 특수문자를 포함하여 8자 이상, 15자 이하로 입력해주세요.", "red");
-    } else if (newPassword === passwordConfirm) {
-        setMessage("password_msg", "비밀번호와 비밀번호 확인이 일치합니다.", "green");
+    if (password1.value === password2.value) {
+        password2.classList.remove('is-invalid');
+        password2.classList.add('is-valid');
+        passwordCheckMsg.innerHTML = '';
         passwordResult = true;
     } else {
-        setMessage("password_msg", "비밀번호와 비밀번호 확인이 일치하지 않습니다.", "red");
+        password2.classList.remove('is-valid');
+        password2.classList.add('is-invalid');
+        passwordMsg.innerHTML = '';
+        passwordCheckMsg.innerHTML = '비밀번호와 비밀번호 확인이 일치하지 않습니다.';
+        passwordResult = false;
     }
 };
+
+const preventSubmit = () => {
+    const form = document.getElementById("f");
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
+    });
+};
+
+const changePassword = () => {
+    if (!previousPasswordResult) {
+        preventSubmit();
+        passwordChange();
+    }
+    if (!passwordResult) {
+        preventSubmit();
+        passwordVaild();
+    }
+    if (previousPasswordResult && passwordResult) {
+        document.getElementById("f").submit();
+    }
+}

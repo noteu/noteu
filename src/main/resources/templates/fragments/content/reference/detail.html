@@ -11,7 +11,8 @@
                 <div class="page-title-box">
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">Subject(getById)</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Noteu</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Apps</a></li>
                             <li class="breadcrumb-item"><a th:href="@{/subjects/{subjectId}/references(subjectId = ${subjectId})}">ReferenceRoom</a></li>
                             <li class="breadcrumb-item active">ReferenceRoom Detail</li>
                         </ol>
@@ -64,11 +65,11 @@
                             <div class="p-2">
                                 <div class="row align-items-center" th:each="f:${referenceRoom.reference}">
                                     <div class="col ps-0">
-                                        <a th:href="@{/subjects/${referenceRoom.subject.id}/references/down(id=${referenceRoom.referenceRoomId}, referenceName=${f.referenceName})}" class="text-muted fw-bold" th:text="${f.referenceName}"></a>
+                                        <a th:href="@{/subjects/{subjectId}(subjectId=${subjectId})/references/down(id=${referenceRoom.referenceRoomId}, referenceName=${f.referenceName})}" class="text-muted fw-bold" th:text="${f.referenceName}"></a>
                                     </div>
                                     <div class="col-auto">
                                         <!-- Button -->
-                                        <a th:href="@{/subjects/${referenceRoom.subject.id}/references/down(id=${referenceRoom.referenceRoomId}, referenceName=${f.referenceName})}" class="btn btn-link btn-lg text-muted">
+                                        <a th:href="@{/subjects/{subjectId}(subjectId=${subjectId})/references/down(id=${referenceRoom.referenceRoomId}, referenceName=${f.referenceName})}" class="btn btn-link btn-lg text-muted">
                                             <i class="ri-download-2-line"></i>
                                         </a>
                                     </div>

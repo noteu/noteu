@@ -11,7 +11,8 @@
         <div class="page-title-box">
           <div class="page-title-right">
             <ol class="breadcrumb m-0">
-              <li class="breadcrumb-item"><a href="javascript: void(0);">Subject(getById)</a></li>
+              <li class="breadcrumb-item"><a href="javascript: void(0);">Noteu</a></li>
+              <li class="breadcrumb-item"><a href="javascript: void(0);">Apps</a></li>
               <li class="breadcrumb-item"><a th:href="@{/subjects/{subjectId}/questions(subjectId = ${subjectId})}">Question Post</a></li>
               <li class="breadcrumb-item active">Question Post Detail</li>
             </ol>
@@ -46,10 +47,12 @@
               </div>
             </div>
             <!-- project title-->
-            <div>
+            <div class="d-flex">
               <input type="hidden" class="memberId" th:value="${questionPost.memberId}">
-              <img th:src="${questionPost.profile}" class="me-2 rounded-circle userProfile" height="24">
-              <h5 th:text="${questionPost.memberName}"></h5>
+              <img th:src="${questionPost.profile}" class="rounded-circle me-2 userProfile" height="32" width="32">
+              <div class="w-100">
+                <h5 th:text="${questionPost.memberName}"></h5>
+              </div>
             </div>
             <hr>
             <div th:id="contentPreview" th:utext="${questionPost.questionPostContent}"></div>
@@ -68,10 +71,16 @@
           <div class="card-body">
             <div th:each="c : ${questionPost.comment}" class="d-flex">
               <input type="hidden" class="memberId" th:value="${c.memberId}">
-              <img class="me-2 rounded-circle userProfile" th:src="${c.profile}" height="32">
+              <img class="me-2 rounded-circle userProfile" th:src="${c.profile}" height="32" width="32">
               <div class="w-100">
                 <div class="d-flex justify-content-between">
-                  <h5 class="mt-0" th:text="${c.memberName}"></h5>
+                  <input type="hidden" class="memberRole">
+                  <th:block th:each="role : ${c.memberRole}">
+                    <input type="hidden" th:value="${role}" th:attr="class='memberRole'">
+                  </th:block>
+                  <h5 class="mt-0 answerMember">
+                    <span th:text="${c.memberName}"></span>
+                  </h5>
                   <div class="d-flex justify-content-between">
                     <input type="hidden" class="questionPostCommentId" th:value="${c.questionCommentId}">
                     <div class="text-muted me-3 createdAt" th:text="${c.createdAt}"></div>

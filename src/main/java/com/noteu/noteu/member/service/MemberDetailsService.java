@@ -59,7 +59,7 @@ public class MemberDetailsService implements UserDetailsManager{
     @Override
     public void updateUser(MemberEditDto memberEditDto) {
 
-        Member member = findById(memberEditDto.getId());
+        Member member = getById(memberEditDto.getId());
 
         String editMemberName = memberEditDto.getMemberName();
         String editEmail = memberEditDto.getEmail();
@@ -104,7 +104,7 @@ public class MemberDetailsService implements UserDetailsManager{
     @Override
     public void changePassword(MemberPasswordDto memberPasswordDto) {
 
-        Member member = findById(memberPasswordDto.getId());
+        Member member = getById(memberPasswordDto.getId());
         String newPassword = memberPasswordDto.getNewPassword();
 
         member.modifyPassword(passwordEncoder.encode(newPassword));
@@ -119,7 +119,7 @@ public class MemberDetailsService implements UserDetailsManager{
     }
 
     @Transactional(readOnly = true)
-    public Member findById(Long memberId) {
+    public Member getById(Long memberId) {
         Member member = memberRepository.findById(memberId).orElse(null);
         if (member == null) {
             return null;
@@ -173,5 +173,17 @@ public class MemberDetailsService implements UserDetailsManager{
 
         // SecurityContextHolder에 MemberInfo 저장
         SecurityContextHolder.getContext().setAuthentication(memberInfo);
+    }
+
+    public Member getByUsername(String username) {
+        return memberRepository.findByUsername(username).orElse(null);
+    }
+
+    public Member getByEmail(String email) {
+        return memberRepository.findByEmail(email).orElse(null);
+    }
+
+    public Member getByTel(String tel) {
+        return memberRepository.findByTel(tel).orElse(null);
     }
 }

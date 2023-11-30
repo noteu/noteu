@@ -37,6 +37,7 @@ public class ChatRoomController {
         model.addAttribute("subjectId", subjectId);
         model.addAttribute("memberId", memberInfo.getId());
         model.addAttribute("memberName", memberInfo.getMemberName());
+        model.addAttribute("profile", memberInfo.getProfile());
 
         return "layout/chat/chat";
     }
@@ -87,7 +88,9 @@ public class ChatRoomController {
 
     // 채팅방 입장 화면
     @GetMapping("/rooms/enter/{roomId}")
-    public String roomDetail(Model model, @PathVariable Long roomId) {
+    public String roomDetail(Model model, @PathVariable Long roomId,
+                             @AuthenticationPrincipal MemberInfo memberInfo) {
+
         model.addAttribute("roomId", roomId);
 
         return "fragments/content/chat/roomdetail";

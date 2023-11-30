@@ -8,7 +8,8 @@
                 <div class="page-title-box">
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">Subject(getById)</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Noteu</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Apps</a></li>
                             <li class="breadcrumb-item">ReferenceRoom</li>
                         </ol>
                     </div>
@@ -33,8 +34,9 @@
                                 <form id="search" th:action="@{/subjects/{subjectId}/references/search(subjectId = ${subjectId})}" method="POST">
                                     <div class="input-group">
                                         <input type="search" class="form-control dropdown-toggle" id="searchWord" name="searchWord" placeholder="Search...">
-                                        <span class="mdi mdi-magnify search-icon"></span>
-                                        <button class="input-group-text btn btn-primary" type="submit">Search</button>
+                                        <button class="input-group-text btn btn-primary" type="submit">
+                                            <i class="mdi mdi-magnify search-icon"></i>
+                                        </button>
                                     </div>
                                 </form>
                             </div>

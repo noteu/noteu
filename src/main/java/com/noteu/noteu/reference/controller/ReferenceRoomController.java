@@ -65,10 +65,25 @@ public class ReferenceRoomController {
         List<MultipartFile> fileList = addRequestReferenceRoomDTO.getReferenceFile();
         Long referenceRoomDTOId = referenceRoomDTO.getId();
 
-        File fileDir = new File(path + "/reference/" + referenceRoomDTOId);
-        if(!fileDir.exists()){
-            fileDir.mkdir();
+        File referenceDir = new File(path + "reference");
+        if(!referenceDir.exists()){
+            if(referenceDir.mkdir()){
+                log.info("Success create directory!");
+            } else {
+                log.info("Failed create directory");
+            }
         }
+
+        File fileDir = new File(path + "reference/" + referenceRoomDTOId);
+        if(!fileDir.exists()){
+            if(fileDir.mkdir()){
+                log.info("Success create directory!");
+            } else {
+                log.info("Failed create directory");
+            }
+        }
+        log.info("path : {}", path);
+        log.info("fileDir : {}", fileDir);
 
         List<String> fileNames = new ArrayList<>();
         List<Long> fileSizes = new ArrayList<>();
