@@ -10,6 +10,6 @@ public class fileConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/file/**")
-                .addResourceLocations("file:///home/ubuntu/src/main/resources/static/file");
+                .addResourceLocations("file:///home/ubuntu/src/main/resources/static/file/");
     }
 }
