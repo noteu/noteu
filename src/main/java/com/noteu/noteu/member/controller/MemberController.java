@@ -86,7 +86,7 @@ public class MemberController {
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long memberId, @AuthenticationPrincipal MemberInfo memberInfo) {
         memberDetailsService.deleteUser(memberId, memberInfo.getUsername());
-        return "redirect:/auth/login";
+        return "redirect:/auth/sign-out";
     }
 
     @GetMapping("/password/{id}")
