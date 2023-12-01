@@ -613,6 +613,7 @@ export function pastChat(roomId, friendId, loginId) {
                 document.querySelector("#chat-message").appendChild(li);
             });
         });
+    $('#scroll').scrollTop($('#scroll')[0].scrollHeight);
 }
 
 ////////////////////////////////////// socket chat ////////////////////////////////////////////
@@ -634,6 +635,7 @@ function sendMessage() {
         message: messageInput.value
     }));
     messageInput.value = '';
+    $('#scroll').scrollTop($('#scroll')[0].scrollHeight);
 }
 
 function recvMessage(recv) {
@@ -700,6 +702,7 @@ function recvMessage(recv) {
     findAllRoom(subjectId, token);
     // document.getElementById(`time${recv.roomId}`).innerHTML = formattedTime;
     // document.getElementById(`lastmessage${recv.roomId}`).innerHTML = recv.message;
+    $('#scroll').scrollTop($('#scroll')[0].scrollHeight);
 }
 
 export function connect(roomId, senderName) {
