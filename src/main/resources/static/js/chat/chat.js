@@ -116,6 +116,7 @@ function findAllFriend(subjectId, token) {
                 img.className = "me-2 rounded-circle";
                 img.src = profile;
                 img.height = "48";
+                img.width = "48";
                 img.alt = username;
 
                 const innerDiv = document.createElement("div");
@@ -229,6 +230,7 @@ export function findAllRoom(subjectId, token) {
                 img.className = "me-2 rounded-circle";
                 img.src = profile;
                 img.height = "48";
+                img.width = "48";
                 img.alt = username;
 
                 const innerDiv = document.createElement("div");
@@ -363,6 +365,7 @@ async function findAllRoomAndSocketConnect() {
                 img.className = "me-2 rounded-circle";
                 img.src = profile;
                 img.height = "48";
+                img.width = "48";
                 img.alt = username;
 
                 const innerDiv = document.createElement("div");
