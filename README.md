@@ -1,6 +1,6 @@
  # NOTEU
 
- - 배포 URL : [https://www.noteu.kro.kr/](3.36.72.106)
+ - 배포 URL : [noteu](3.36.72.106)
 <br/>
 
 ## 프로젝트 소개
